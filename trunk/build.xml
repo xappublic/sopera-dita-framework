@@ -31,7 +31,7 @@
 			<property name="args.input" value="${map.file}" />
 			<property name="output.dir" value="out${file.separator}htmlhelp" />
 			<property name="transtype" value="htmlhelp" />
-		</ant>
+		</ant>		
 	</target>
 
 	<target name="data2eclipsehelp" depends="integrate">
@@ -66,6 +66,9 @@
 			<property name="transtype" value="xhtml" />
 			<property name="clean.temp" value="no" />
 		</ant>
+		<copy todir="${basedir}${file.separator}out${file.separator}xhtml">
+			<fileset dir="${basedir}${file.separator}data"/>
+		</copy>		
 	</target>
 	<target name="createAll">
 		<antcall target="data2pdf" />

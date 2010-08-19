@@ -33,7 +33,6 @@
                    Needed as a directory prefix for the @href "document()" function calls.
                    Default is './'
 -->
-
 <!-- Include error message template -->
 <xsl:import href="common/output-message.xsl"/>
 <xsl:import href="common/dita-utilities.xsl"/>
@@ -97,14 +96,78 @@
   </head><xsl:value-of select="$newline"/>
 
   <body>
-     <xsl:if test="string-length($OUTPUTCLASS) &gt; 0">
-       <xsl:attribute name="class">
+	<xsl:if test="string-length($OUTPUTCLASS) &gt; 0">
+		<xsl:attribute name="class">
          <xsl:value-of select="$OUTPUTCLASS"/>
-       </xsl:attribute>
-     </xsl:if>
-     <xsl:value-of select="$newline"/>
-    <xsl:apply-templates/>
-   </body><xsl:value-of select="$newline"/>
+		</xsl:attribute>
+    </xsl:if>
+	<xsl:value-of select="$newline"/>
+	<div>
+		<xsl:attribute name="class">navi</xsl:attribute>
+		<xsl:value-of select="$newline"/>
+		<img>
+			<xsl:attribute name="src">logo/soplogo.png</xsl:attribute>
+			<xsl:attribute name="alt"></xsl:attribute>
+			<xsl:attribute name="style">float: left; margin-left: 10px;</xsl:attribute>
+		</img>
+		<xsl:value-of select="$newline"/>
+		<div>
+			<xsl:attribute name="class">naviline</xsl:attribute>
+			<xsl:value-of select="$newline"/>
+            <span>
+				<xsl:attribute name="style">font-size: larger;</xsl:attribute>
+				<xsl:choose>
+					<xsl:when test="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')] or /*[contains(@class,' map/map ')]/@title">
+					<xsl:call-template name="gen-user-panel-title-pfx"/> <!-- hook for a user-XSL title prefix -->
+						<xsl:choose>
+						  <xsl:when test="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')]">
+							<xsl:value-of select="normalize-space(/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')])"/>
+						  </xsl:when>
+						  <xsl:when test="/*[contains(@class,' map/map ')]/@title">
+							<xsl:value-of select="/*[contains(@class,' map/map ')]/@title"/>
+						  </xsl:when>
+						</xsl:choose>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>SOPERA Documentation</xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
+			</span>
+			<xsl:value-of select="$newline"/>
+			<input>
+				<xsl:attribute name="id">searchbox</xsl:attribute>
+				<xsl:attribute name="type">text</xsl:attribute>
+				<xsl:attribute name="style">float:right; margin-right: 2px;</xsl:attribute>				
+			</input>
+			<xsl:value-of select="$newline"/>
+        </div>
+		<xsl:value-of select="$newline"/>
+	</div>     
+    <xsl:value-of select="$newline"/>
+	<div>
+		<xsl:attribute name="class">screen</xsl:attribute>
+		<xsl:value-of select="$newline"/>
+		<div>
+			<xsl:attribute name="class">menu</xsl:attribute>
+			<xsl:value-of select="$newline"/>
+			<xsl:apply-templates/>			
+		</div>
+		<xsl:value-of select="$newline"/>
+		<div>
+			<xsl:attribute name="class">frm</xsl:attribute>
+			<xsl:value-of select="$newline"/>
+            <iframe>
+				<xsl:attribute name="id">docframe</xsl:attribute>
+				<xsl:attribute name="frameborder">0</xsl:attribute>
+				<xsl:attribute name="style">width: 100%; display: block; height: 100%; border: 0px solid black;</xsl:attribute>
+			</iframe>
+			<xsl:value-of select="$newline"/>
+        </div>
+		<xsl:value-of select="$newline"/>
+	</div>
+	<xsl:value-of select="$newline"/>
+   </body>
+   <xsl:value-of select="$newline"/>
   </html>
 </xsl:template>
 
@@ -157,9 +220,10 @@
 <xsl:template match="/*[contains(@class, ' map/map ')]">
   <xsl:param name="pathFromMaplist"/>
   <xsl:if test=".//*[contains(@class, ' map/topicref ')][not(@toc='no')][not(@processing-role='resource-only')]">
-    <ul><xsl:value-of select="$newline"/>
-
-      <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
+    <ul>
+	  <xsl:attribute name="style">list-style-type: none; padding-left: 20px;</xsl:attribute>
+	  <xsl:value-of select="$newline"/>
+	  <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       </xsl:apply-templates>
     </ul><xsl:value-of select="$newline"/>
@@ -264,11 +328,13 @@
         
         <!-- If there are any children that should be in the TOC, process them -->
         <xsl:if test="descendant::*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))][not(@processing-role='resource-only')]">
-          <xsl:value-of select="$newline"/><ul><xsl:value-of select="$newline"/>
+          <xsl:value-of select="$newline"/>
+		  <ul><xsl:value-of select="$newline"/>
             <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
               <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
             </xsl:apply-templates>
-          </ul><xsl:value-of select="$newline"/>
+          </ul>
+		  <xsl:value-of select="$newline"/>
         </xsl:if>
       </li><xsl:value-of select="$newline"/>
     </xsl:when>
@@ -441,6 +507,153 @@
 <xsl:template match="/|node()|@*" mode="gen-user-head">
   <!-- to customize: copy this to your override transform, add the content you want. -->
   <!-- it will be placed in the HEAD section of the XHTML. -->
+  <link type="text/css" href="jquery/css/ui-lightness/jquery-ui-1.8.4.custom.css" rel="stylesheet" />
+  <xsl:value-of select="$newline"/>
+  <script type="text/javascript" src="jquery/js/jquery-1.4.2.min.js"></script>
+  <xsl:value-of select="$newline"/>
+  <script type="text/javascript" src="jquery/js/jquery-ui-1.8.4.custom.min.js"></script>
+  <xsl:value-of select="$newline"/>
+  <script type="text/javascript" src="jquery/js/jquery.corner.js"></script>
+  <xsl:value-of select="$newline"/>
+  <script type="text/javascript">
+		<![CDATA[
+        $(document).ready(function () {
+            $('#screen').attr('style', 'height: ' + ($(window).height() - 135) + 'px'); // Set height screen div
+            $('.menu').attr('style', 'height: ' + ($(window).height() - 160) + 'px'); // Set height menu div
+            $('.frm').attr('style', 'height: ' + ($(window).height() - 160) + 'px'); // Set height frame div
+
+
+            $('.navi').corner("top");
+            $('.menu').corner("bl");
+            $('.frm').corner("br");
+
+            var files = new Array();
+
+            $('.menu ul li a').each(function (index) {
+                var el = new Object();
+                el.href = $(this).attr('href');
+                el.text = $(this).text();
+                files.push(el);
+                if (index == 0) $('#docframe').attr('src', $(this).attr('href')); //in frame show first element
+
+                //$(this).attr('href', $(this).attr('href'));
+
+                $(this).click(function (event) {
+                    $('iframe').attr('src', $(this).attr('href')); return false;
+                });
+            });
+
+            $('#searchbox').autocomplete({
+                delay: 500,
+                minLength: 0,
+                search: function (event, ui) {
+                    $('.menu ul li').each(function (index) {
+                        if ($('#searchbox').val() != '') {
+                            if ($(this).text().toLowerCase().indexOf($('#searchbox').val().toLowerCase()) == -1) {
+                                $(this).hide();
+                            }
+                            else {
+                                $(this).show();
+                            }
+                        }
+                        else {
+                            $(this).show();
+                        }
+                    });
+                }
+            });
+
+            //Filter hints
+            $('#searchbox').css('color', '#808080');
+            $('#searchbox').val('menu filter');
+
+            $('#searchbox').focusin(function myfunction() {
+                if ($('#searchbox').val() == 'menu filter') {
+                    $('#searchbox').css('color', '#000000');
+                    $('#searchbox').val('');
+                }
+                $('#searchbox').animate({
+                    left: '-=300',
+                    width: '+=300'
+                }, 200, function () {
+
+                });
+            });
+
+            $('#searchbox').focusout(function myfunction() {
+                if ($('#searchbox').val() == '') {
+                    $('#searchbox').css('color', '#808080');
+                    $('#searchbox').val('menu filter');
+                }
+                $('#searchbox').animate({
+                    left: '+=300',
+                    width: '-=300'
+                }, 200, function () {
+
+                });
+            });
+
+            $('.navi').css('border', '1px solid #6F6C67'); // fix border for ie;
+        });
+		]]>
+    </script>
+    <xsl:value-of select="$newline"/>
+	<style type="text/css">
+        <![CDATA[
+		*
+        {
+            font-family: "Trebuchet MS" , Verdana, Arial, Helvetica, sans-serif;
+        }
+        
+        body
+        {
+            background-color: #83827C;
+        }
+        
+        .menu
+        {
+			overflow: auto;
+            border: 1px solid #6F6C67;
+            background: #A5C85A;
+            float: left;
+            width: 272px;
+            padding: 10px;
+            height: 500px;
+        }
+        
+        .menu a
+        {
+            color: #FFFFFF;
+            font-weight: 600;
+        }
+        
+        .frm
+        {
+            border: 1px solid #6F6C67;
+            margin-left: 300px;
+            background-color: #FFFFFF;
+            height: 100%;
+            padding: 10px;
+        }
+        
+        .navi
+        {
+            border: 1px solid #6F6C67;
+            height: 110px;
+            margin-bottom: 5px;
+            background-color: #FFFFFF;
+        }
+        
+        .naviline
+        {
+            margin-top: 55px;
+            padding: 2px 0px 2px 0px;
+            background-color: #83B817;
+            height: 24px;
+        }
+		]]>
+    </style>
+	<xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template name="gen-user-header">
