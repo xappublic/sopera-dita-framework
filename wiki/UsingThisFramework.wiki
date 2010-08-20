@@ -1,3 +1,4 @@
+#labels Featured
 #Instructions on Using the SOPERA DITA Framework
 
 = Introduction =
