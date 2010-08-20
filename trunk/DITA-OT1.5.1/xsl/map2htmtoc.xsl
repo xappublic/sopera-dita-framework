@@ -507,7 +507,7 @@
 <xsl:template match="/|node()|@*" mode="gen-user-head">
   <!-- to customize: copy this to your override transform, add the content you want. -->
   <!-- it will be placed in the HEAD section of the XHTML. -->
-  <link type="text/css" href="jquery/css/ui-lightness/jquery-ui-1.8.4.custom.css" rel="stylesheet" />
+  <link type="text/css" href="jquery/css/sopera/jquery-ui-1.8.4.sopera.css" rel="stylesheet" />
   <xsl:value-of select="$newline"/>
   <script type="text/javascript" src="jquery/js/jquery-1.4.2.min.js"></script>
   <xsl:value-of select="$newline"/>
