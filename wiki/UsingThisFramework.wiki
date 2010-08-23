@@ -25,5 +25,10 @@ To collect and view your Eclipse Help, do the following:
      </ol>
 
 ==Collect and View your PDF File ==
+ <ol>
+       <li>Locate the <tt>out</tt> folder: </li>
+       <li>Your PDF file is in the <tt>out\pdf</tt> folder</li>
+       <li>Click on it and view it in Adobe Reader or any other PDF viewer that you have installed on your machine.</li>
+    </ol>
 
-==Collect and View your XTML Files ==
+==Collect and View your XHTML Files ==
