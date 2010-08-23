@@ -8,7 +8,7 @@ For the purposes of documenting the work flow, I am going to assume you are usin
    <li> Check out the project anywhere you want in Windows Explorer.</li>
    <li>Ensure that you have a valid DITAMAP and DITA XML file. </li>
    <li>Start <tt>convert.jar</tt> by clicking on it.</li>
-   <li>Add your ditamap into the <b></b> field and click the <b>Start process</b>    button</li>  
+   <li>Add your ditamap into the <b></b> field and click the <b>Start process</b>    button.</li>  
 </ol>
 
 ==Collect and View your Eclipse Help ==
@@ -35,5 +35,5 @@ To collect and view your Eclipse Help, do the following:
  <ol>
        <li>Locate the <tt>out</tt> folder: </li>
        <li>Your XHTML files are in the <tt>out\xhtml</tt> folder</li>
-       <li>Click on <tt>index.html</tt>and view the help in any web browser./li>
+       <li>Click on <tt>index.html</tt>and view the help in any web browser.</li>
     </ol>
