@@ -1,14 +1,13 @@
 #labels Featured
-#Instructions on Using the SOPERA DITA Framework
-
-= Introduction =
-
-Add your content here.
 
 
-= Details =
+= Using the SOPERA DITA Framework =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+To use the Framework to generate PDF, Eclipse Help and XHTML, do the following:
+
+For the purposes of documenting the work flow, I am going to assume you are using Windows OS but the Framework works on Linux OS too.)
+
+# Check out the project anywhere you want
+# Ensure that you have a valid DITAMAP and DITA XML files
+# Start convert.jar by clicking on it.
+#
