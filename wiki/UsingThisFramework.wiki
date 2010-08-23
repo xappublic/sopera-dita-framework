@@ -1,4 +1,3 @@
-#labels Featured
 = Using the SOPERA DITA Framework =
 
 To use the Framework to generate PDF, Eclipse Help and XHTML, do the following:
@@ -6,10 +5,16 @@ To use the Framework to generate PDF, Eclipse Help and XHTML, do the following:
 For the purposes of documenting the work flow, I am going to assume you are using Windows OS but the Framework works on Linux OS too.)
 
 <ol>
-<li> Check out the project anywhere you want </li>
-<li>Ensure that you have a valid DITAMAP and DITA XML files </li>
-<li>Start convert.jar by clicking on it.</li>
-<li>Add your ditamap into the <b></b> field and click the <b>Start process</b> button</li>
-<li>Locate the <tt>out</tt> folder: your Eclipse Help is in the <tt>out\eclipsehelpjar</tt> folder</li>
-<li>Move or copy your Eclipe Help JAR file into an Eclipse IDE <tt>dropins folder</tt>. </li>
+   <li> Check out the project anywhere you want </li>
+   <li>Ensure that you have a valid DITAMAP and DITA XML files </li>
+   <li>Start convert.jar by clicking on it.</li>
+   <li>Add your ditamap into the <b></b> field and click the <b>Start process</b>    button</li>
+   <li>Locate the <tt>out</tt> folder: 
+     <ol>
+       <li>Your Eclipse Help is in the <tt>out\eclipsehelpjar</tt> folder</li>
+       <li>Move or copy your Eclipe Help JAR file into an Eclipse IDE <tt>dropins 
+       folder</tt>.</li>
+       <li>Start the Eclipse IDE and click the <b>Help</b> menu item. In the list of Eclipse Helps, your help should now be visible.</li>
+     </ol>
+   </li>
 </ol>
