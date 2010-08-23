@@ -1,13 +1,14 @@
 #labels Featured
 
-
 = Using the SOPERA DITA Framework =
 
 To use the Framework to generate PDF, Eclipse Help and XHTML, do the following:
 
 For the purposes of documenting the work flow, I am going to assume you are using Windows OS but the Framework works on Linux OS too.)
 
-# Check out the project anywhere you want
-# Ensure that you have a valid DITAMAP and DITA XML files
-# Start convert.jar by clicking on it.
-#
+<ol>
+<li> Check out the project anywhere you want </li>
+<li>Ensure that you have a valid DITAMAP and DITA XML files </li>
+<li>Start convert.jar by clicking on it.</li>
+<li></li>
+</ol>
