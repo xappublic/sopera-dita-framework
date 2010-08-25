@@ -101,6 +101,33 @@
          <xsl:value-of select="$OUTPUTCLASS"/>
 		</xsl:attribute>
     </xsl:if>
+	<div id="favoritesDialog" title="Favorite documents" style="display: none; font-size: medium;">
+	<xsl:value-of select="$newline"/>
+        <div style="border: 1px solid #000000">
+		<xsl:value-of select="$newline"/>
+            <table style="width: 100%">
+			<xsl:value-of select="$newline"/>
+                <tbody>
+				<xsl:value-of select="$newline"/>
+                    <tr>
+					<xsl:value-of select="$newline"/>
+                        <td><input type="text" id="favoriteNow" style="margin: 2px; width: 100%;" /></td>
+						<xsl:value-of select="$newline"/>
+                        <td style="width: 55px;"><input type="button" id="favoritesAdd" value="Add" style="float: right; margin: 2px;" /></td>
+						<xsl:value-of select="$newline"/>
+                    </tr>
+					<xsl:value-of select="$newline"/>
+                </tbody>
+				<xsl:value-of select="$newline"/>
+            </table>
+			<xsl:value-of select="$newline"/>
+            <div id="favelements">
+			<xsl:value-of select="$newline"/>
+			</div>
+			<xsl:value-of select="$newline"/>
+        </div>
+		<xsl:value-of select="$newline"/>
+    </div>
 	<xsl:value-of select="$newline"/>
 	<div>
 		<xsl:attribute name="class">navi</xsl:attribute>
@@ -132,8 +159,10 @@
 						<xsl:text>SOPERA Documentation</xsl:text>
 					</xsl:otherwise>
 				</xsl:choose>
-			</span>
+			</span>			
 			<xsl:value-of select="$newline"/>
+			&nbsp;<span id="favorites" style="float: right;"><img src="logo/favorites.png" alt="" /></span>
+            <xsl:value-of select="$newline"/>
 			<input>
 				<xsl:attribute name="id">searchbox</xsl:attribute>
 				<xsl:attribute name="type">text</xsl:attribute>
@@ -515,9 +544,11 @@
   <xsl:value-of select="$newline"/>
   <script type="text/javascript" src="jquery/js/jquery.corner.js"></script>
   <xsl:value-of select="$newline"/>
+  <script type="text/javascript" src="jquery/js/jquery.cookie.js"></script>
+  <xsl:value-of select="$newline"/>
   <script type="text/javascript">
-		<![CDATA[
-        $(document).ready(function () {
+		<xsl:text disable-output-escaping="yes"><![CDATA[
+		$(document).ready(function () {
             $('#screen').attr('style', 'height: ' + ($(window).height() - 135) + 'px'); // Set height screen div
             $('.menu').attr('style', 'height: ' + ($(window).height() - 160) + 'px'); // Set height menu div
             $('.frm').attr('style', 'height: ' + ($(window).height() - 160) + 'px'); // Set height frame div
@@ -549,7 +580,7 @@
                 search: function (event, ui) {
                     $('.menu ul li').each(function (index) {
                         if ($('#searchbox').val() != '') {
-                            if ($(this).text().toLowerCase().indexOf($('#searchbox').val().toLowerCase()) == -1) {
+                            if ($(this).text().toLowerCase().indexOf($('#searchbox').val().toLowerCase()) < 0) {
                                 $(this).hide();
                             }
                             else {
@@ -594,8 +625,88 @@
             });
 
             $('.navi').css('border', '1px solid #6F6C67'); // fix border for ie;
-        });
+
+            $('#favoritesDialog').dialog({
+                autoOpen: false,
+                //draggable: false,
+                //resizable: false,
+                modal: true,
+                open: function (event, ui) {
+                    var framesrc = $('#docframe').attr('src');
+                    $(files).each(function (index) {
+                        if (this.href == framesrc) $('#favoriteNow').val(this.text);
+                    });
+                    var favoritesData = $.cookie("favorites");
+                    if (favoritesData != null) {
+                        var favs = favoritesData.split("\|\*\|");
+                        $('#favelements').html('');
+                        // for each pair "name|-|link"
+                        $(favs).each(function (index) {
+                            var fav = this.split("\|-\|");
+                            //alert(fav[0] + " and " + fav[1]);
+                            var favDiv = $('<div class="favorite"></div>');
+                            var favAnchor = $('<a href="' + fav[1] + '">' + fav[0] + '</a>');
+                            $(favAnchor).click(function (event) {
+                                $('#docframe').attr('src', $(this).attr('href'));
+                                $('#favoritesDialog').dialog('close');
+                                return false;
+                            });
+                            $(favAnchor).appendTo(favDiv);
+                            $(favDiv).append('&nbsp;');
+                            var favAnchorDel = $('<a href="' + fav[1] + '">[x]</a>');
+                            $(favAnchorDel).click(function (event) {
+                                //Deleting bookmark
+                                var bDelName = $(this).attr('href');
+                                var divToDel = $(this).parent();
+                                var favoritesData = $.cookie("favorites");
+                                var favoritesDataNew = "";
+                                if (favoritesData != null) {
+                                    var favsDel = favoritesData.split("\|\*\|");
+                                    // for each pair "name|-|link"
+                                    $(favsDel).each(function (index) {
+                                        var favDel = this.split("\|-\|");
+                                        if (favDel[1] != bDelName) {
+                                            if (favoritesDataNew == "") {
+                                                favoritesDataNew += favDel[0] + "|-|" + favDel[1];
+                                            }
+                                            else {
+                                                favoritesDataNew += "|*|" + favDel[0] + "|-|" + favDel[1];
+                                            }
+                                        }
+                                    });
+                                }
+                                $.cookie("favorites", favoritesDataNew, { expires: 365 });
+                                $(divToDel).hide();
+                                return false;
+                            });
+                            $(favAnchorDel).appendTo(favDiv);
+                            $(favDiv).appendTo($('#favelements'));
+                        });
+                    }
+                }
+            });
+
+            $('#favorites').click(function (event) {
+                if ($('#favoritesDialog').dialog('isOpen') == false) { $('#favoritesDialog').dialog('open'); }
+                else { $('#favoritesDialog').dialog('close'); }
+            });
+
+            $('#favoritesAdd').click(function (event) {
+                var flink = $('#docframe').attr('src');
+                var fname = $('#favoriteNow').val();
+                var favoritesData = $.cookie("favorites");
+                if (favoritesData != null) {
+                    favoritesData += "|*|" + fname + "|-|" + flink;
+                }
+                else {
+                    favoritesData = fname + "|-|" + flink;
+                }
+                $.cookie("favorites", favoritesData, { expires: 365 });
+                $('#favoritesDialog').dialog('close');
+            });
+        });		
 		]]>
+		</xsl:text>
     </script>
     <xsl:value-of select="$newline"/>
 	<style type="text/css">
@@ -651,6 +762,13 @@
             background-color: #83B817;
             height: 24px;
         }
+        
+        .favorite
+        {
+            border: 1px solid #000000; 
+            margin: 2px; 
+            padding: 2px;
+        } 
 		]]>
     </style>
 	<xsl:value-of select="$newline"/>
