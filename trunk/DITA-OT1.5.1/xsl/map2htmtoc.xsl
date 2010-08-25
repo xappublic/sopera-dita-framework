@@ -645,7 +645,7 @@
                             var fav = this.split("\|-\|");
                             //alert(fav[0] + " and " + fav[1]);
                             var favDiv = $('<div class="favorite"></div>');
-                            if (fav[1] != undefined) {
+                            if ((fav[1] != undefined) && (fav[1] != 'undefined')) {
                                 var favAnchor = $('<a href="' + fav[1] + '">' + fav[0] + '</a>');
                                 $(favAnchor).click(function (event) {
                                     $('#docframe').attr('src', $(this).attr('href'));
