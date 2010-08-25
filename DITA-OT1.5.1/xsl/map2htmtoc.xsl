@@ -645,42 +645,44 @@
                             var fav = this.split("\|-\|");
                             //alert(fav[0] + " and " + fav[1]);
                             var favDiv = $('<div class="favorite"></div>');
-                            var favAnchor = $('<a href="' + fav[1] + '">' + fav[0] + '</a>');
-                            $(favAnchor).click(function (event) {
-                                $('#docframe').attr('src', $(this).attr('href'));
-                                $('#favoritesDialog').dialog('close');
-                                return false;
-                            });
-                            $(favAnchor).appendTo(favDiv);
-                            $(favDiv).append('&nbsp;');
-                            var favAnchorDel = $('<a href="' + fav[1] + '">[x]</a>');
-                            $(favAnchorDel).click(function (event) {
-                                //Deleting bookmark
-                                var bDelName = $(this).attr('href');
-                                var divToDel = $(this).parent();
-                                var favoritesData = $.cookie("favorites");
-                                var favoritesDataNew = "";
-                                if (favoritesData != null) {
-                                    var favsDel = favoritesData.split("\|\*\|");
-                                    // for each pair "name|-|link"
-                                    $(favsDel).each(function (index) {
-                                        var favDel = this.split("\|-\|");
-                                        if (favDel[1] != bDelName) {
-                                            if (favoritesDataNew == "") {
-                                                favoritesDataNew += favDel[0] + "|-|" + favDel[1];
+                            if (fav[1] != undefined) {
+                                var favAnchor = $('<a href="' + fav[1] + '">' + fav[0] + '</a>');
+                                $(favAnchor).click(function (event) {
+                                    $('#docframe').attr('src', $(this).attr('href'));
+                                    $('#favoritesDialog').dialog('close');
+                                    return false;
+                                });
+                                $(favAnchor).appendTo(favDiv);
+                                $(favDiv).append('&nbsp;');
+                                var favAnchorDel = $('<a href="' + fav[1] + '">[x]</a>');
+                                $(favAnchorDel).click(function (event) {
+                                    //Deleting bookmark
+                                    var bDelName = $(this).attr('href');
+                                    var divToDel = $(this).parent();
+                                    var favoritesData = $.cookie("favorites");
+                                    var favoritesDataNew = "";
+                                    if (favoritesData != null) {
+                                        var favsDel = favoritesData.split("\|\*\|");
+                                        // for each pair "name|-|link"
+                                        $(favsDel).each(function (index) {
+                                            var favDel = this.split("\|-\|");
+                                            if (favDel[1] != bDelName) {
+                                                if (favoritesDataNew == "") {
+                                                    favoritesDataNew += favDel[0] + "|-|" + favDel[1];
+                                                }
+                                                else {
+                                                    favoritesDataNew += "|*|" + favDel[0] + "|-|" + favDel[1];
+                                                }
                                             }
-                                            else {
-                                                favoritesDataNew += "|*|" + favDel[0] + "|-|" + favDel[1];
-                                            }
-                                        }
-                                    });
-                                }
-                                $.cookie("favorites", favoritesDataNew, { expires: 365 });
-                                $(divToDel).hide();
-                                return false;
-                            });
-                            $(favAnchorDel).appendTo(favDiv);
-                            $(favDiv).appendTo($('#favelements'));
+                                        });
+                                    }
+                                    $.cookie("favorites", favoritesDataNew, { expires: 365 });
+                                    $(divToDel).hide();
+                                    return false;
+                                });
+                                $(favAnchorDel).appendTo(favDiv);
+                                $(favDiv).appendTo($('#favelements'));
+                            }
                         });
                     }
                 }
