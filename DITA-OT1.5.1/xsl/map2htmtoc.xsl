@@ -549,10 +549,16 @@
   <script type="text/javascript">
 		<xsl:text disable-output-escaping="yes"><![CDATA[
 		$(document).ready(function () {
-            $('#screen').attr('style', 'height: ' + ($(window).height() - 135) + 'px'); // Set height screen div
+            $('.menu ul li a').bind('mouseenter', function (event) {
+                $(this).css('color', '#555555');
+            });
+            $('.menu ul li a').bind('mouseleave', function (event) {
+                $(this).css('color', '');                
+            });
+			
+			$('#screen').attr('style', 'height: ' + ($(window).height() - 135) + 'px'); // Set height screen div
             $('.menu').attr('style', 'height: ' + ($(window).height() - 160) + 'px'); // Set height menu div
             $('.frm').attr('style', 'height: ' + ($(window).height() - 160) + 'px'); // Set height frame div
-
 
             $('.navi').corner("top");
             $('.menu').corner("bl");
