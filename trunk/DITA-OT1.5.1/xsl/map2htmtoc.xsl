@@ -169,6 +169,15 @@
 				<xsl:attribute name="style">float:right; margin-right: 2px;</xsl:attribute>				
 			</input>
 			<xsl:value-of select="$newline"/>
+			<div id="searchOpt" class="searchopt">
+				<xsl:value-of select="$newline"/>
+                <input type="radio" name="box" id="box1" value="t1" checked="checked" />Only title
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="box" id="box2" value="t2" />Title and text
+				<xsl:value-of select="$newline"/>
+            </div>
+			<xsl:value-of select="$newline"/>
+			<span id="searching" style="float: right; display: none;"><img src="logo/searching.gif" alt="" /></span>
         </div>
 		<xsl:value-of select="$newline"/>
 	</div>     
@@ -553,10 +562,10 @@
                 $(this).css('color', '#555555');
             });
             $('.menu ul li a').bind('mouseleave', function (event) {
-                $(this).css('color', '');                
+                $(this).css('color', '');
             });
-			
-			$('#screen').attr('style', 'height: ' + ($(window).height() - 135) + 'px'); // Set height screen div
+
+            $('#screen').attr('style', 'height: ' + ($(window).height() - 135) + 'px'); // Set height screen div
             $('.menu').attr('style', 'height: ' + ($(window).height() - 160) + 'px'); // Set height menu div
             $('.frm').attr('style', 'height: ' + ($(window).height() - 160) + 'px'); // Set height frame div
 
@@ -573,17 +582,64 @@
                 files.push(el);
                 if (index == 0) $('#docframe').attr('src', $(this).attr('href')); //in frame show first element
 
-                //$(this).attr('href', $(this).attr('href'));
-
                 $(this).click(function (event) {
                     $('iframe').attr('src', $(this).attr('href')); return false;
                 });
             });
 
-            $('#searchbox').autocomplete({
-                delay: 500,
-                minLength: 0,
-                search: function (event, ui) {
+            function xmlParser(xml) {
+                var findFiles = new Array();
+                $(xml).find("file").each(function () {
+                    var name = $(this).find("name").text();
+                    var text = $(this).find("text").text();
+                    if (name.toLowerCase().indexOf($('#searchbox').val().toLowerCase()) != -1) {
+                        findFiles.push(name);
+                    }
+                    else if (text.toLowerCase().indexOf($('#searchbox').val().toLowerCase()) != -1) {
+                        findFiles.push(name);
+                    }
+                });
+                menuFilter(findFiles)
+            }
+
+            function menuFilter(findFiles) {
+                $('.menu ul li').each(function (index) {
+                    if ($.inArray($(this).text(), findFiles) != -1) {
+                        $(this).show();
+                    }
+                    else {
+                        $(this).hide();
+                    }
+                });
+                //Hide animation search
+                $('#searching').hide();
+            }
+
+            function runSearch() {
+                if ($('#searchbox').val() == '') {
+                    $('.menu ul li').each(function (index) {
+                        $(this).show();
+                    });
+                    $('#searchOpt').hide(200);
+                }
+                else if ($("input:radio[name=box]").filter(":checked").val() == 't2') {
+                    //Profesional search
+                    if ($('#searchbox').val().length >= 3) {
+                        $('#searchOpt').show(200);
+                        $('#searching').show();
+                        $(document).ready(function () {
+                            $.ajax({
+                                type: "GET",
+                                url: "searchdata.xml",
+                                dataType: "xml",
+                                success: xmlParser
+                            });
+                        });
+                    }
+                }
+                else {
+                    //Simple search
+                    $('#searchOpt').show(200);
                     $('.menu ul li').each(function (index) {
                         if ($('#searchbox').val() != '') {
                             if ($(this).text().toLowerCase().indexOf($('#searchbox').val().toLowerCase()) < 0) {
@@ -598,9 +654,16 @@
                         }
                     });
                 }
+            }
+
+            $('#searchbox').autocomplete({
+                delay: 500,
+                minLength: 0,
+                search: function (event, ui) {
+                    runSearch();
+                }
             });
 
-            //Filter hints
             $('#searchbox').css('color', '#808080');
             $('#searchbox').val('menu filter');
 
@@ -610,24 +673,26 @@
                     $('#searchbox').val('');
                 }
                 $('#searchbox').animate({
-                    left: '-=300',
-                    width: '+=300'
+                    width: '500px'
                 }, 200, function () {
 
-                });
+                })
             });
 
             $('#searchbox').focusout(function myfunction() {
                 if ($('#searchbox').val() == '') {
                     $('#searchbox').css('color', '#808080');
                     $('#searchbox').val('menu filter');
-                }
-                $('#searchbox').animate({
-                    left: '+=300',
-                    width: '-=300'
-                }, 200, function () {
+                    $('#searchbox').animate({
+                        width: '150px'
+                    }, 200, function () {
 
-                });
+                    });
+                    $('.menu ul li').each(function (index) {
+                        $(this).show();
+                    });
+                    $('#searchOpt').hide(200);
+                }
             });
 
             $('.navi').css('border', '1px solid #6F6C67'); // fix border for ie;
@@ -711,7 +776,11 @@
                 $.cookie("favorites", favoritesData, { expires: 365 });
                 $('#favoritesDialog').dialog('close');
             });
-        });		
+
+            $('input:radio[name=box]').click(function (event) {
+                runSearch();
+            });
+        });
 		]]>
 		</xsl:text>
     </script>
@@ -776,6 +845,17 @@
             margin: 2px; 
             padding: 2px;
         } 
+		
+        .searchopt
+        {
+            display: none;
+            position: absolute;
+            top: 93px;
+            right: 35px;
+            border: 1px solid #7F9DB9;
+            width: 300px;
+            background-color: #FFFFFF;
+        }
 		]]>
     </style>
 	<xsl:value-of select="$newline"/>
