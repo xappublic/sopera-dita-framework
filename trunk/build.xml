@@ -66,6 +66,10 @@
 			<property name="transtype" value="xhtml" />
 			<property name="clean.temp" value="no" />
 		</ant>
+		<java jar="${basedir}${file.separator}SearchGen.jar" fork="true" failonerror="true">
+			<arg value="${basedir}${file.separator}in${file.separator}bpm_users_guide.ditamap"/>
+			<arg value="${basedir}${file.separator}out${file.separator}xhtml${file.separator}"/>
+		</java>
 		<copy todir="${basedir}${file.separator}out${file.separator}xhtml">
 			<fileset dir="${basedir}${file.separator}data"/>
 		</copy>		
@@ -73,6 +77,6 @@
 	<target name="createAll">
 		<antcall target="data2pdf" />
 		<antcall target="data2xhtml" />
-		<antcall target="data2eclipsehelp"/>
-	</target>
+		<antcall target="data2eclipsehelp"/>		
+	</target>	
 </project>
