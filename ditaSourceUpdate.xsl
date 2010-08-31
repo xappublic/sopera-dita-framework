@@ -8,12 +8,12 @@
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:variable name="href" select="@id"/>
-				<xsl:result-document href="{$href}.ditamap" doctype-public="-//OASIS//DTD DITA Map//EN" doctype-system="../../DITA-OT1.5.1/dtd/technicalContent/dtd/map.dtd" indent="yes" method="xml" encoding="UTF-8">
+				<xsl:result-document href="{$href}.tmp" doctype-public="-//OASIS//DTD DITA Map//EN" doctype-system="../../DITA-OT1.5.1/dtd/technicalContent/dtd/map.dtd" indent="yes" method="xml" encoding="UTF-8">
 					<map>
 						<xsl:element name="topicref">
 							<xsl:attribute name="href">
 									<xsl:value-of select="@id"/>
-									<xsl:text>.xml</xsl:text>
+									<xsl:text>1.xml</xsl:text>
 							</xsl:attribute>
 							<xsl:for-each select="(descendant::topic) | (descendant::concept) | (descendant::task) | (descendant::reference) | (descendant::glossary)">
 								<xsl:element name="topicref">
@@ -26,7 +26,7 @@
 						</xsl:element>
 					</map>
 				</xsl:result-document>
-				<xsl:result-document href="{$href}.tmp" doctype-public="-//OASIS//DTD DITA 1.2 Topic//EN" doctype-system="../../DITA-OT1.5.1/dtd/technicalContent/dtd/topic.dtd" indent="yes" method="xml" encoding="UTF-8">
+				<xsl:result-document href="{$href}1.xml" doctype-public="-//OASIS//DTD DITA 1.2 Topic//EN" doctype-system="../../DITA-OT1.5.1/dtd/technicalContent/dtd/topic.dtd" indent="yes" method="xml" encoding="UTF-8">
 					<xsl:element name="{local-name(.)}">
 						<xsl:attribute name="id">
 							<xsl:value-of select="@id"/>
