@@ -103,6 +103,11 @@
 				<include name="**/*.xml" />
 			</fileset>
 		</foreach>
+		<foreach target="renameMaps" param="dita.tmp.map">
+			<fileset dir="${source.dir}">
+				<include name="**/*.tmp" />
+			</fileset>
+		</foreach>
 		<!--<antcall target="updateSourceDoctype" />
 		-->
 		<!--<replaceregexp flags="m">
@@ -156,5 +161,12 @@
 			</xmlcatalog>
 		</xslt>
 		<move file="${dita.source}.tmp" tofile="${dita.source}" />
+	</target>
+	<target name="renameMaps">
+		<echo>${dita.tmp.map}</echo>
+		<dirname property="tmp.map.dir" file="${dita.tmp.map}"/>
+		<echo>${tmp.map.dir}</echo>
+		<basename file="${dita.tmp.map}" property="just.dita.map" suffix=".tmp"/>
+		<move file="${dita.tmp.map}" tofile="${tmp.map.dir}/${just.dita.map}.xml" />
 	</target>
 </project>
