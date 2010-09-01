@@ -66,8 +66,9 @@
 			<property name="transtype" value="xhtml" />
 			<property name="clean.temp" value="no" />
 		</ant>
+		<basename property="eclipsehelpjar" file="${map.file}" suffix=".ditamap"/>
 		<java jar="${basedir}${file.separator}SearchGen.jar" fork="true" failonerror="true">
-			<arg value="${basedir}${file.separator}in${file.separator}bpm_users_guide.ditamap"/>
+			<arg value="${map.file}"/>
 			<arg value="${basedir}${file.separator}out${file.separator}xhtml${file.separator}"/>
 		</java>
 		<copy todir="${basedir}${file.separator}out${file.separator}xhtml">
