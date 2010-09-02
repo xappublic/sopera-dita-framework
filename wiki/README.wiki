@@ -10,7 +10,7 @@ This readme files describes the folders in this framework and contains instructi
 
 
 ===Structure of the project:====
-<pre>
+{{{
 SopDitaDocumentation	- main project folder.
 |
 --- DITA-OT1.5.1 	- folder with DITA-OT.
@@ -38,7 +38,8 @@ SopDitaDocumentation	- main project folder.
 --- start.bat		- file for classpath settings. You need to run this file first to work without GUI.
 |
 --- transformate.bat	- file to call main ant script (build.xml).
-</pre>
+}}}
+
 
 
 Installing of DITA-OT (SOPERA version):
@@ -49,8 +50,6 @@ Installing of DITA-OT (SOPERA version):
 Upgrade the version of DITA-OT if you have an older version present:
 1. Unzip folder with DITA-OT to a project project folder.
 2. Set DITA-OT version in the build.properties (dita.version variable).
-
-
 
 
 ===Using DITA-OT to generate PDF output using the GUI:===
