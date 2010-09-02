@@ -1,4 +1,5 @@
-This is the sourses for using and testing automated creation of SOPERA documentation.
+This readme files describes the folders in this framework and contains instructions on  using it.
+
 
 
 
@@ -12,29 +13,29 @@ Structure of the project:
 
 SopDitaDocumentation	- main project folder.
 |
---- DITA-OT1.5.1 	- folder with DITA-OT.
+--- DITA-OT1.5.1 		- folder with DITA-OT.
 |
---- in		 	- folder with source dita files, images and ditamap.
+--- in		 			- folder with source dita files, images and ditamap.
 |
---- lib			- folder with libs for java GUI application.
+--- lib					- folder with libs for java GUI application.
 |
---- out		 	- folder with ready documentation.
+--- out		 			- folder with ready documentation.
 |
---- temp	 	- temporary folder.
+--- temp	 			- temporary folder.
 |
 --- build.properties	- file with main project properties.
 |
---- build.xml		- main ant script, which starts transformation process.
+--- build.xml			- main ant script, which starts transformation process.
 |
---- Convert.jar		- GUI application.
+--- Convert.jar			- GUI application.
 |
---- forjavaapp.bat	- batch file for java application.
+--- forjavaapp.bat		- batch file for java application.
 |
---- forjavaapp.sh	- file for java application.
+--- forjavaapp.sh		- file for java application.
 |
---- README.txt		- this file, short descrition of the project.
+--- README.txt			- this file, short description of the project.
 |
---- start.bat		- file for classpath settings. You need to run this file first to work without GUI.
+--- start.bat			- file for classpath settings. You need to run this file first to work without GUI.
 |
 --- transformate.bat	- file to call main ant script (build.xml).
 
@@ -45,14 +46,23 @@ Installing of DITA-OT (SOPERA version):
 
 
 
-Upgrade the version of DITA-OT:
-1. Unzip folder with DITA-OT to the our project folder.
+Upgrade the version of DITA-OT if you have an older version present:
+1. Unzip folder with DITA-OT to a project project folder.
 2. Set DITA-OT version in the build.properties (dita.version variable).
 
 
 
 
-Using of DITA-OT for pdf generation in console:
-1. Open file build.properties and change dita.version variable to the correct version value; set source.dir variable to the folder with source dita files; set path to the ditamap file with help of map.file variable.
-2. Run start.cmd file to start creation of documents.
-3. Open "out/pdf" folder and you can find pdf document there.
+Generate PDF output using the GUI:
+1. Start convert.jar
+2. In the new window that appears, click "Add ditamap file" and browse to your ditamap file.
+3. Click "Start process".
+4. If your files are valid and the process successful, you should see a "Build Successful" message when the generation process is completed.
+5. Go to the "out/pdf" folder and locate your PDF file.
+
+Alternatively, you can also do the following:
+1. Open the file build.properties and change the dita.version variable to the correct version value; 
+2. Set the source.dir variable to the folder with source dita files; 
+3. Set the path to the ditamap file with help of map.file variable.
+2. Run start.cmd file to start the PDF generation process.
+3. Go to the "out/pdf" folder and locate your PDF file.
