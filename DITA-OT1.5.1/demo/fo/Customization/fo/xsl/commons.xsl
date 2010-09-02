@@ -55,6 +55,12 @@
 			</fo:table>		
     </xsl:template>
 	
+	<xsl:template match="//unknown">
+		<fo:block>
+			<xsl:attribute name="page-break-after">always</xsl:attribute>
+		</fo:block>
+    </xsl:template>
+	
 	<xsl:template match="*[contains(@class,' topic/section ')]" mode="dita2xslfo:section-heading">
       <!-- Specialized simpletable elements may override this rule to add
            default headings for a section. By default, titles are processed
