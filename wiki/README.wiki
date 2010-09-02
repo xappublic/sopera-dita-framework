@@ -1,3 +1,4 @@
+#labels Featured
 This readme files describes the folders in this framework and contains instructions on  using it.
 
 
@@ -57,14 +58,15 @@ Upgrade the version of DITA-OT if you have an older version present:
   <li> Start <tt>convert.jar</tt>. </li>
   <li>Click "Add ditamap file" and browse to your ditamap file.</li>
   <li> Click "Start process".</li>
-  <li> If your files are valid and the process successful, you should see a 
-   "Build Successful" when the generation process is completed.</li>
+  <li> If your files are valid and the process successful, you should see a "Build Successful" when the generation process is completed.</li>
 <li> Go to the "out/pdf" folder and locate your PDF file.</li>
 </ol>
 
 ===Alternatively, you can also do the following:===
-1. Open the file build.properties and change the dita.version variable to the correct version value; 
-2. Set the source.dir variable to the folder with source dita files; 
-3. Set the path to the ditamap file with help of map.file variable.
-2. Run start.cmd file to start the PDF generation process.
-3. Go to the "out/pdf" folder and locate your PDF file.
+<ol>
+ <li>Open the file build.properties and change the dita.version variable to the correct version value.</li> 
+ <li>Set the source.dir variable to the folder with source dita files. </li>
+ <li>Set the path to the ditamap file with help of map.file variable.</li>
+ <li>Run start.cmd file to start the PDF generation process.</li>
+ <li>Go to the "out/pdf" folder and locate your PDF file.</li>
+</ol>
