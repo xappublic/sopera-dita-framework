@@ -41,9 +41,10 @@ SopDitaDocumentation	- main project folder.
 }}}
 
 
+---- 
 
-Installing of DITA-OT (SOPERA version):
-1. Checkout project form svn: http://sopera-examples.googlecode.com/svn/dita/sandbox/SopDitaDocumentation.
+===Installing of DITA-OT (SOPERA version):===
+Checkout project from svn: <a href="http://sopera-examples.googlecode.com/svn/dita/sandbox/SopDitaDocumentation">SopDitaDocumentation</a>.
 
 
 
