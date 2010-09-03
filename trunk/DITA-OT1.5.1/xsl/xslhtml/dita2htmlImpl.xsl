@@ -4596,7 +4596,7 @@
     <!-- title -or- title & desc -->
     <xsl:when test="*[contains(@class,' topic/title ')]">
       <span class="figcap">
-       <xsl:choose>      <!-- Hungarian: "1. Figure " -->
+       <!--<xsl:choose>
         <xsl:when test="( (string-length($ancestorlang)=5 and contains($ancestorlang,'hu-hu')) or (string-length($ancestorlang)=2 and contains($ancestorlang,'hu')) )">
          <xsl:value-of select="$fig-count-actual"/><xsl:text>. </xsl:text>
          <xsl:call-template name="getString">
@@ -4608,7 +4608,7 @@
           <xsl:with-param name="stringName" select="'Figure'"/>
          </xsl:call-template><xsl:text> </xsl:text><xsl:value-of select="$fig-count-actual"/><xsl:text>. </xsl:text>
         </xsl:otherwise>
-       </xsl:choose>
+       </xsl:choose>-->
        <xsl:apply-templates select="./*[contains(@class,' topic/title ')]" mode="figtitle"/>
       </span>
 	  <br />
