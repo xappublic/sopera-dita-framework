@@ -1,13 +1,9 @@
 This readme files describes the folders in this framework and contains instructions on  using it.
 
 
-
-
 Requirements:
 1. Java 1.6.x.
 2. Ant 1.7.x.
-
-
 
 Structure of the project:
 
