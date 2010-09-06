@@ -62,4 +62,4 @@ Alternatively, you can also do the following:
 2. Set the source.dir variable to the folder with source dita files; 
 3. Set the path to the ditamap file with help of map.file variable.
 2. Run start.cmd file to start the PDF generation process.
-3. Go to the "out/pdf" folder and locate your PDF file.
+3. Go to the "out/ditamapFilename/pdf" folder and locate your PDF file.
