@@ -55,7 +55,7 @@ Generate PDF output using the GUI:
 2. In the new window that appears, click "Add ditamap file" and browse to your ditamap file.
 3. Click "Start process".
 4. If your files are valid and the process successful, you should see a "Build Successful" message when the generation process is completed.
-5. Go to the "out/pdf" folder and locate your PDF file.
+5. Go to the "out/ditamapFilename/pdf" folder and locate your PDF file.
 
 Alternatively, you can also do the following:
 1. Open the file build.properties and change the dita.version variable to the correct version value; 
