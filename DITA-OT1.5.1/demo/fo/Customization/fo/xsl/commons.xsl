@@ -88,15 +88,15 @@
 	
 	<xsl:template match="*[contains(@class, ' topic/p ')]">
         <fo:block xsl:use-attribute-sets="p" id="{@id}">
-			<xsl:if test="./parent::*[contains(@class,' topic/body ')]">
-                <xsl:attribute name="margin-left">45mm</xsl:attribute>
-			</xsl:if>
 			<xsl:if test="./ancestor::*[contains(@oid, 'metadata')]">
 			    <xsl:attribute name="margin-left">10mm</xsl:attribute>
 			</xsl:if>
 			<xsl:if test="./ancestor::*[contains(@class, ' task/task ')]">
                 <xsl:attribute name="margin-left">0mm</xsl:attribute>
-			</xsl:if>			
+			</xsl:if>
+			<xsl:if test="./parent::*[contains(@class,' topic/body ')]">
+                <xsl:attribute name="margin-left">45mm</xsl:attribute>
+			</xsl:if>
 			<xsl:apply-templates/>
         </fo:block>
     </xsl:template>
@@ -115,6 +115,9 @@
 			</xsl:if>
 			<xsl:if test="./ancestor::*[name()='table']">
                 <xsl:attribute name="margin-left">0mm</xsl:attribute>
+			</xsl:if>
+			<xsl:if test="./parent::*[contains(@class,' topic/body ')]">
+                <xsl:attribute name="margin-left">45mm</xsl:attribute>
 			</xsl:if>
 			<fo:inline xsl:use-attribute-sets="note__label">
                 <xsl:choose>
