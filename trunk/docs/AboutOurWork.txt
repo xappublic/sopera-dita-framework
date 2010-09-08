@@ -1,0 +1,39 @@
+﻿- <uncnown /> tag add page break;
+- Image size should be set in DITA files or convert images into a suitable size.
+- Width of the table columns specified in the DITA files as the ratio of one column to another.
+- When looking in the HTML version after entering more than three letters, you can choose to search by document title or by document title and document body.
+- To start the HTML version you must run index.html
+- XSL files that change the output pdf are in the folder \DITA-OT1.5.1\demo\fo\Customization\fo
+
+xsl folder contains files for the transformation:
+	commons.xsl contains data for the transformation of common tags.
+	front-matter_1.0.xsl contains data transformation of the first page and page with copyright, data are taken from metadata.
+	pr-domain.xsl contains the code for the transformation codeblock.
+	In the file root-processing.xsl added to obtain the name of the product from metadata and added to generate LOF and LOT.
+	файл static-content.xsl responsible for creating a header and footer on even, odd, the first page, etc.
+	tables_1.0.xsl responsible for displaying tables. It adds an anchor for the LOT and set the formatting table cells.
+	toc.xsl and toc.xsl responsible for the generation of TOC, LOF and LOT
+
+attrs folder contains files with attributes:
+	basic-settings.xsl file contains data on the parameters page, font size, etc. We have changed the settings page to page is consistent with A4 format and indent 2 cm by default.
+	front-matter-attr.xsl file contains attributes the main page, It is given by the size and font of the title, the color of the line under the title, location of Sopera logo and formatting of the second page with copyrights.
+	links-attr.xsl file contains the display options in the options document. We have made the underlined, blue and removed the italics.
+	pr-domain-attr.xsl file contains attributes of building blocks with the code. We made the font a bit smaller and removed the padding that had been in the display blocks of code in the tables.
+	static-content-attr.xsl file contains formatting header and footer. We have made them more similar to the original document Sopera. Reduced the length of the line, indent on the sides, top and bottom.
+	In tables-attr.xsl file were removed initial margins in the tables, it is possible to accommodate more text in the table, because the size of table columns decreased in comparison with the original DITA generation.
+	In toc-attr.xsl file were set the font size in links LOT and LOF.
+
+Files with static text are in the folder DITA-OT1.5.1\demo\fo\Customization\common\vars for different localizations.
+	
+Temp folder contains files when generating stage1.xml, stage2.fo.
+In the first stored data to be converted into an xml files immediately before transformation, based on a sample made xpath, in the second file data is stored after the transformation, which are transmitted to the fop to generate pdf.
+
+Data for the transformation eclipsehelp and html are in \DITA-OT1.5.1\xsl
+In html help uses JavaScript engine jQuery.
+With DITA generates html version of the document, which slightly altered the file index.html. In this file connects javascript library, style sheets, and a few rules himself html document.
+Then, after generating the data from the folder "data" is transferred to the folder with the html version of the reference. This folder contains the actual framework jQuery, logos and images for design and style sheets, which are connected to the file index.html.
+Also worth noting that we have created with the help of Java applications Searchgen.jar generated xml file containing the title and text of all help files intended for a quick search on the document.
+
+HTML version of the Help on the left contains a list of the documentation section. This list can be filtered pomoschtyu search string, which is located in the upper right corner.
+Just next to the search includes a button to display the bookmarks.
+In opened the document you can add a bookmark and then use it to switch between documents.
