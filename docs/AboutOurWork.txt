@@ -36,4 +36,4 @@ Also worth noting that we have created with the help of Java applications Search
 
 HTML version of the Help on the left contains a list of the documentation section. This list can be filtered pomoschtyu search string, which is located in the upper right corner.
 Just next to the search includes a button to display the bookmarks.
-In opened the document you can add a bookmark and then use it to switch between documents.
+In opened document you can add a bookmark and then use it to switch between documents.
