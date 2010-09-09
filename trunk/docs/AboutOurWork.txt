@@ -29,8 +29,8 @@ Temp folder contains files when generating stage1.xml, stage2.fo.
 In the first stored data to be converted into an xml files immediately before transformation, based on a sample made xpath, in the second file data is stored after the transformation, which are transmitted to the fop to generate pdf.
 
 Data for the transformation eclipsehelp and html are in \DITA-OT1.5.1\xsl
-In html help uses JavaScript engine jQuery.
-With DITA generates html version of the document, which slightly altered the file index.html. In this file connects javascript library, style sheets, and a few rules himself html document.
+In html help uses JavaScript engine - jQuery.
+With DITA, generates html version of the document, which slightly altered the file index.html. In this file connects javascript libraries, style sheets, and a few rules himself html document.
 Then, after generating the data from the folder "data" is transferred to the folder with the html version of the reference. This folder contains the actual framework jQuery, logos and images for design and style sheets, which are connected to the file index.html.
 Also worth noting that we have created with the help of Java applications Searchgen.jar generated xml file containing the title and text of all help files intended for a quick search on the document.
 
