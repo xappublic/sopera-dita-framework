@@ -116,6 +116,9 @@
 			<xsl:if test="./ancestor::*[name()='table']">
                 <xsl:attribute name="margin-left">0mm</xsl:attribute>
 			</xsl:if>
+			<xsl:if test="count((./ancestor::*[contains(@class, ' topic/topic ')]) | (./ancestor::*[contains(@class, ' topic/body ')])) &gt; 1">
+                <xsl:attribute name="margin-left">0mm</xsl:attribute>
+			</xsl:if>
 			<xsl:if test="./parent::*[contains(@class,' topic/body ')]">
                 <xsl:attribute name="margin-left">45mm</xsl:attribute>
 			</xsl:if>

@@ -19,6 +19,9 @@
 			<xsl:if test="./ancestor::*[name()='p']">
 				<xsl:attribute name="margin-left">0mm</xsl:attribute>
 			</xsl:if>
+			<xsl:if test="./parent::*[contains(@class,' topic/li ')]">
+				<xsl:attribute name="margin-left">0mm</xsl:attribute>
+			</xsl:if>			
             <xsl:call-template name="setScale"/>
             <!-- rules have to be applied within the scope of the PRE box; else they start from page margin! -->
             <xsl:if test="contains(@frame,'top')">
