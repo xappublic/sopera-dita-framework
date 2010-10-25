@@ -318,16 +318,26 @@
 <!--                </fo:float>-->
             </xsl:when>
             <xsl:otherwise>
+				<xsl:variable name="newhref"><xsl:value-of select="@href"/></xsl:variable>
 				<xsl:variable name="newWidth">
 					<xsl:choose>
-						<xsl:when test="@width  &gt; 4.8">
+						<xsl:when test="@*[contains(name(),'width')]">
 							<xsl:value-of select="@width"/>
 						</xsl:when>
 						<xsl:otherwise>
-							4.8in
+							<xsl:choose>
+								<xsl:when test="number(document('../../../../../../images.xml')/images/image[@href = $newhref]/@width) &gt; 340">
+									340px
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="document('../../../../../../images.xml')/images/image[@href = $newhref]/@width"/>px
+								</xsl:otherwise>
+							</xsl:choose>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
+				<!--<fo:block><xsl:value-of select="$newhref"/></fo:block>
+				<fo:block><xsl:value-of select="document('../../../../../../images.xml')/images/image[@href = $newhref]/@width"/></fo:block>-->
 				<fo:inline xsl:use-attribute-sets="image__inline" id="{@id}">
                     <xsl:call-template name="placeImage">
                         <xsl:with-param name="imageAlign" select="@align"/>
