@@ -290,6 +290,132 @@
         </fo:block>
     </xsl:template>	
 	
+	<xsl:template match="*[contains(@class,' topic/image ')]">
+        <!-- build any pre break indicated by style -->
+        <xsl:choose>
+            <xsl:when test="parent::fig">
+                <!-- NOP if there is already a break implied by a parent property -->
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:if test="not(@placement='inline')">
+                    <!-- generate an FO break here -->
+                    <fo:block>&#160;</fo:block>
+                </xsl:if>
+            </xsl:otherwise>
+        </xsl:choose>
+
+        <xsl:choose>
+            <xsl:when test="not(@placement = 'inline')">
+<!--                <fo:float xsl:use-attribute-sets="image__float">-->
+                    <fo:block xsl:use-attribute-sets="image__block" id="{@id}">
+                        <xsl:call-template name="placeImage">
+                            <xsl:with-param name="imageAlign" select="@align"/>
+                            <xsl:with-param name="href" select="@href"/>
+                            <xsl:with-param name="height" select="@height"/>
+                            <xsl:with-param name="width" select="@width"/>
+                        </xsl:call-template>
+                    </fo:block>
+<!--                </fo:float>-->
+            </xsl:when>
+            <xsl:otherwise>
+				<xsl:variable name="newWidth">
+					<xsl:choose>
+						<xsl:when test="@width  &gt; 4.8">
+							<xsl:value-of select="@width"/>
+						</xsl:when>
+						<xsl:otherwise>
+							4.8in
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
+				<fo:inline xsl:use-attribute-sets="image__inline" id="{@id}">
+                    <xsl:call-template name="placeImage">
+                        <xsl:with-param name="imageAlign" select="@align"/>
+                        <xsl:with-param name="href" select="@href"/>
+                        <xsl:with-param name="height" select="@height"/>
+                        <!--<xsl:with-param name="width" select="@width"/>-->
+						<xsl:with-param name="width" select="$newWidth"/>
+                    </xsl:call-template>
+                </fo:inline>
+            </xsl:otherwise>
+        </xsl:choose>
+
+        <!-- build any post break indicated by style -->
+        <xsl:choose>
+            <xsl:when test="parent::fig">
+                <!-- NOP if there is already a break implied by a parent property -->
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:if test="not(@placement='inline')">
+                    <!-- generate an FO break here -->
+                    <fo:block>&#160;</fo:block>
+                </xsl:if>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template name="placeImage">
+        <xsl:param name="imageAlign"/>
+        <xsl:param name="href"/>
+        <xsl:param name="height"/>
+        <xsl:param name="width"/>
+        <xsl:apply-templates select="." mode="placeImage">
+            <xsl:with-param name="imageAlign" select="$imageAlign"/>
+            <xsl:with-param name="href" select="$href"/>
+            <xsl:with-param name="height" select="$height"/>
+            <xsl:with-param name="width" select="$width"/>
+        </xsl:apply-templates>
+    </xsl:template>
+
+    <xsl:template match="*" mode="placeImage">
+        <xsl:param name="imageAlign"/>
+        <xsl:param name="href"/>
+        <xsl:param name="height"/>
+        <xsl:param name="width"/>
+<!--Using align attribute set according to image @align attribute-->
+        <xsl:call-template name="processAttrSetReflection">
+                <xsl:with-param name="attrSet" select="concat('__align__', $imageAlign)"/>
+                <xsl:with-param name="path" select="'../../cfg/fo/attrs/commons-attr.xsl'"/>
+            </xsl:call-template>
+        <fo:external-graphic src="url({$href})" xsl:use-attribute-sets="image">
+            <!--Setting image height if defined-->
+            <xsl:if test="$height">
+                <xsl:attribute name="content-height">
+                <!--The following test was commented out because most people found the behavior
+                 surprising.  It used to force images with a number specified for the dimensions
+                 *but no units* to act as a measure of pixels, *if* you were printing at 72 DPI.
+                 Uncomment if you really want it. -->
+                    <!--<xsl:choose>
+                        <xsl:when test="not(string(number($height)) = 'NaN')">
+                            <xsl:value-of select="concat($height div 72,'in')"/>
+                        </xsl:when>
+                        <xsl:when test="$height">-->
+                            <xsl:value-of select="$height"/>
+                        <!--</xsl:when>
+                    </xsl:choose>-->
+                </xsl:attribute>
+            </xsl:if>
+            <!--Setting image width if defined-->
+            <xsl:if test="$width">
+                <xsl:attribute name="content-width">
+                    <!--<xsl:choose>
+                        <xsl:when test="not(string(number($width)) = 'NaN')">
+                            <xsl:value-of select="concat($width div 72,'in')"/>
+                        </xsl:when>
+                        <xsl:when test="$width">-->
+                            <xsl:value-of select="$width"/>
+                        <!--</xsl:when>
+                    </xsl:choose>-->
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="not($width) and not($height) and @scale">
+                <xsl:attribute name="content-width">
+                    <xsl:value-of select="concat(@scale,'%')"/>
+                </xsl:attribute>
+            </xsl:if>
+        </fo:external-graphic>
+    </xsl:template>
+	
 	<xsl:template match="//*[contains(@oid, 'metadata')]"></xsl:template>
 	<xsl:template match="//*[contains(@oid, 'metadata')]//p">
 		<fo:block>
