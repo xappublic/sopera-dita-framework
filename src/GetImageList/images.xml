@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<images>
+<image href="images/ui_workbench.png" width="627" height="443" />
+<image href="images/ui_win_switch_perspective.png" width="342" height="403" />
+<image href="images/ui_admin_perspective.png" width="434" height="99" />
+<image href="images/ui_esb_prop_tab.png" width="424" height="171" />
+<image href="images/drag_drop_context_menu.png" width="442" height="261" />
+</images>
