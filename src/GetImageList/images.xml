@@ -8,4 +8,22 @@
 <image href="images\drag_drop_context_menu.png" width="4500" height="2657" />
 <image href="images\expose_sop_provider_wizard1.png" width="456" height="534" />
 <image href="images\expose_process_wizard.png" width="729" height="550" />
+<image href="images\container-namespace.gif" width="16" height="16" />
+<image href="images\service.gif" width="16" height="16" />
+<image href="images\service-na.gif" width="16" height="16" />
+<image href="images\operation-input.gif" width="16" height="16" />
+<image href="images\operation-input-output.gif" width="16" height="16" />
+<image href="images\operation-output.gif" width="16" height="16" />
+<image href="images\operation-callback.gif" width="16" height="16" />
+<image href="images\services_alphabetically_sorted.png" width="556" height="287" />
+<image href="images\sr_drag_drop_items_0.png" width="503" height="370" />
+<image href="images\show_service_namespaces.png" width="767" height="49" />
+<image href="images\with_namespaces.png" width="766" height="138" />
+<image href="images\without_namespaces.png" width="766" height="135" />
+<image href="images\global_metadata_config.png" width="646" height="453" />
+<image href="images\metatada_properties_tab.png" width="522" height="222" />
+<image href="images\enable_dyn_credentials.png" width="673" height="228" />
+<image href="images\metatada_dynamic_properties.png" width="525" height="584" />
+<image href="images\changing_wsdl_default_location.png" width="561" height="227" />
+<image href="images\caching_enabled_false.png" width="770" height="389" />
 </images>

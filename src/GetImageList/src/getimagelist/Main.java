@@ -91,6 +91,20 @@ public class Main {
                 files.add(new FilesList(hrefFile.getParent() + "\\", hrefFile.getParent() + "\\" + href)); // Добавляем первый файл в список файлов
             }
 
+            XPathExpression expr3 = xpath.compile("//topic");
+            Object result3 = expr3.evaluate(doc, XPathConstants.NODESET);
+            NodeList nodes3 = (NodeList) result3;
+
+            for (int i = 0; i < nodes3.getLength(); i++)
+            {
+                if(nodes3.item(i).getAttributes().getNamedItem("conref")!=null)
+                {
+                    String href = nodes3.item(i).getAttributes().getNamedItem("conref").getNodeValue().replace('/', '\\');
+                    File hrefFile = new File(files.get(0).rootCatalogpath + href);
+                    files.add(new FilesList(hrefFile.getParent() + "\\", hrefFile.getParent() + "\\" + href)); // Добавляем первый файл в список файлов
+                }
+            }
+
             //////////////////////////////////////////////////////
             {
                 String res = "";
