@@ -48,6 +48,9 @@
 	</target>
 
 	<target name="data2pdf" depends="integrate">
+		<java jar="${basedir}${file.separator}GetImageList.jar" fork="true" failonerror="true">
+			<arg value="${map.file}"/>			
+		</java>
 		<ant antfile="${dita.dir}${file.separator}build.xml" target="init">
 			<!-- please refer to the toolkit's document for supported parameters, and 
 			   specify them base on your needs -->
