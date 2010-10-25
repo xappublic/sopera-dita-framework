@@ -31,10 +31,6 @@ SopDitaDocumentation	- main project folder.
 --- forjavaapp.sh		- file for java application.
 |
 --- README.txt			- this file, short description of the project.
-|
---- start.bat			- file for classpath settings. You need to run this file first to work without GUI.
-|
---- transformate.bat	- file to call main ant script (build.xml).
 
 
 
@@ -61,5 +57,8 @@ Alternatively, you can also do the following:
 1. Open the file build.properties and change the dita.version variable to the correct version value; 
 2. Set the source.dir variable to the folder with source dita files; 
 3. Set the path to the ditamap file with help of map.file variable.
-2. Run start.cmd file to start the PDF generation process.
+2. Run forjavaapp.bat file to start the PDF generation process.
 3. Go to the "out/ditamapFilename/pdf" folder and locate your PDF file.
+
+Known issues
+1. If "ant not found" message is shown, you have to run forjavaapp.bat and convert.jar from project folder.
