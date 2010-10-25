@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <images>
+<image href="images\sopera.png" width="89" height="76" />
 <image href="images\ui_workbench.png" width="627" height="443" />
 <image href="images\ui_win_switch_perspective.png" width="342" height="403" />
 <image href="images\ui_admin_perspective.png" width="434" height="99" />
 <image href="images\ui_esb_prop_tab.png" width="424" height="171" />
 <image href="images\drag_drop_context_menu.png" width="4500" height="2657" />
+<image href="images\expose_sop_provider_wizard1.png" width="456" height="534" />
+<image href="images\expose_process_wizard.png" width="729" height="550" />
 </images>

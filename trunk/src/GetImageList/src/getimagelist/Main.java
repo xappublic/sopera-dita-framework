@@ -11,6 +11,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -35,23 +37,30 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SAXException, ParserConfigurationException, XPathExpressionException, IOException {
-        int flag = 1;
         String mapFilePath = "";
         if(args.length == 0) { System.out.println("add arg with path to xml file"); return; }
-        else
-        {
-            mapFilePath = args[0];
-            if(mapFilePath.equals("begin")) flag = 0;
-            if(mapFilePath.equals("end")) flag = 2;
-        }
-        //mapFilePath = "C:\\bin\\sopera-dita-framework\\in\\sopera_intalio_ui_overview.xml";
+        else mapFilePath = args[0];
+        //mapFilePath = "C:\\bin\\sopera-dita-framework\\in\\bpm_users_guide.ditamap";
 
-        File mapFile = null;
-        NodeList nodes = null;
+        File mapFile = new File(mapFilePath);
+        List<FilesList> files = new ArrayList<FilesList>();
+
+        files.add(new FilesList(mapFile.getParent() + "\\", mapFilePath)); // Добавляем первый файл в список файлов
+
         
-        if(flag==1)
+        //Создаем начало файла
         {
-            mapFile = new File(mapFilePath);
+            String res = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\r\n<images>\r\n";
+            OutputStreamWriter f = new OutputStreamWriter(new FileOutputStream("images.xml", false), "UTF8");
+            char[] buflast = new char[res.length()];
+            res.getChars(0, buflast.length, buflast, 0);
+            f.write(buflast, 0, buflast.length);
+            f.flush();
+            f.close();
+        }
+
+        while(files.size() > 0)
+        {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setValidating(false);
             factory.setNamespaceAware(true); // never forget this!
@@ -64,59 +73,66 @@ public class Main {
                     return new InputSource(new StringReader(""));
                 }
             });
-            org.w3c.dom.Document doc = builder.parse(mapFilePath);
+            org.w3c.dom.Document doc = builder.parse(files.get(0).filePath);
             XPathFactory xPathFactory = XPathFactory.newInstance();
             XPath xpath = xPathFactory.newXPath();
             XPathExpression expr = xpath.compile("//image");
             Object result = expr.evaluate(doc, XPathConstants.NODESET);
-            nodes = (NodeList) result;
-        }
-        String res = "";
-        if(flag == 0)
-        {
-            res = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\r\n<images>\r\n";
-            OutputStreamWriter f = new OutputStreamWriter(new FileOutputStream("images.xml", false), "UTF8");
-            char[] buflast = new char[res.length()];
-            res.getChars(0, buflast.length, buflast, 0);
-            f.write(buflast, 0, buflast.length);
-            f.flush();
-        }
-        if(flag == 1)
-        {
-            OutputStreamWriter f = new OutputStreamWriter(new FileOutputStream("images.xml", true), "UTF8");
-            try {
-                for (int i = 0; i < nodes.getLength(); i++) {
-                    res += "<image href=\"";
-                    String href = nodes.item(i).getAttributes().getNamedItem("href").getNodeValue().replace('/', '\\');
-                    res += href;
-                    res += "\"";
-                    //////////////////////////////////
-                    System.out.println(mapFile.getParent() +  "\\" + href);
-                    File inFile = new File(mapFile.getParent() +  "\\" + href);
-                    Image image = (Image) ImageIO.read(inFile);
-                    res += " width=\"" + image.getWidth(null) + "\"";
-                    res += " height=\"" + image.getHeight(null) + "\"";
-                    //////////////////////////////////
-                    res += " />\r\n";
-                }
-                char[] buflast = new char[res.length()];
-                res.getChars(0, buflast.length, buflast, 0);
-                f.write(buflast, 0, buflast.length);
-                f.flush();
+            NodeList nodes = (NodeList) result;
+
+            XPathExpression expr2 = xpath.compile("//topicref");
+            Object result2 = expr2.evaluate(doc, XPathConstants.NODESET);
+            NodeList nodes2 = (NodeList) result2;
+
+            for (int i = 0; i < nodes2.getLength(); i++)
+            {
+                String href = nodes2.item(i).getAttributes().getNamedItem("href").getNodeValue().replace('/', '\\');
+                File hrefFile = new File(files.get(0).rootCatalogpath + href);
+                files.add(new FilesList(hrefFile.getParent() + "\\", hrefFile.getParent() + "\\" + href)); // Добавляем первый файл в список файлов
             }
-            catch (IOException e) {
-              try {f.close();} catch (Exception e1) {};
-              return;
-             }
+
+            //////////////////////////////////////////////////////
+            {
+                String res = "";
+                OutputStreamWriter f = new OutputStreamWriter(new FileOutputStream("images.xml", true), "UTF8");
+                try {
+                    for (int i = 0; i < nodes.getLength(); i++) {
+                        res += "<image href=\"";
+                        String href = nodes.item(i).getAttributes().getNamedItem("href").getNodeValue().replace('/', '\\');
+                        res += href;
+                        res += "\"";
+                        //////////////////////////////////
+                        System.out.println(files.get(0).rootCatalogpath + href);
+                        File inFile = new File(files.get(0).rootCatalogpath + href);
+                        Image image = (Image) ImageIO.read(inFile);
+                        res += " width=\"" + image.getWidth(null) + "\"";
+                        res += " height=\"" + image.getHeight(null) + "\"";
+                        //////////////////////////////////
+                        res += " />\r\n";
+                    }
+                    char[] buflast = new char[res.length()];
+                    res.getChars(0, buflast.length, buflast, 0);
+                    f.write(buflast, 0, buflast.length);
+                    f.flush();
+                }
+                catch (IOException e) {
+                  try {f.close();} catch (Exception e1) {};
+                  return;
+                 }
+                f.close();
+            }
+            files.remove(0);
         }
-        if(flag == 2)
+        
+        // End of file
         {
-            res = "</images>";
+            String res2 = "</images>";
             OutputStreamWriter f = new OutputStreamWriter(new FileOutputStream("images.xml", true), "UTF8");
-            char[] buflast = new char[res.length()];
-            res.getChars(0, buflast.length, buflast, 0);
+            char[] buflast = new char[res2.length()];
+            res2.getChars(0, buflast.length, buflast, 0);
             f.write(buflast, 0, buflast.length);
             f.flush();
+            f.close();
         }
     }
 }
