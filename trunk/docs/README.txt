@@ -62,3 +62,4 @@ Alternatively, you can also do the following:
 
 Known issues
 1. If "ant not found" message is shown, you have to run forjavaapp.bat and convert.jar from project folder.
+2. Doctype must be written in one line.
