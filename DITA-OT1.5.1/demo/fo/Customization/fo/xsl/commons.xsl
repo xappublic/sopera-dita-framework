@@ -291,4 +291,14 @@
     </xsl:template>	
 	
 	<xsl:template match="//*[contains(@oid, 'metadata')]"></xsl:template>
+	<xsl:template match="//*[contains(@oid, 'metadata')]//p">
+		<fo:block>
+			<xsl:attribute name="margin-left">10mm</xsl:attribute>
+			<xsl:attribute name="text-indent">0em</xsl:attribute> 
+			<xsl:attribute name="space-before">0.6em</xsl:attribute> 
+			<xsl:attribute name="space-after">0.6em</xsl:attribute> 
+			<xsl:attribute name="space-after.optimum">3pt</xsl:attribute> 
+			<xsl:apply-templates/>
+		</fo:block>
+	</xsl:template>
 </xsl:stylesheet>
