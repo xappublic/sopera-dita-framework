@@ -80,27 +80,27 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 	// statusBarPanel begin
 	private JPanel statusBarPanel;
 	private JLabel statusBarLabel;
+
 	// statusBarPanel end.
 
-	class DitaFileFilter extends javax.swing.filechooser.FileFilter
-    {
-	    private final String[] okFileExtensions =  new String[] {"ditamap"};
-	
-	    public boolean accept(File file)
-	    {
-	    	if(file.isDirectory()) return true;
-		    for (String extension : okFileExtensions)
-		      if (file.getName().toLowerCase().endsWith(extension))
-		        return true;
-		    return false;
-        }
+	class DitaFileFilter extends javax.swing.filechooser.FileFilter {
+		private final String[] okFileExtensions = new String[] { "ditamap" };
+
+		public boolean accept(File file) {
+			if (file.isDirectory())
+				return true;
+			for (String extension : okFileExtensions)
+				if (file.getName().toLowerCase().endsWith(extension))
+					return true;
+			return false;
+		}
 
 		@Override
 		public String getDescription() {
 			return "Dita Map file";
 		}
-    }
-	
+	}
+
 	public FrameworkContentPane() {
 		setBorder(componentBorder);
 		setOpaque(true);
@@ -163,19 +163,20 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		addMapButton.setPreferredSize(new Dimension(100, 26));
 		addMapButton.setMaximumSize(new Dimension(100, 26));
 		addMapButton.addActionListener(this);
-		
 
 		deleteMapButton = new JButton("Delete ditamap");
 		deleteMapButton.setBorder(componentBorder);
 		deleteMapButton.setMinimumSize(new Dimension(100, 26));
 		deleteMapButton.setPreferredSize(new Dimension(100, 26));
 		deleteMapButton.setMaximumSize(new Dimension(100, 26));
+		deleteMapButton.addActionListener(this);
 
 		clearMapsButton = new JButton("Clear all maps");
 		clearMapsButton.setBorder(componentBorder);
 		clearMapsButton.setMinimumSize(new Dimension(100, 26));
 		clearMapsButton.setPreferredSize(new Dimension(100, 26));
 		clearMapsButton.setMaximumSize(new Dimension(100, 26));
+		clearMapsButton.addActionListener(this);
 
 		mapButtonsPanel.add(addMapButton);
 		mapButtonsPanel.add(deleteMapButton);
@@ -371,23 +372,30 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 	}
 
 	public void run() {
-		// TODO Auto-generated method stub		
+		// TODO Auto-generated method stub
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		if(arg0.getSource().equals(addMapButton))
-		{
+		if (arg0.getSource().equals(addMapButton)) {
 			JFileChooser chooser = new JFileChooser();
-	        chooser.setCurrentDirectory(new File("."));
-	        chooser.setFileFilter(new DitaFileFilter());
-	        int returnVal = chooser.showOpenDialog(this);
-	        if(returnVal == JFileChooser.APPROVE_OPTION) {
-	           //System.out.println("You chose to open this file: " + chooser.getSelectedFile().getName());
-	        	DefaultListModel dlm = (DefaultListModel)mapList.getModel();
-	        	dlm.addElement(chooser.getSelectedFile().getAbsolutePath());
-	        	
-	        }
+			chooser.setCurrentDirectory(new File("."));
+			chooser.setFileFilter(new DitaFileFilter());
+			int returnVal = chooser.showOpenDialog(this);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				DefaultListModel dlm = (DefaultListModel) mapList.getModel();
+				dlm.addElement(chooser.getSelectedFile().getAbsolutePath());
+			}
 		}
+		if (arg0.getSource().equals(deleteMapButton)) {
+			if (mapList.getSelectedIndex() != -1) {
+				DefaultListModel dlm = (DefaultListModel) mapList.getModel();
+				dlm.remove(mapList.getSelectedIndex());
+			}
+		}
+		if (arg0.getSource().equals(clearMapsButton)) {
+				DefaultListModel dlm = (DefaultListModel) mapList.getModel();
+				dlm.clear();			
+		}
+		// XXX
 	}
 }
