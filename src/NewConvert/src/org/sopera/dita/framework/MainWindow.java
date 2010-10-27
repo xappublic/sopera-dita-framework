@@ -14,7 +14,8 @@ public class MainWindow {
 		jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		jFrame.setResizable(false);
 		jFrame.setContentPane(new FrameworkContentPane());
-		jFrame.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		jFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		jFrame.setLocationRelativeTo(null);
 		jFrame.setVisible(true);
 	}
 
