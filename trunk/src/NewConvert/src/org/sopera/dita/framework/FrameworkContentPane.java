@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileFilter;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -78,9 +80,27 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 	// statusBarPanel begin
 	private JPanel statusBarPanel;
 	private JLabel statusBarLabel;
-
 	// statusBarPanel end.
 
+	class DitaFileFilter extends javax.swing.filechooser.FileFilter
+    {
+	    private final String[] okFileExtensions =  new String[] {"ditamap"};
+	
+	    public boolean accept(File file)
+	    {
+	    	if(file.isDirectory()) return true;
+		    for (String extension : okFileExtensions)
+		      if (file.getName().toLowerCase().endsWith(extension))
+		        return true;
+		    return false;
+        }
+
+		@Override
+		public String getDescription() {
+			return "Dita Map file";
+		}
+    }
+	
 	public FrameworkContentPane() {
 		setBorder(componentBorder);
 		setOpaque(true);
@@ -142,6 +162,8 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		addMapButton.setMinimumSize(new Dimension(100, 26));
 		addMapButton.setPreferredSize(new Dimension(100, 26));
 		addMapButton.setMaximumSize(new Dimension(100, 26));
+		addMapButton.addActionListener(this);
+		
 
 		deleteMapButton = new JButton("Delete ditamap");
 		deleteMapButton.setBorder(componentBorder);
@@ -327,39 +349,45 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		add(statusBarPanel);
 	}
 
-	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO
 	}
 
-	@Override
 	public void mouseExited(MouseEvent e) {
 		statusBarLabel.setText("\u00A9 SOPERA GmbH, 2010");
 	}
 
-	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
 	}
 
-	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
 	}
 
-	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub		
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
+		if(arg0.getSource().equals(addMapButton))
+		{
+			JFileChooser chooser = new JFileChooser();
+	        chooser.setCurrentDirectory(new File("."));
+	        chooser.setFileFilter(new DitaFileFilter());
+	        int returnVal = chooser.showOpenDialog(this);
+	        if(returnVal == JFileChooser.APPROVE_OPTION) {
+	           //System.out.println("You chose to open this file: " + chooser.getSelectedFile().getName());
+	        	DefaultListModel dlm = (DefaultListModel)mapList.getModel();
+	        	dlm.addElement(chooser.getSelectedFile().getAbsolutePath());
+	        	
+	        }
+		}
 	}
 }
