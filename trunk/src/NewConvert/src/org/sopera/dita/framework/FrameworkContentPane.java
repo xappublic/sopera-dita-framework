@@ -9,10 +9,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.io.FileFilter;
-
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.filechooser.FileFilter;
 
 public class FrameworkContentPane extends JPanel implements ActionListener,
 		MouseListener, Runnable {
@@ -83,7 +82,7 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 
 	// statusBarPanel end.
 
-	class DitaFileFilter extends javax.swing.filechooser.FileFilter {
+	class DitaFileFilter extends FileFilter {
 		private final String[] okFileExtensions = new String[] { "ditamap" };
 
 		public boolean accept(File file) {
@@ -203,6 +202,7 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		logProgressBar.setMinimumSize(new Dimension(500, 25));
 		logProgressBar.setPreferredSize(new Dimension(500, 25));
 		logProgressBar.setMaximumSize(new Dimension(500, 25));
+		logProgressBar.setStringPainted(true);
 
 		logSaveButton = new JButton("Save");
 
@@ -230,7 +230,8 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		validationLogProgressBar.setMinimumSize(new Dimension(500, 25));
 		validationLogProgressBar.setPreferredSize(new Dimension(500, 25));
 		validationLogProgressBar.setMaximumSize(new Dimension(500, 25));
-
+		validationLogProgressBar.setStringPainted(true);
+		
 		validationLogSaveButton = new JButton("Save");
 
 		validationLogButtonPanel.add(validationLogProgressBar);
@@ -257,7 +258,8 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		shortLogProgressBar.setMinimumSize(new Dimension(500, 25));
 		shortLogProgressBar.setPreferredSize(new Dimension(500, 25));
 		shortLogProgressBar.setMaximumSize(new Dimension(500, 25));
-
+		shortLogProgressBar.setStringPainted(true);
+		
 		shortLogSaveButton = new JButton("Save");
 
 		shortLogButtonPanel.add(shortLogProgressBar);
