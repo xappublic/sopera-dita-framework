@@ -38,9 +38,9 @@ public class Main {
      */
     public static void main(String[] args) throws SAXException, ParserConfigurationException, XPathExpressionException, IOException {
         String mapFilePath = "";
-        if(args.length == 0) { System.out.println("add arg with path to xml file"); return; }
-        else mapFilePath = args[0];
-        //mapFilePath = "C:\\bin\\sopera-dita-framework\\in\\bpm\\bpm_rent_a_car_tutorial.ditamap";
+        //if(args.length == 0) { System.out.println("add arg with path to xml file"); return; }
+        //else mapFilePath = args[0];
+        mapFilePath = "C:\\bin\\sopera-dita-framework\\in\\bpm\\bpm_rent_a_car_tutorial.ditamap";
 
         File mapFile = new File(mapFilePath);
         List<FilesList> files = new ArrayList<FilesList>();
@@ -134,7 +134,6 @@ public class Main {
                 }
                 catch (IOException e) {
                   try {f.close();} catch (Exception e1) {};
-                  return;
                  }
                 f.close();
             }
