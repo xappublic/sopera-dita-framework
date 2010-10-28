@@ -1,29 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <images>
-<image href="images\sopera.png" width="89" height="76" />
-<image href="images\ui_workbench.png" width="627" height="443" />
-<image href="images\ui_win_switch_perspective.png" width="342" height="403" />
-<image href="images\ui_admin_perspective.png" width="434" height="99" />
-<image href="images\ui_esb_prop_tab.png" width="424" height="171" />
-<image href="images\drag_drop_context_menu.png" width="4500" height="2657" />
-<image href="images\expose_sop_provider_wizard1.png" width="456" height="534" />
-<image href="images\expose_process_wizard.png" width="729" height="550" />
-<image href="images\container-namespace.gif" width="16" height="16" />
-<image href="images\service.gif" width="16" height="16" />
-<image href="images\service-na.gif" width="16" height="16" />
-<image href="images\operation-input.gif" width="16" height="16" />
-<image href="images\operation-input-output.gif" width="16" height="16" />
-<image href="images\operation-output.gif" width="16" height="16" />
-<image href="images\operation-callback.gif" width="16" height="16" />
-<image href="images\services_alphabetically_sorted.png" width="556" height="287" />
-<image href="images\sr_drag_drop_items_0.png" width="503" height="370" />
-<image href="images\show_service_namespaces.png" width="767" height="49" />
-<image href="images\with_namespaces.png" width="766" height="138" />
-<image href="images\without_namespaces.png" width="766" height="135" />
-<image href="images\global_metadata_config.png" width="646" height="453" />
-<image href="images\metatada_properties_tab.png" width="522" height="222" />
-<image href="images\enable_dyn_credentials.png" width="673" height="228" />
-<image href="images\metatada_dynamic_properties.png" width="525" height="584" />
-<image href="images\changing_wsdl_default_location.png" width="561" height="227" />
-<image href="images\caching_enabled_false.png" width="770" height="389" />
-</images>
+<image href="images\sop_bpm_architecture.png" width="674" height="330" />
+<image href="images\sop_bpm_tut_selecting_an_eg.png" width="512" height="292" />
+<image href="images\sop_bpm_tutorial_googlecode_eg.png" width="326" height="91" />
+<image href="images\sop_bpm_selecting_an_eg_win.png" width="417" height="413" />
+<image href="images\sop_bpm_start_asf_infra.png" width="527" height="316" />
+<image href="images\sop_bpm_start_bpm_svr.png" width="515" height="316" />
+<image href="images\sop_bpm_start_asf_infra.png" width="527" height="316" />
+<image href="images\sop_bpm_start_bpm_svr.png" width="515" height="316" />
+<image href="images\sop_bpm_create_new_proj.png" width="545" height="145" />
+<image href="images\new_sop_bpm_project_win.png" width="489" height="488" />
