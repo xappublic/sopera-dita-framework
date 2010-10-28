@@ -426,13 +426,11 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 					System.out.println("Resize images for "
 							+ String.valueOf(dlm.getElementAt(i)));
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				try {
-					Thread.sleep(2000);
+					Thread.sleep(3000);
 				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
