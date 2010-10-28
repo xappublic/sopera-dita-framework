@@ -40,7 +40,7 @@ public class Main {
         String mapFilePath = "";
         if(args.length == 0) { System.out.println("add arg with path to xml file"); return; }
         else mapFilePath = args[0];
-        //mapFilePath = "C:\\bin\\sopera-dita-framework\\in\\bpm_users_guide.ditamap";
+        //mapFilePath = "C:\\bin\\sopera-dita-framework\\in\\bpm\\bpm_rent_a_car_tutorial.ditamap";
 
         File mapFile = new File(mapFilePath);
         List<FilesList> files = new ArrayList<FilesList>();
@@ -86,9 +86,12 @@ public class Main {
 
             for (int i = 0; i < nodes2.getLength(); i++)
             {
-                String href = nodes2.item(i).getAttributes().getNamedItem("href").getNodeValue().replace('/', '\\');
-                File hrefFile = new File(files.get(0).rootCatalogpath + href);
-                files.add(new FilesList(hrefFile.getParent() + "\\", hrefFile.getParent() + "\\" + href)); // Добавляем первый файл в список файлов
+                if(nodes2.item(i).getAttributes().getNamedItem("href") != null)
+                {
+                    String href = nodes2.item(i).getAttributes().getNamedItem("href").getNodeValue().replace('/', '\\');
+                    File hrefFile = new File(files.get(0).rootCatalogpath + href);
+                    files.add(new FilesList(hrefFile.getParent() + "\\", hrefFile.getParent() + "\\" + href)); // Добавляем первый файл в список файлов
+                }
             }
 
             XPathExpression expr3 = xpath.compile("//topic");
@@ -97,7 +100,7 @@ public class Main {
 
             for (int i = 0; i < nodes3.getLength(); i++)
             {
-                if(nodes3.item(i).getAttributes().getNamedItem("conref")!=null)
+                if(nodes3.item(i).getAttributes().getNamedItem("conref") != null)
                 {
                     String href = nodes3.item(i).getAttributes().getNamedItem("conref").getNodeValue().replace('/', '\\');
                     File hrefFile = new File(files.get(0).rootCatalogpath + href);
