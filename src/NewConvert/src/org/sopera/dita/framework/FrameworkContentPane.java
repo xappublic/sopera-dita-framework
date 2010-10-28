@@ -9,9 +9,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.filechooser.FileFilter;
 
 public class FrameworkContentPane extends JPanel implements ActionListener,
 		MouseListener, Runnable {
@@ -70,6 +75,7 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 	private JCheckBox pdfCheckBox;
 	private JCheckBox htmlCheckBox;
 	private JCheckBox eclipseHelpCheckBox;
+	private JCheckBox convertPics;
 	private JPanel processButtonsPanel;
 	private JButton validationButton;
 	private JButton startButton;
@@ -79,11 +85,23 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 	// statusBarPanel begin
 	private JPanel statusBarPanel;
 	private JLabel statusBarLabel;
-
 	// statusBarPanel end.
 
-	class DitaFileFilter extends FileFilter {
-		private final String[] okFileExtensions = new String[] { "ditamap" };
+	String cmdFile = "";
+
+	class DitaFileFilter extends javax.swing.filechooser.FileFilter {
+		private final String[] okFileExtensions;
+		private final String description;
+
+		public DitaFileFilter(String ext, String descr) {
+			okFileExtensions = new String[] { ext };
+			description = descr;
+		}
+
+		public DitaFileFilter(String[] ext, String descr) {
+			okFileExtensions = ext;
+			description = descr;
+		}
 
 		public boolean accept(File file) {
 			if (file.isDirectory())
@@ -96,7 +114,7 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 
 		@Override
 		public String getDescription() {
-			return "Dita Map file";
+			return description;
 		}
 	}
 
@@ -203,8 +221,9 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		logProgressBar.setPreferredSize(new Dimension(500, 25));
 		logProgressBar.setMaximumSize(new Dimension(500, 25));
 		logProgressBar.setStringPainted(true);
-
+		
 		logSaveButton = new JButton("Save");
+		logSaveButton.addActionListener(this);
 
 		logButtonPanel.add(logProgressBar);
 		logButtonPanel.add(logSaveButton);
@@ -231,7 +250,7 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		validationLogProgressBar.setPreferredSize(new Dimension(500, 25));
 		validationLogProgressBar.setMaximumSize(new Dimension(500, 25));
 		validationLogProgressBar.setStringPainted(true);
-		
+
 		validationLogSaveButton = new JButton("Save");
 
 		validationLogButtonPanel.add(validationLogProgressBar);
@@ -271,11 +290,13 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		infoTabs.addTab("Maps", null, mapPanel, "List of ditamaps");
 		infoTabs.addTab("Log", null, logPanel,
 				"Information about transformation process");
-		infoTabs.addTab("Validation", null, validationLogPanel,
-				"Information about validation process");
-		infoTabs.addTab("Short log", null, shortLogPanel,
-				"Log with main information about convertation process");
-		for (int i = 0; i < 4; i++) {
+		// XXX
+		// infoTabs.addTab("Validation", null, validationLogPanel,
+		// "Information about validation process");
+		// infoTabs.addTab("Short log", null, shortLogPanel,
+		// "Log with main information about convertation process");
+		// for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 2; i++) {
 			infoTabs.setForegroundAt(i, new Color(132, 184, 24));
 			infoTabs.setBackgroundAt(i, new Color(255, 255, 255));
 		}
@@ -297,16 +318,26 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		documentTypesPanel.setMinimumSize(new Dimension(188, 420));
 		documentTypesPanel.setPreferredSize(new Dimension(188, 420));
 		documentTypesPanel.setMaximumSize(new Dimension(188, 420));
-
+		// / XXX
 		pdfCheckBox = new JCheckBox("Create PDF");
+		pdfCheckBox.setEnabled(false);
+		pdfCheckBox.setSelected(true);
 
 		htmlCheckBox = new JCheckBox("Create HTML");
+		htmlCheckBox.setEnabled(false);
+		htmlCheckBox.setSelected(true);
 
 		eclipseHelpCheckBox = new JCheckBox("Create EclipseHelp");
+		eclipseHelpCheckBox.setEnabled(false);
+		eclipseHelpCheckBox.setSelected(true);
+
+		convertPics = new JCheckBox("Auto resize images");
+		convertPics.setSelected(true);
 
 		documentTypesPanel.add(pdfCheckBox);
 		documentTypesPanel.add(htmlCheckBox);
 		documentTypesPanel.add(eclipseHelpCheckBox);
+		documentTypesPanel.add(convertPics);
 
 		processButtonsPanel = new JPanel();
 		processButtonsPanel.setLayout(new FlowLayout());
@@ -318,8 +349,9 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		validationButton = new JButton("Validate");
 
 		startButton = new JButton("Start");
-
-		processButtonsPanel.add(validationButton);
+		startButton.addActionListener(this);
+		// XXX
+		// processButtonsPanel.add(validationButton);
 		processButtonsPanel.add(startButton);
 
 		layout.putConstraint(SpringLayout.WEST, documentTypesPanel, 0,
@@ -350,6 +382,13 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		add(projectNamePanel);
 		add(centralPanel);
 		add(statusBarPanel);
+
+		if (System.getProperties().getProperty("os.name").indexOf("indows") > 0) {
+			System.out.println(System.getProperties().getProperty("os.name"));
+			cmdFile = "forjavaapp.bat";
+		} else {
+			cmdFile = "sh forjavaapp.sh";
+		}
 	}
 
 	public void mouseClicked(MouseEvent e) {
@@ -374,14 +413,58 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 	}
 
 	public void run() {
-		// TODO Auto-generated method stub
+		logTextArea.setText("");
+		String cmd = cmdFile;
+		DefaultListModel dlm = (DefaultListModel) mapList.getModel();
+		logProgressBar.setMaximum(100 * dlm.getSize());
+		for (int i = 0; i < dlm.getSize(); i++) {
+			if (convertPics.isSelected()) {
+				try {
+					Process preproc = Runtime.getRuntime().exec(
+							"java -jar GetImageList.jar "
+									+ String.valueOf(dlm.getElementAt(i)));
+					System.out.println("Resize images for "
+							+ String.valueOf(dlm.getElementAt(i)));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			Process proc = null;
+			cmd += " 1.5.1 in " + String.valueOf(dlm.getElementAt(i));
+			try {
+				proc = Runtime.getRuntime().exec(cmd, null, new File("."));
+			} catch (IOException e) {
+				System.out.println("File \"forjavaapp\" not found");
+				return;
+			}
+
+			InputStreamDataListener isdl = new InputStreamDataListener(proc,
+					logTextArea, logProgressBar, i);
+			Thread isdlThread = new Thread(isdl);
+			try {
+				isdlThread.start();
+			} catch (Exception e) {
+				System.err.println("Error");
+			}
+			InputStreamErrorListener isel = new InputStreamErrorListener(proc,
+					logTextArea, isdlThread);
+			new Thread(isel).start();
+		}
+		logProgressBar.setValue(100 * mapList.getModel().getSize());
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
 		if (arg0.getSource().equals(addMapButton)) {
 			JFileChooser chooser = new JFileChooser();
 			chooser.setCurrentDirectory(new File("."));
-			chooser.setFileFilter(new DitaFileFilter());
+			chooser.setFileFilter(new DitaFileFilter("ditamap", "DITA Map file"));
 			int returnVal = chooser.showOpenDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				DefaultListModel dlm = (DefaultListModel) mapList.getModel();
@@ -395,9 +478,51 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 			}
 		}
 		if (arg0.getSource().equals(clearMapsButton)) {
-				DefaultListModel dlm = (DefaultListModel) mapList.getModel();
-				dlm.clear();			
+			DefaultListModel dlm = (DefaultListModel) mapList.getModel();
+			dlm.clear();
 		}
+		if (arg0.getSource().equals(startButton)) {
+			try {
+				new Thread(this).start();
+			} catch (Exception e) {
+			}
+			infoTabs.getModel().setSelectedIndex(1);
+		}
+		if (arg0.getSource().equals(logSaveButton)) {
+			JFileChooser chooser = new JFileChooser();
+			chooser.setCurrentDirectory(new File("."));
+			chooser.setFileFilter(new DitaFileFilter("txt", "Text file"));
+			int returnVal = chooser.showOpenDialog(this);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				if (chooser.getSelectedFile().getAbsolutePath().toLowerCase()
+						.endsWith(".txt")) {
+					SaveFileAsString(chooser.getSelectedFile()
+							.getAbsolutePath(), "UTF8", logTextArea.getText());
+				} else {
+					SaveFileAsString(chooser.getSelectedFile()
+							.getAbsolutePath() + ".txt", "UTF8",
+							logTextArea.getText());
+				}
+			}
+		}
+
 		// XXX
+	}
+
+	private void SaveFileAsString(String file, String encoding, String string) {
+		OutputStream outputStream = null;
+		try {
+			outputStream = new FileOutputStream(file);
+			Writer writer = new OutputStreamWriter(outputStream, encoding);
+			writer.write(string);
+			writer.close();
+		} catch (Exception ex) {
+		} finally {
+			if (outputStream != null)
+				try {
+					outputStream.close();
+				} catch (IOException ex) {
+				}
+		}
 	}
 }
