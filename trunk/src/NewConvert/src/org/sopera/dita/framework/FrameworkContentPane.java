@@ -3,7 +3,6 @@ package org.sopera.dita.framework;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -49,21 +48,24 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 	// mapPanel end
 	// logPanel begin
 	private JPanel logPanel;
-	private TextArea logTextArea;
+	private JScrollPane logScrollPane;
+	private JTextArea logTextArea;
 	private JPanel logButtonPanel;
 	private JProgressBar logProgressBar;
 	private JButton logSaveButton;
 	// logPanel end
 	// validationLogPanel begin
 	private JPanel validationLogPanel;
-	private TextArea validationLogTextArea;
+	private JScrollPane validationLogScrollPane;
+	private JTextArea validationLogTextArea;
 	private JPanel validationLogButtonPanel;
 	private JProgressBar validationLogProgressBar;
 	private JButton validationLogSaveButton;
 	// validationLogPanel end
 	// shortLogPanel begin
 	private JPanel shortLogPanel;
-	private TextArea shortLogTextArea;
+	private JScrollPane shortLogScrollPane;
+	private JTextArea shortLogTextArea;
 	private JPanel shortLogButtonPanel;
 	private JProgressBar shortLogProgressBar;
 	private JButton shortLogSaveButton;
@@ -77,7 +79,8 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 	private JCheckBox eclipseHelpCheckBox;
 	private JCheckBox convertPics;
 	private JPanel processButtonsPanel;
-	private JButton validationButton;
+	//XXX
+	//private JButton validationButton;
 	private JButton startButton;
 	// buttonPanel end
 	// centralPanel end.
@@ -203,12 +206,16 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		mapPanel.add(mapButtonsPanel);
 
 		logPanel = new JPanel();
+		
+		logTextArea = new JTextArea();
+		logTextArea.setLineWrap(true);
+		logTextArea.setWrapStyleWord(true);
 
-		logTextArea = new TextArea();
-		logTextArea.setMinimumSize(new Dimension(590, 380));
-		logTextArea.setPreferredSize(new Dimension(590, 380));
-		logTextArea.setMaximumSize(new Dimension(590, 380));
-
+		logScrollPane = new JScrollPane(logTextArea);
+		logScrollPane.setMinimumSize(new Dimension(590, 380));
+		logScrollPane.setPreferredSize(new Dimension(590, 380));
+		logScrollPane.setMaximumSize(new Dimension(590, 380));
+		
 		logButtonPanel = new JPanel();
 		logButtonPanel.setBorder(componentBorder);
 		logButtonPanel.setMinimumSize(new Dimension(590, 40));
@@ -228,15 +235,19 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		logButtonPanel.add(logProgressBar);
 		logButtonPanel.add(logSaveButton);
 
-		logPanel.add(logTextArea);
+		logPanel.add(logScrollPane);
 		logPanel.add(logButtonPanel);
 
 		validationLogPanel = new JPanel();
 
-		validationLogTextArea = new TextArea();
-		validationLogTextArea.setMinimumSize(new Dimension(590, 380));
-		validationLogTextArea.setPreferredSize(new Dimension(590, 380));
-		validationLogTextArea.setMaximumSize(new Dimension(590, 380));
+		validationLogTextArea = new JTextArea();
+		validationLogTextArea.setLineWrap(true);
+		validationLogTextArea.setWrapStyleWord(true);
+		
+		validationLogScrollPane = new JScrollPane(validationLogTextArea);
+		validationLogScrollPane.setMinimumSize(new Dimension(590, 380));
+		validationLogScrollPane.setPreferredSize(new Dimension(590, 380));
+		validationLogScrollPane.setMaximumSize(new Dimension(590, 380));
 
 		validationLogButtonPanel = new JPanel();
 		validationLogButtonPanel.setBorder(componentBorder);
@@ -256,16 +267,20 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		validationLogButtonPanel.add(validationLogProgressBar);
 		validationLogButtonPanel.add(validationLogSaveButton);
 
-		validationLogPanel.add(validationLogTextArea);
+		validationLogPanel.add(validationLogScrollPane);
 		validationLogPanel.add(validationLogButtonPanel);
 
 		shortLogPanel = new JPanel();
 
-		shortLogTextArea = new TextArea();
-		shortLogTextArea.setMinimumSize(new Dimension(590, 380));
-		shortLogTextArea.setPreferredSize(new Dimension(590, 380));
-		shortLogTextArea.setMaximumSize(new Dimension(590, 380));
+		shortLogTextArea = new JTextArea();
+		shortLogTextArea.setLineWrap(true);
+		shortLogTextArea.setWrapStyleWord(true);
 
+		shortLogScrollPane = new JScrollPane(shortLogTextArea);
+		shortLogScrollPane.setMinimumSize(new Dimension(590, 380));
+		shortLogScrollPane.setPreferredSize(new Dimension(590, 380));
+		shortLogScrollPane.setMaximumSize(new Dimension(590, 380));
+		
 		shortLogButtonPanel = new JPanel();
 		shortLogButtonPanel.setBorder(componentBorder);
 		shortLogButtonPanel.setMinimumSize(new Dimension(590, 40));
@@ -284,17 +299,17 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		shortLogButtonPanel.add(shortLogProgressBar);
 		shortLogButtonPanel.add(shortLogSaveButton);
 
-		shortLogPanel.add(shortLogTextArea);
+		shortLogPanel.add(shortLogScrollPane);
 		shortLogPanel.add(shortLogButtonPanel);
 
 		infoTabs.addTab("Maps", null, mapPanel, "List of ditamaps");
 		infoTabs.addTab("Log", null, logPanel,
 				"Information about transformation process");
 		// XXX
-		// infoTabs.addTab("Validation", null, validationLogPanel,
-		// "Information about validation process");
-		// infoTabs.addTab("Short log", null, shortLogPanel,
-		// "Log with main information about convertation process");
+//		 infoTabs.addTab("Validation", null, validationLogPanel,
+//		 "Information about validation process");
+//		 infoTabs.addTab("Short log", null, shortLogPanel,
+//		 "Log with main information about convertation process");
 		// for (int i = 0; i < 4; i++) {
 		for (int i = 0; i < 2; i++) {
 			infoTabs.setForegroundAt(i, new Color(132, 184, 24));
@@ -345,8 +360,9 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		processButtonsPanel.setMinimumSize(new Dimension(188, 42));
 		processButtonsPanel.setPreferredSize(new Dimension(188, 42));
 		processButtonsPanel.setMaximumSize(new Dimension(188, 42));
-
-		validationButton = new JButton("Validate");
+		
+		//XXX
+		//validationButton = new JButton("Validate");
 
 		startButton = new JButton("Start");
 		startButton.addActionListener(this);
@@ -397,7 +413,7 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 	}
 
 	public void mouseEntered(MouseEvent e) {
-		// TODO
+		// XXX
 	}
 
 	public void mouseExited(MouseEvent e) {
@@ -418,22 +434,6 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		DefaultListModel dlm = (DefaultListModel) mapList.getModel();
 		logProgressBar.setMaximum(100 * dlm.getSize());
 		for (int i = 0; i < dlm.getSize(); i++) {
-			if (convertPics.isSelected()) {
-				try {
-					Process preproc = Runtime.getRuntime().exec(
-							"java -jar GetImageList.jar "
-									+ String.valueOf(dlm.getElementAt(i)));
-					System.out.println("Resize images for "
-							+ String.valueOf(dlm.getElementAt(i)));
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-				try {
-					Thread.sleep(3000);
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
-				}
-			}
 			Process proc = null;
 			cmd += " 1.5.1 in " + String.valueOf(dlm.getElementAt(i));
 			try {
