@@ -77,7 +77,6 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 	private JCheckBox pdfCheckBox;
 	private JCheckBox htmlCheckBox;
 	private JCheckBox eclipseHelpCheckBox;
-	private JCheckBox convertPics;
 	private JPanel processButtonsPanel;
 	//XXX
 	//private JButton validationButton;
@@ -210,6 +209,7 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		logTextArea = new JTextArea();
 		logTextArea.setLineWrap(true);
 		logTextArea.setWrapStyleWord(true);
+		logTextArea.setEditable(false);
 
 		logScrollPane = new JScrollPane(logTextArea);
 		logScrollPane.setMinimumSize(new Dimension(590, 380));
@@ -228,7 +228,9 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		logProgressBar.setPreferredSize(new Dimension(500, 25));
 		logProgressBar.setMaximumSize(new Dimension(500, 25));
 		logProgressBar.setStringPainted(true);
-		
+		logProgressBar.setMaximum(100);
+		logProgressBar.setValue(0);
+				
 		logSaveButton = new JButton("Save");
 		logSaveButton.addActionListener(this);
 
@@ -243,6 +245,7 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		validationLogTextArea = new JTextArea();
 		validationLogTextArea.setLineWrap(true);
 		validationLogTextArea.setWrapStyleWord(true);
+		validationLogTextArea.setEditable(false);
 		
 		validationLogScrollPane = new JScrollPane(validationLogTextArea);
 		validationLogScrollPane.setMinimumSize(new Dimension(590, 380));
@@ -275,7 +278,8 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		shortLogTextArea = new JTextArea();
 		shortLogTextArea.setLineWrap(true);
 		shortLogTextArea.setWrapStyleWord(true);
-
+		shortLogTextArea.setEditable(false);
+		
 		shortLogScrollPane = new JScrollPane(shortLogTextArea);
 		shortLogScrollPane.setMinimumSize(new Dimension(590, 380));
 		shortLogScrollPane.setPreferredSize(new Dimension(590, 380));
@@ -333,26 +337,20 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		documentTypesPanel.setMinimumSize(new Dimension(188, 420));
 		documentTypesPanel.setPreferredSize(new Dimension(188, 420));
 		documentTypesPanel.setMaximumSize(new Dimension(188, 420));
-		// / XXX
+		
 		pdfCheckBox = new JCheckBox("Create PDF");
-		pdfCheckBox.setEnabled(false);
 		pdfCheckBox.setSelected(true);
 
 		htmlCheckBox = new JCheckBox("Create HTML");
-		htmlCheckBox.setEnabled(false);
 		htmlCheckBox.setSelected(true);
 
 		eclipseHelpCheckBox = new JCheckBox("Create EclipseHelp");
-		eclipseHelpCheckBox.setEnabled(false);
 		eclipseHelpCheckBox.setSelected(true);
 
-		convertPics = new JCheckBox("Auto resize images");
-		convertPics.setSelected(true);
 
 		documentTypesPanel.add(pdfCheckBox);
 		documentTypesPanel.add(htmlCheckBox);
 		documentTypesPanel.add(eclipseHelpCheckBox);
-		documentTypesPanel.add(convertPics);
 
 		processButtonsPanel = new JPanel();
 		processButtonsPanel.setLayout(new FlowLayout());
@@ -435,7 +433,16 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		logProgressBar.setMaximum(100 * dlm.getSize());
 		for (int i = 0; i < dlm.getSize(); i++) {
 			Process proc = null;
-			cmd += " 1.5.1 in " + String.valueOf(dlm.getElementAt(i));
+			cmd += " " + String.valueOf(dlm.getElementAt(i)) + " ";
+			if ((pdfCheckBox.isSelected() == true) && (htmlCheckBox.isSelected() == false) && (eclipseHelpCheckBox.isSelected() == false)) cmd += "1";
+			if ((pdfCheckBox.isSelected() == false) && (htmlCheckBox.isSelected() == true) && (eclipseHelpCheckBox.isSelected() == false)) cmd += "2";
+			if ((pdfCheckBox.isSelected() == false) && (htmlCheckBox.isSelected() == false) && (eclipseHelpCheckBox.isSelected() == true)) cmd += "3";
+			if ((pdfCheckBox.isSelected() == true) && (htmlCheckBox.isSelected() == true) && (eclipseHelpCheckBox.isSelected() == false)) cmd += "4";
+			if ((pdfCheckBox.isSelected() == false) && (htmlCheckBox.isSelected() == true) && (eclipseHelpCheckBox.isSelected() == true)) cmd += "5";
+			if ((pdfCheckBox.isSelected() == true) && (htmlCheckBox.isSelected() == true) && (eclipseHelpCheckBox.isSelected() == true)) cmd += "6";
+			if ((pdfCheckBox.isSelected() == true) && (htmlCheckBox.isSelected() == false) && (eclipseHelpCheckBox.isSelected() == true)) cmd += "7";
+			if ((pdfCheckBox.isSelected() == false) && (htmlCheckBox.isSelected() == false) && (eclipseHelpCheckBox.isSelected() == false)) return;
+			
 			try {
 				proc = Runtime.getRuntime().exec(cmd, null, new File("."));
 			} catch (IOException e) {

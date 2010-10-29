@@ -9,20 +9,13 @@
 <project name="data_htmlhelp" default="createAll" basedir=".">
 
 	<!-- dita.dir should point to the toolkit's root directory -->
-	<property file="build.properties" />
-	<property name="dita.dir" value="${basedir}${file.separator}DITA-OT${dita.version}" />
-	<property name="map.doctype.begin" value="-//OASIS//DTD DITA 1.2 BookMap//EN&quot; &quot;../DITA-OT" />
-	<property name="map.doctype.end" value="/dtd/bookmap/dtd/bookmap.dtd" />
+	<property name="dita.dir" value="${basedir}${file.separator}DITA-OT" />
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" />
+	
 	<basename property="outfolder" file="${map.file}" suffix=".ditamap"/>
 	<!-- if file is a relative file name, the file name will be resolved 
        relative to the importing file -->
 	<import file="${dita.dir}${file.separator}integrator.xml" />
-
-	<target name="setDitaVersion">
-		<replaceregexp file="${map.file}" replace="${map.doctype.begin}${dita.version}${map.doctype.end}">
-			<regexp pattern="${map.doctype.begin}(.*)${map.doctype.end}" />
-		</replaceregexp>
-	</target>
 
 	<target name="data2htmlhelp" depends="integrate">
 		<ant antfile="${dita.dir}${file.separator}build.xml" target="init">
@@ -41,6 +34,7 @@
 			<property name="args.input" value="${map.file}" />
 			<property name="output.dir" value="out${file.separator}${outfolder}${file.separator}eclipsehelp" />
 			<property name="transtype" value="eclipsehelp" />
+			<property name="clean.temp" value="yes" />
 		</ant>
 		<basename property="eclipsehelpjar" file="${map.file}" suffix=".ditamap"/>
 		<mkdir dir="out${file.separator}${outfolder}${file.separator}eclipsehelpjar"/>
@@ -48,16 +42,13 @@
 	</target>
 
 	<target name="data2pdf" depends="integrate">
-		<!--<java jar="${basedir}${file.separator}GetImageList.jar" fork="true" failonerror="true">
-			<arg value="${map.file}"/>			
-		</java>-->
 		<ant antfile="${dita.dir}${file.separator}build.xml" target="init">
 			<!-- please refer to the toolkit's document for supported parameters, and 
 			   specify them base on your needs -->
 			<property name="args.input" value="${map.file}" />
 			<property name="output.dir" value="out${file.separator}${outfolder}${file.separator}pdf" />
 			<property name="transtype" value="pdf" />
-			<property name="clean.temp" value="no" />
+			<property name="clean.temp" value="yes" />
 		</ant>
 	</target>
 	<target name="data2xhtml" depends="integrate">
@@ -67,7 +58,7 @@
 			<property name="args.input" value="${map.file}" />
 			<property name="output.dir" value="out${file.separator}${outfolder}${file.separator}xhtml" />
 			<property name="transtype" value="xhtml" />
-			<property name="clean.temp" value="no" />
+			<property name="clean.temp" value="yes" />
 		</ant>
 		<basename property="eclipsehelpjar" file="${map.file}" suffix=".ditamap"/>
 		<java jar="${basedir}${file.separator}SearchGen.jar" fork="true" failonerror="true">
@@ -79,8 +70,61 @@
 		</copy>		
 	</target>
 	<target name="createAll">
-		<antcall target="data2pdf" />
-		<antcall target="data2xhtml" />
-		<antcall target="data2eclipsehelp"/>		
+		<if>
+			<equals arg1="${ctype}" arg2="1" />
+			<then>
+				<echo message="START DITA-2-PDF" />
+				<antcall target="data2pdf" />
+			</then>
+			<elseif>
+				<equals arg1="${ctype}" arg2="2" />
+				<then>
+					<echo message="START DITA-2-HTML" />
+					<antcall target="data2xhtml" />
+				</then>
+			</elseif>
+			<elseif>
+				<equals arg1="${ctype}" arg2="3" />
+				<then>
+					<echo message="START DITA-2-ECLIPSEHELP" />
+					<antcall target="data2eclipsehelp"/>
+				</then>
+			</elseif>
+			<elseif>
+				<equals arg1="${ctype}" arg2="4" />
+				<then>
+					<echo message="START DITA-2-PDF" />
+					<antcall target="data2pdf" />
+					<echo message="START DITA-2-HTML" />
+					<antcall target="data2xhtml" />
+				</then>
+			</elseif>
+			<elseif>
+				<equals arg1="${ctype}" arg2="5" />
+				<then>
+					<echo message="START DITA-2-HTML" />
+					<antcall target="data2xhtml" />
+					<echo message="START DITA-2-ECLIPSEHELP" />
+					<antcall target="data2eclipsehelp"/>
+				</then>
+			</elseif>
+			<elseif>
+				<equals arg1="${ctype}" arg2="6" />
+				<then>
+					<echo message="START DITA-2-PDF" />
+					<antcall target="data2pdf" />
+					<echo message="START DITA-2-ECLIPSEHELP" />
+					<antcall target="data2eclipsehelp"/>
+				</then>
+			</elseif>
+			<else>
+				<echo message="START DITA-2-PDF" />
+				<antcall target="data2pdf" />
+				<echo message="START DITA-2-ECLIPSEHELP" />
+				<echo message="START DITA-2-HTML" />
+				<antcall target="data2xhtml" />
+				<antcall target="data2eclipsehelp"/>
+		    </else>
+		</if>
 	</target>	
 </project>
