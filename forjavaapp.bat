@@ -17,4 +17,5 @@ set CLASSPATH=%DITA_DIR%lib\saxon\saxon9-dom4j.jar;%DITA_DIR%lib\saxon\saxon9-jd
 set CLASSPATH=%DITA_DIR%lib\saxon\saxon9-s9api.jar;%DITA_DIR%lib\saxon\saxon9-sql.jar;%CLASSPATH%
 set CLASSPATH=%DITA_DIR%lib\saxon\saxon9-xom.jar;%DITA_DIR%lib\saxon\saxon9-xpath.jar;%DITA_DIR%lib\saxon\saxon9-xqj.jar;%CLASSPATH%
 
-if not "%1" == "" (	if not "%2" == "" ( if not "%3" == "" ( ant -buildfile build.xml -Ddita.version=%1 -Dsource.dir=%2 -Dmap.file=%3 ) ) ) else ( ant -buildfile build.xml -Ddita.version=1.5.1 )
+if not "%1" == "" (	if not "%2" == "" ( if not "%3" == "" ( java -jar GetImageList.jar %3 ) ) )
+if not "%1" == "" (	if not "%2" == "" ( if not "%3" == "" ( ant -buildfile build.xml -Ddita.version=%1 -Dsource.dir=%2 -Dmap.file=%3 ) ) ) else ( echo "Enter args" )
