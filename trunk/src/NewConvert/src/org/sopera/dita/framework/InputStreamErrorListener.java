@@ -12,11 +12,13 @@ import javax.swing.JTextArea;
 public class InputStreamErrorListener implements Runnable {
 	Process proc;
 	JTextArea logTextArea;
+	JTextArea shortLogTextArea;
 	Thread isdlThread;
 
-	InputStreamErrorListener(Process proc, JTextArea logTextArea, Thread isdlThread) {
+	InputStreamErrorListener(Process proc, JTextArea logTextArea, JTextArea shortLogTextArea, Thread isdlThread) {
 		this.proc = proc;
 		this.logTextArea = logTextArea;
+		this.shortLogTextArea = shortLogTextArea;
 		this.isdlThread = isdlThread;
 	}
 
@@ -28,6 +30,8 @@ public class InputStreamErrorListener implements Runnable {
 			while ((str = br.readLine()) != null) {
 				logTextArea.append(str + "\r\n");
 				logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
+				shortLogTextArea.append(str + "\r\n");
+				shortLogTextArea.setCaretPosition(shortLogTextArea.getDocument().getLength());
 			}
 		} catch (IOException ex) {
 			Logger.getLogger(InputStreamErrorListener.class.getName()).log(

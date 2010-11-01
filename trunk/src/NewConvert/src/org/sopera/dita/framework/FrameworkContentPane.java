@@ -312,10 +312,10 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		// XXX
 //		 infoTabs.addTab("Validation", null, validationLogPanel,
 //		 "Information about validation process");
-//		 infoTabs.addTab("Short log", null, shortLogPanel,
-//		 "Log with main information about convertation process");
+		 infoTabs.addTab("Short log", null, shortLogPanel,
+		 "Log with main information about convertation process");
 		// for (int i = 0; i < 4; i++) {
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < 3; i++) {
 			infoTabs.setForegroundAt(i, new Color(132, 184, 24));
 			infoTabs.setBackgroundAt(i, new Color(255, 255, 255));
 		}
@@ -428,9 +428,12 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 
 	public void run() {
 		logTextArea.setText("");
+		shortLogTextArea.setText("");
+		infoTabs.getModel().setSelectedIndex(2);		
 		String cmd = cmdFile;
 		DefaultListModel dlm = (DefaultListModel) mapList.getModel();
 		logProgressBar.setMaximum(100 * dlm.getSize());
+		shortLogProgressBar.setMaximum(100 * dlm.getSize());
 		for (int i = 0; i < dlm.getSize(); i++) {
 			Process proc = null;
 			cmd += " " + String.valueOf(dlm.getElementAt(i)) + " ";
@@ -439,8 +442,8 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 			if ((pdfCheckBox.isSelected() == false) && (htmlCheckBox.isSelected() == false) && (eclipseHelpCheckBox.isSelected() == true)) cmd += "3";
 			if ((pdfCheckBox.isSelected() == true) && (htmlCheckBox.isSelected() == true) && (eclipseHelpCheckBox.isSelected() == false)) cmd += "4";
 			if ((pdfCheckBox.isSelected() == false) && (htmlCheckBox.isSelected() == true) && (eclipseHelpCheckBox.isSelected() == true)) cmd += "5";
-			if ((pdfCheckBox.isSelected() == true) && (htmlCheckBox.isSelected() == true) && (eclipseHelpCheckBox.isSelected() == true)) cmd += "6";
-			if ((pdfCheckBox.isSelected() == true) && (htmlCheckBox.isSelected() == false) && (eclipseHelpCheckBox.isSelected() == true)) cmd += "7";
+			if ((pdfCheckBox.isSelected() == true) && (htmlCheckBox.isSelected() == false) && (eclipseHelpCheckBox.isSelected() == true)) cmd += "6";
+			if ((pdfCheckBox.isSelected() == true) && (htmlCheckBox.isSelected() == true) && (eclipseHelpCheckBox.isSelected() == true)) cmd += "7";
 			if ((pdfCheckBox.isSelected() == false) && (htmlCheckBox.isSelected() == false) && (eclipseHelpCheckBox.isSelected() == false)) return;
 			
 			try {
@@ -451,7 +454,7 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 			}
 
 			InputStreamDataListener isdl = new InputStreamDataListener(proc,
-					logTextArea, logProgressBar, i);
+					logTextArea, logProgressBar, i, shortLogTextArea, shortLogProgressBar, mapList.getModel().getSize());
 			Thread isdlThread = new Thread(isdl);
 			try {
 				isdlThread.start();
@@ -459,10 +462,11 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 				System.err.println("Error");
 			}
 			InputStreamErrorListener isel = new InputStreamErrorListener(proc,
-					logTextArea, isdlThread);
+					logTextArea, shortLogTextArea, isdlThread);
 			new Thread(isel).start();
 		}
 		logProgressBar.setValue(100 * mapList.getModel().getSize());
+		shortLogProgressBar.setValue(100 * mapList.getModel().getSize());
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
@@ -490,8 +494,7 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 			try {
 				new Thread(this).start();
 			} catch (Exception e) {
-			}
-			infoTabs.getModel().setSelectedIndex(1);
+			}			
 		}
 		if (arg0.getSource().equals(logSaveButton)) {
 			JFileChooser chooser = new JFileChooser();
