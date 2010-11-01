@@ -70,6 +70,17 @@
 		</copy>		
 	</target>
 	<target name="createAll">
+		<xmlvalidate failonerror="true">
+			<fileset dir="in">
+				<include name="**/*.xml" />
+				<include name="**/*.ditamap" />
+			</fileset>			
+			<xmlcatalog>
+				<dtd publicId="-//OASIS//DTD DITA 1.2 topic//EN" location="${basedir}${file.separator}DITA-OT/dtd/technicalContent/dtd/topic.dtd" />
+				<dtd publicId="-//OASIS//DTD DITA 1.2 task//EN" location="${basedir}${file.separator}DITA-OT/dtd/technicalContent/dtd/task.dtd" />
+				<dtd publicId="-//OASIS//DTD DITA map//EN" location="${basedir}${file.separator}DITA-OT/dtd/technicalContent/dtd/map.dtd" />
+			</xmlcatalog>
+		</xmlvalidate>
 		<if>
 			<equals arg1="${ctype}" arg2="1" />
 			<then>
