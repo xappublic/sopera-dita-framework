@@ -84,6 +84,7 @@ public class InputStreamDataListener implements Runnable {
             	logTextArea.append(str + "\r\n");
             	logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
             	shortLog(str);
+            	shortLogTextArea.setCaretPosition(shortLogTextArea.getDocument().getLength());
                 if (str.indexOf("dita2pdf:") >= 0) {
                     progressBar.setValue(10 + (i * 100));
                 }
