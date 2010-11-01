@@ -465,8 +465,8 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 					logTextArea, shortLogTextArea, isdlThread);
 			new Thread(isel).start();
 		}
-		logProgressBar.setValue(100 * mapList.getModel().getSize());
-		shortLogProgressBar.setValue(100 * mapList.getModel().getSize());
+		//logProgressBar.setValue(100 * mapList.getModel().getSize());
+		//shortLogProgressBar.setValue(100 * mapList.getModel().getSize());
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
