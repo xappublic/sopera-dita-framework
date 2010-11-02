@@ -430,11 +430,11 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		logTextArea.setText("");
 		shortLogTextArea.setText("");
 		infoTabs.getModel().setSelectedIndex(2);		
-		String cmd = cmdFile;
 		DefaultListModel dlm = (DefaultListModel) mapList.getModel();
 		logProgressBar.setMaximum(100 * dlm.getSize());
 		shortLogProgressBar.setMaximum(100 * dlm.getSize());
 		for (int i = 0; i < dlm.getSize(); i++) {
+			String cmd = cmdFile;
 			Process proc = null;
 			cmd += " " + String.valueOf(dlm.getElementAt(i)) + " ";
 			if ((pdfCheckBox.isSelected() == true) && (htmlCheckBox.isSelected() == false) && (eclipseHelpCheckBox.isSelected() == false)) cmd += "1";
@@ -445,7 +445,7 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 			if ((pdfCheckBox.isSelected() == true) && (htmlCheckBox.isSelected() == false) && (eclipseHelpCheckBox.isSelected() == true)) cmd += "6";
 			if ((pdfCheckBox.isSelected() == true) && (htmlCheckBox.isSelected() == true) && (eclipseHelpCheckBox.isSelected() == true)) cmd += "7";
 			if ((pdfCheckBox.isSelected() == false) && (htmlCheckBox.isSelected() == false) && (eclipseHelpCheckBox.isSelected() == false)) return;
-			
+			System.out.println("cmd command = \"" + cmd + "\"");
 			try {
 				proc = Runtime.getRuntime().exec(cmd, null, new File("."));
 			} catch (IOException e) {
@@ -464,9 +464,11 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 			InputStreamErrorListener isel = new InputStreamErrorListener(proc,
 					logTextArea, shortLogTextArea, isdlThread);
 			new Thread(isel).start();
+			try {
+				proc.waitFor();
+			} catch (InterruptedException e) {
+			}
 		}
-		//logProgressBar.setValue(100 * mapList.getModel().getSize());
-		//shortLogProgressBar.setValue(100 * mapList.getModel().getSize());
 	}
 
 	public void actionPerformed(ActionEvent arg0) {

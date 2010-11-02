@@ -106,7 +106,7 @@ public class InputStreamDataListener implements Runnable {
                 shortLogProgressBar.setValue(progressBar.getValue());
             }
             try {
-                proc.waitFor();
+            	proc.waitFor();    
             } catch (InterruptedException e) {
             	logTextArea.append("Error\r\n");
             	logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
