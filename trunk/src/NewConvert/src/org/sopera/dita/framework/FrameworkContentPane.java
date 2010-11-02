@@ -42,6 +42,7 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 	// mapButtonsPanel begin
 	private JPanel mapButtonsPanel;
 	private JButton addMapButton;
+	private JButton findMapButton;
 	private JButton deleteMapButton;
 	private JButton clearMapsButton;
 	// mapButtonsPanel end
@@ -78,8 +79,6 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 	private JCheckBox htmlCheckBox;
 	private JCheckBox eclipseHelpCheckBox;
 	private JPanel processButtonsPanel;
-	//XXX
-	//private JButton validationButton;
 	private JButton startButton;
 	// buttonPanel end
 	// centralPanel end.
@@ -182,6 +181,13 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		addMapButton.setPreferredSize(new Dimension(100, 26));
 		addMapButton.setMaximumSize(new Dimension(100, 26));
 		addMapButton.addActionListener(this);
+		
+		findMapButton = new JButton("Find ditamaps");
+		findMapButton.setBorder(componentBorder);
+		findMapButton.setMinimumSize(new Dimension(100, 26));
+		findMapButton.setPreferredSize(new Dimension(100, 26));
+		findMapButton.setMaximumSize(new Dimension(100, 26));
+		findMapButton.addActionListener(this);
 
 		deleteMapButton = new JButton("Delete ditamap");
 		deleteMapButton.setBorder(componentBorder);
@@ -198,6 +204,7 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		clearMapsButton.addActionListener(this);
 
 		mapButtonsPanel.add(addMapButton);
+		mapButtonsPanel.add(findMapButton);
 		mapButtonsPanel.add(deleteMapButton);
 		mapButtonsPanel.add(clearMapsButton);
 
@@ -309,12 +316,8 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		infoTabs.addTab("Maps", null, mapPanel, "List of ditamaps");
 		infoTabs.addTab("Log", null, logPanel,
 				"Information about transformation process");
-		// XXX
-//		 infoTabs.addTab("Validation", null, validationLogPanel,
-//		 "Information about validation process");
-		 infoTabs.addTab("Short log", null, shortLogPanel,
-		 "Log with main information about convertation process");
-		// for (int i = 0; i < 4; i++) {
+		infoTabs.addTab("Short log", null, shortLogPanel,
+		"Log with main information about convertation process");
 		for (int i = 0; i < 3; i++) {
 			infoTabs.setForegroundAt(i, new Color(132, 184, 24));
 			infoTabs.setBackgroundAt(i, new Color(255, 255, 255));
@@ -359,13 +362,9 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		processButtonsPanel.setPreferredSize(new Dimension(188, 42));
 		processButtonsPanel.setMaximumSize(new Dimension(188, 42));
 		
-		//XXX
-		//validationButton = new JButton("Validate");
-
 		startButton = new JButton("Start");
 		startButton.addActionListener(this);
-		// XXX
-		// processButtonsPanel.add(validationButton);
+
 		processButtonsPanel.add(startButton);
 
 		layout.putConstraint(SpringLayout.WEST, documentTypesPanel, 0,
@@ -406,12 +405,11 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void mouseEntered(MouseEvent e) {
-		// XXX
+
 	}
 
 	public void mouseExited(MouseEvent e) {
@@ -419,11 +417,11 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 	}
 
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
+
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
+	
 	}
 
 	public void run() {
@@ -515,10 +513,32 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 				}
 			}
 		}
-
+		if (arg0.getSource().equals(findMapButton)) {
+			try {
+				FindDitaMaps(new File("in"));
+			}
+			catch (Exception e) {
+				System.out.println("Not found 'in' directory with .ditamap files");
+			}
+		}
 		// XXX
 	}
 
+	private void FindDitaMaps(File files) {
+		File[] fList;
+		fList = files.listFiles();
+		for(int i = 0; i < fList.length; i++)           
+		{
+			if(fList[i].isFile()) {
+		    	 DefaultListModel dlm = (DefaultListModel) mapList.getModel();
+				 if(fList[i].getAbsolutePath().endsWith(".ditamap")) dlm.addElement(fList[i].getAbsolutePath());		    	 
+		    }
+			else {
+				FindDitaMaps(fList[i]);
+			}
+		}
+	}
+	
 	private void SaveFileAsString(String file, String encoding, String string) {
 		OutputStream outputStream = null;
 		try {
