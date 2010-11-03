@@ -108,8 +108,7 @@ public class InputStreamDataListener implements Runnable {
             try {
             	proc.waitFor();    
             } catch (InterruptedException e) {
-            	logTextArea.append("Error\r\n");
-            	logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
+            	
             }
             br.close();
             istr.close();

@@ -306,6 +306,7 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		shortLogProgressBar.setStringPainted(true);
 		
 		shortLogSaveButton = new JButton("Save");
+		shortLogSaveButton.addActionListener(this);
 
 		shortLogButtonPanel.add(shortLogProgressBar);
 		shortLogButtonPanel.add(shortLogSaveButton);
@@ -457,7 +458,7 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 			try {
 				isdlThread.start();
 			} catch (Exception e) {
-				System.err.println("Error");
+				System.err.println("Cant start thread");
 			}
 			InputStreamErrorListener isel = new InputStreamErrorListener(proc,
 					logTextArea, shortLogTextArea, isdlThread);
@@ -510,6 +511,23 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 					SaveFileAsString(chooser.getSelectedFile()
 							.getAbsolutePath() + ".txt", "UTF8",
 							logTextArea.getText());
+				}
+			}
+		}
+		if (arg0.getSource().equals(shortLogSaveButton)) {
+			JFileChooser chooser = new JFileChooser();
+			chooser.setCurrentDirectory(new File("."));
+			chooser.setFileFilter(new DitaFileFilter("txt", "Text file"));
+			int returnVal = chooser.showOpenDialog(this);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				if (chooser.getSelectedFile().getAbsolutePath().toLowerCase()
+						.endsWith(".txt")) {
+					SaveFileAsString(chooser.getSelectedFile()
+							.getAbsolutePath(), "UTF8", shortLogTextArea.getText());
+				} else {
+					SaveFileAsString(chooser.getSelectedFile()
+							.getAbsolutePath() + ".txt", "UTF8",
+							shortLogTextArea.getText());
 				}
 			}
 		}
