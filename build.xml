@@ -48,7 +48,7 @@
 			<property name="args.input" value="${map.file}" />
 			<property name="output.dir" value="out${file.separator}${outfolder}${file.separator}pdf" />
 			<property name="transtype" value="pdf" />
-			<property name="clean.temp" value="yes" />
+			<property name="clean.temp" value="no" />
 		</ant>
 	</target>
 	<target name="data2xhtml" depends="integrate">
@@ -79,6 +79,10 @@
 				<dtd publicId="-//OASIS//DTD DITA 1.2 topic//EN" location="${basedir}${file.separator}DITA-OT/dtd/technicalContent/dtd/topic.dtd" />
 				<dtd publicId="-//OASIS//DTD DITA 1.2 task//EN" location="${basedir}${file.separator}DITA-OT/dtd/technicalContent/dtd/task.dtd" />
 				<dtd publicId="-//OASIS//DTD DITA map//EN" location="${basedir}${file.separator}DITA-OT/dtd/technicalContent/dtd/map.dtd" />
+				
+				<dtd publicId="-//OASIS//DTD DITA 1.2 Concept//EN" location="${basedir}${file.separator}DITA-OT/dtd/technicalContent/dtd/concept.dtd" />
+				<dtd publicId="-//OASIS//DTD DITA 1.2 Reference//EN" location="${basedir}${file.separator}DITA-OT/dtd/technicalContent/dtd/reference.dtd" />
+				<dtd publicId="-//OASIS//DTD DITA 1.2 Glossary//EN" location="${basedir}${file.separator}DITA-OT/dtd/technicalContent/dtd/glossary.dtd" />
 			</xmlcatalog>
 		</xmlvalidate>
 		<if>
