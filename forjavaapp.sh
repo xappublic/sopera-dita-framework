@@ -1,18 +1,6 @@
 #!/bin/sh
-#  This file is part of the DITA Open Toolkit project hosted on 
-#  Sourceforge.net. See the accompanying license.txt file for 
-#  applicable licenses.
-#  (c) Copyright IBM Corp. 2006 All Rights Reserved.
 
-#if  [ "${DITA_HOME:+1}" != "1" ]; then 
-#   echo "DITA_HOME environment variable is empty or not set";
-#   exit 127;
-#fi
-
-#cd "$DITA_HOME"
-
-# Get the absolute path of DITAOT's home directory
-DITA_DIR="DITA-OT1.5.1"
+DITA_DIR="DITA-OT"
 
 if [ -f "$DITA_DIR"/tools/ant/bin/ant ] && [ ! -x "$DITA_DIR"/tools/ant/bin/ant ]; then
 chmod +x "$DITA_DIR"/tools/ant/bin/ant
@@ -35,4 +23,19 @@ else
 export CLASSPATH="$NEW_CLASSPATH"
 fi
 
-ant -buildfile build.xml
+if ["$1" != ""]
+then
+java -jar GetImageList.jar "$1"
+fi
+
+if ["$1" != ""]
+then
+if ["$2" != ""]
+then
+ant -buildfile build.xml -Dmap.file="$1" -Dctype="$2"
+else 
+ant -buildfile build.xml -Dmap.file="$1" -Dctype=7
+fi
+else
+echo "Enter two args (map path and convert type number)"
+fi
