@@ -57,5 +57,13 @@
     <xsl:attribute-set name="dlhead.ddhd__content">
         <xsl:attribute name="font-weight">normal</xsl:attribute>
     </xsl:attribute-set>
+	
+	    <xsl:attribute-set name="dlentry.dt">
+        <xsl:attribute name="relative-align">baseline</xsl:attribute>
+		<xsl:attribute name="width">40mm</xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="dlentry.dd">
+    </xsl:attribute-set>
 
 </xsl:stylesheet>

@@ -9,4 +9,7 @@
 		<xsl:attribute name="margin-left">45mm</xsl:attribute>
     </xsl:attribute-set>
 
+	<xsl:attribute-set name="steps.step__content">
+        <xsl:attribute name="margin-left">2mm</xsl:attribute>    
+    </xsl:attribute-set>	
 </xsl:stylesheet>
