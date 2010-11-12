@@ -29,9 +29,9 @@
 
 <!--DL is a table-->
 <xsl:attribute-set name="dl">
-    <!--xsl:attribute name="width">100%</xsl:attribute-->
+    <!--xsl:attribute name="width">100%</xsl:attribute
     <xsl:attribute name="space-before.optimum">5pt</xsl:attribute>
-    <xsl:attribute name="space-after.optimum">5pt</xsl:attribute>
+    <xsl:attribute name="space-after.optimum">5pt</xsl:attribute>-->
 </xsl:attribute-set>
 
 <!-- DL body -->

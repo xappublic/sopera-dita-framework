@@ -120,7 +120,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- The formatting used to display ordered lists (e.g., "1., 2." or 
          "1), 2)" -->
-    <variable id="Ordered List Number"><param ref-name="number"/>. </variable>
+    <variable id="Ordered List Number"><param ref-name="number" />. </variable>
 
     <!-- The unordered list bullet   -->
     <variable id="Unordered List bullet">&#x2022;</variable>

@@ -7,21 +7,30 @@
     <xsl:template match="*[contains(@class,' pr-d/codeblock ')]">
         <xsl:call-template name="generateAttrLabel"/>
         <fo:block xsl:use-attribute-sets="codeblock" id="{@id}">
-			<xsl:if test="./ancestor::*[name()='task']">
+			<xsl:if test="./ancestor::*[contains(@class, ' task/task ')]">
 				<xsl:attribute name="margin-left">0mm</xsl:attribute>
+				<xsl:attribute name="width">100%</xsl:attribute>
 			</xsl:if>
-			<xsl:if test="./ancestor::*[name()='section']">
+			<xsl:if test="./ancestor::*[contains(@class, ' topic/section ')]">
 				<xsl:attribute name="margin-left">0mm</xsl:attribute>
+				<xsl:attribute name="width">100%</xsl:attribute>
 			</xsl:if>
-			<xsl:if test="./ancestor::*[name()='example']">
+			<xsl:if test="./ancestor::*[contains(@class, ' topic/example ')]">
 				<xsl:attribute name="margin-left">0mm</xsl:attribute>
+				<xsl:attribute name="width">100%</xsl:attribute>
 			</xsl:if>
-			<xsl:if test="./ancestor::*[name()='p']">
+			<xsl:if test="./ancestor::*[contains(@class, ' topic/p ')]">
 				<xsl:attribute name="margin-left">0mm</xsl:attribute>
+				<xsl:attribute name="width">100%</xsl:attribute>
+			</xsl:if>
+			<xsl:if test="./ancestor::*[contains(@class, ' topic/dd ')]">
+				<xsl:attribute name="margin-left">0mm</xsl:attribute>
+				<xsl:attribute name="width">100%</xsl:attribute>
 			</xsl:if>
 			<xsl:if test="./parent::*[contains(@class,' topic/li ')]">
 				<xsl:attribute name="margin-left">0mm</xsl:attribute>
-			</xsl:if>			
+				<xsl:attribute name="width">100%</xsl:attribute>
+			</xsl:if>
             <xsl:call-template name="setScale"/>
             <!-- rules have to be applied within the scope of the PRE box; else they start from page margin! -->
             <xsl:if test="contains(@frame,'top')">

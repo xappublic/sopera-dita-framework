@@ -30,29 +30,33 @@
     </xsl:template>
 
 	<!-- <xsl:template match="*[contains(@class,' topic/section ')]"> [not(contains(ancestor::*[@class],' task/task '))] -->
-	<xsl:template match="section[contains(@class,' topic/section ')]">
-			<fo:table>
-				<fo:table-column column-width="40mm"/>
-				<fo:table-column column-width="5mm"/>
-				<fo:table-column column-width="125mm"/>
+	<xsl:template match="//*[contains(@class, ' topic/section ')][not(ancestor::*[contains(@class, ' topic/section ')])][not(ancestor::*[contains(@class, ' task/task ')])]">
+		<fo:table>
+			<fo:table-column column-width="40mm"/>
+			<fo:table-column column-width="5mm"/>
+			<fo:table-column column-width="125mm"/>
 
-				<fo:table-body>
-				  <fo:table-row>
-					<fo:table-cell>
-						<xsl:apply-templates select="title"/>			
-					</fo:table-cell>
-					<fo:table-cell>
-						<fo:block></fo:block>
-					</fo:table-cell>
-					<fo:table-cell>
-						<fo:block xsl:use-attribute-sets="section" id="{@id}">
-							<xsl:apply-templates select="." mode="dita2xslfo:section-heading"/>
-							<xsl:apply-templates select="*[name()!='title']"/>
-						</fo:block>
-					</fo:table-cell>
-				  </fo:table-row>			  
-				</fo:table-body>
-			</fo:table>		
+			<fo:table-body>
+			  <fo:table-row>
+				<fo:table-cell>
+					<xsl:apply-templates select="title"/>			
+				</fo:table-cell>
+				<fo:table-cell>
+					<fo:block></fo:block>
+				</fo:table-cell>
+				<fo:table-cell>
+					<fo:block xsl:use-attribute-sets="section">
+						<!--111<xsl:value-of select="./parent::*[contains(@class, ' topic/section ')]"/>222-->
+						<xsl:value-of select="."/>
+					</fo:block>
+					<fo:block xsl:use-attribute-sets="section" id="{@id}">
+						<xsl:apply-templates select="." mode="dita2xslfo:section-heading"/>
+						<xsl:apply-templates select="*[name()!='title']"/>
+					</fo:block>
+				</fo:table-cell>
+			  </fo:table-row>			  
+			</fo:table-body>
+		</fo:table>		
     </xsl:template>
 	
 	<xsl:template match="//unknown">
@@ -60,12 +64,20 @@
 			<xsl:attribute name="page-break-after">always</xsl:attribute>
 		</fo:block>
     </xsl:template>
-	
+
+	<!--
+	<xsl:template match="prereq[contains(@class,' topic/section ')]">
+		<fo:block>
+			<xsl:attribute name="margin-left">0mm</xsl:attribute>
+			<xsl:apply-templates />
+		</fo:block>
+    </xsl:template>
+	-->
 	<xsl:template match="*[contains(@class,' topic/section ')]" mode="dita2xslfo:section-heading">
       <!-- Specialized simpletable elements may override this rule to add
            default headings for a section. By default, titles are processed
            where they exist within the section, so overrides may need to
-           check for the existence of a title first. -->
+           check for the existence of a title first. -->		   
     </xsl:template>
 	
 	<xsl:template match="*[contains(@class,' topic/example ')]">
@@ -73,13 +85,13 @@
 			<xsl:if test="./parent::*[name()='body']">
                 <xsl:attribute name="margin-left">45mm</xsl:attribute>
 			</xsl:if>
-			<xsl:if test="./ancestor::*[name()='task']">
+			<xsl:if test="./ancestor::*[contains(@class, ' task/task ')]">
 				<xsl:attribute name="margin-left">0mm</xsl:attribute>
 			</xsl:if>
-			<xsl:if test="./ancestor::*[name()='section']">
+			<xsl:if test="./ancestor::*[contains(@class, ' topic/section ')]">
 				<xsl:attribute name="margin-left">0mm</xsl:attribute>
 			</xsl:if>
-			<xsl:if test="./ancestor::*[name()='example']">
+			<xsl:if test="./ancestor::*[contains(@class, ' topic/example ')]">
 				<xsl:attribute name="margin-left">0mm</xsl:attribute>
 			</xsl:if>
             <xsl:apply-templates/>
@@ -94,13 +106,15 @@
 			<xsl:if test="./ancestor::*[contains(@class, ' task/task ')]">
                 <xsl:attribute name="margin-left">0mm</xsl:attribute>
 			</xsl:if>
+			<xsl:if test="./parent::*[contains(@class,' topic/section ')]">
+                <xsl:attribute name="margin-left">0mm</xsl:attribute>
+			</xsl:if>
 			<xsl:if test="./parent::*[contains(@class,' topic/body ')]">
                 <xsl:attribute name="margin-left">45mm</xsl:attribute>
 			</xsl:if>
 			<xsl:apply-templates/>
         </fo:block>
     </xsl:template>
-	
 	
 	<xsl:template name="placeNoteContent">
         <xsl:apply-templates select="." mode="placeNoteContent"/>
