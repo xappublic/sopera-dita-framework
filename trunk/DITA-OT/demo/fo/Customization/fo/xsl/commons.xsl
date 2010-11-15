@@ -328,11 +328,18 @@
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:choose>
-								<xsl:when test="number(document('../../../../../../images.xml')/images/image[@href = $newhref]/@width) &gt; 340">
-									340px
+								<xsl:when test="count(document('../../../../../../images.xml')/images/image[@href = $newhref]) = 0">
+									100%
 								</xsl:when>
 								<xsl:otherwise>
-									<xsl:value-of select="document('../../../../../../images.xml')/images/image[@href = $newhref]/@width"/>px
+									<xsl:choose>
+										<xsl:when test="number(document('../../../../../../images.xml')/images/image[@href = $newhref]/@width) &gt; 325">
+											325px
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:value-of select="document('../../../../../../images.xml')/images/image[@href = $newhref]/@width"/>px
+										</xsl:otherwise>
+									</xsl:choose>
 								</xsl:otherwise>
 							</xsl:choose>
 						</xsl:otherwise>
@@ -359,11 +366,18 @@
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:choose>
-								<xsl:when test="number(document('../../../../../../images.xml')/images/image[@href = $newhref]/@width) &gt; 340">
-									340px
+								<xsl:when test="count(document('../../../../../../images.xml')/images/image[@href = $newhref]) = 0">
+									100%
 								</xsl:when>
 								<xsl:otherwise>
-									<xsl:value-of select="document('../../../../../../images.xml')/images/image[@href = $newhref]/@width"/>px
+									<xsl:choose>
+										<xsl:when test="number(document('../../../../../../images.xml')/images/image[@href = $newhref]/@width) &gt; 325">
+											325px
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:value-of select="document('../../../../../../images.xml')/images/image[@href = $newhref]/@width"/>px
+										</xsl:otherwise>
+									</xsl:choose>
 								</xsl:otherwise>
 							</xsl:choose>
 						</xsl:otherwise>
