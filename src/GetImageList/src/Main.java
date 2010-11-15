@@ -38,8 +38,7 @@ public class Main {
 			return;
 		} else
 			mapFilePath = args[0];
-		// mapFilePath =
-		// "C:\\bin\\sopera-dita-framework\\in\\bpm\\bpm_rent_a_car_tutorial.ditamap";
+//		 mapFilePath = "C:\\bin\\sopera-dita-framework\\in\\dt_developer_tools_userguide_main.ditamap";
 
 		File mapFile = new File(mapFilePath);
 		List<FilesList> files = new ArrayList<FilesList>();
@@ -182,7 +181,7 @@ public class Main {
 							resTmp += " height=\"" + image.getHeight(null) + "\"";
 							//////////////////////////////////
 							resTmp += " />\r\n";
-							res = resTmp;
+							res += resTmp;
 						} catch (IOException e) {
 							System.err.println("cant open img: '" + href+ "'");
 						}
