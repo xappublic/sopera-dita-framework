@@ -11,6 +11,6 @@
 	<xsl:import href="pr-domain.xsl"/>
 	<xsl:import href="tables_1.0.xsl"/>
 	<xsl:import href="toc.xsl"/>
-	<xsl:import href="toc_1.0.xsl"/>	
-	
+	<xsl:import href="toc_1.0.xsl"/>
+	<xsl:import href="task-elements.xsl"/>	
 </xsl:stylesheet>

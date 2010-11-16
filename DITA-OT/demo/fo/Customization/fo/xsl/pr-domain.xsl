@@ -7,15 +7,19 @@
     <xsl:template match="*[contains(@class,' pr-d/codeblock ')]">
         <xsl:call-template name="generateAttrLabel"/>
         <fo:block xsl:use-attribute-sets="codeblock" id="{@id}">
-			<xsl:if test="./ancestor::*[contains(@class, ' task/task ')]">
+			<!--<xsl:if test="./ancestor::*[contains(@class, ' task/task ')]">
 				<xsl:attribute name="margin-left">0mm</xsl:attribute>
 				<xsl:attribute name="width">100%</xsl:attribute>
-			</xsl:if>
+			</xsl:if>-->
 			<xsl:if test="./ancestor::*[contains(@class, ' topic/section ')]">
 				<xsl:attribute name="margin-left">0mm</xsl:attribute>
 				<xsl:attribute name="width">100%</xsl:attribute>
 			</xsl:if>
 			<xsl:if test="./ancestor::*[contains(@class, ' topic/example ')]">
+				<xsl:attribute name="margin-left">0mm</xsl:attribute>
+				<xsl:attribute name="width">100%</xsl:attribute>
+			</xsl:if>
+			<xsl:if test="./ancestor::*[contains(@class, ' task/steps ')]">
 				<xsl:attribute name="margin-left">0mm</xsl:attribute>
 				<xsl:attribute name="width">100%</xsl:attribute>
 			</xsl:if>
