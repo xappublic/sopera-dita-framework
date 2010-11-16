@@ -46,20 +46,12 @@
 	<xsl:template match="*[contains(@class, ' topic/dl ')]">
         <fo:table xsl:use-attribute-sets="dl" id="{@id}">
 			<xsl:attribute name="margin-left">0mm</xsl:attribute>
-			<xsl:if test="./parent::*[name()='body']">
-				<xsl:attribute name="margin-left">22mm</xsl:attribute>
+			<xsl:if test="./parent::*[contains(@class, ' topic/body ')]">
+				<xsl:attribute name="margin-left">45mm</xsl:attribute>
 			</xsl:if>
-			<!--<xsl:if test="./ancestor::*[name()='task']">
-				<xsl:attribute name="margin-left">0mm</xsl:attribute>
-			</xsl:if>
-			<xsl:if test="./ancestor::*[name()='section']">
-				<xsl:attribute name="margin-left">0mm</xsl:attribute>
-			</xsl:if>
-			<xsl:if test="./ancestor::*[name()='example']">
-				<xsl:attribute name="margin-left">0mm</xsl:attribute>
-			</xsl:if>-->
             <xsl:apply-templates select="*[contains(@class, ' topic/dlhead ')]"/>
             <fo:table-body xsl:use-attribute-sets="dl__body">
+
                 <xsl:choose>
                     <xsl:when test="contains(@otherprops,'sortable')">
                         <xsl:apply-templates select="*[contains(@class, ' topic/dlentry ')]">

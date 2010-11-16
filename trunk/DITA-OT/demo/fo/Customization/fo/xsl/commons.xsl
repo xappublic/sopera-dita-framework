@@ -29,8 +29,8 @@
         </fo:block>
     </xsl:template>
 
-	<!-- <xsl:template match="*[contains(@class,' topic/section ')]"> [not(contains(ancestor::*[@class],' task/task '))] -->
-	<xsl:template match="//*[contains(@class, ' topic/section ')][not(ancestor::*[contains(@class, ' topic/section ')])][not(ancestor::*[contains(@class, ' task/task ')])]">
+	<!--[not(ancestor::*[contains(@class, ' task/task ')])]-->
+	<xsl:template match="//*[contains(@class, ' topic/section ')][not(ancestor::*[contains(@class, ' topic/section ')])]">
 		<fo:table>
 			<fo:table-column column-width="40mm"/>
 			<fo:table-column column-width="5mm"/>
@@ -51,10 +51,12 @@
 							<xsl:value-of select="normalize-space(text())"/>
 						</xsl:variable>
 						<xsl:if test="($presection != '')">
-							<fo:block xsl:use-attribute-sets="section">
-								<xsl:value-of select="$presection"/>
-							</fo:block>
-						</xsl:if>						
+							<xsl:if test="($presection != ' ')">
+								<fo:block xsl:use-attribute-sets="section">
+									<xsl:value-of select="$presection"/>
+								</fo:block>
+							</xsl:if>
+						</xsl:if>
 						<xsl:apply-templates select="*[name()!='title']"/>
 					</fo:block>
 				</fo:table-cell>
@@ -86,13 +88,16 @@
 	
 	<xsl:template match="*[contains(@class,' topic/example ')]">
         <fo:block xsl:use-attribute-sets="example" id="{@id}">
-			<xsl:if test="./parent::*[name()='body']">
+			<xsl:if test="./parent::*[contains(@class, ' topic/body ')]">
                 <xsl:attribute name="margin-left">45mm</xsl:attribute>
 			</xsl:if>
 			<xsl:if test="./ancestor::*[contains(@class, ' task/task ')]">
-				<xsl:attribute name="margin-left">0mm</xsl:attribute>
+				<xsl:attribute name="margin-left">45mm</xsl:attribute>
 			</xsl:if>
 			<xsl:if test="./ancestor::*[contains(@class, ' topic/section ')]">
+				<xsl:attribute name="margin-left">0mm</xsl:attribute>
+			</xsl:if>
+			<xsl:if test="./ancestor::*[contains(@class, ' task/steps ')]">
 				<xsl:attribute name="margin-left">0mm</xsl:attribute>
 			</xsl:if>
 			<xsl:if test="./ancestor::*[contains(@class, ' topic/example ')]">
@@ -108,10 +113,13 @@
 			    <xsl:attribute name="margin-left">10mm</xsl:attribute>
 			</xsl:if>
 			<xsl:if test="./ancestor::*[contains(@class, ' task/task ')]">
-                <xsl:attribute name="margin-left">0mm</xsl:attribute>
+                <xsl:attribute name="margin-left">45mm</xsl:attribute>
 			</xsl:if>
 			<xsl:if test="./parent::*[contains(@class,' topic/section ')]">
                 <xsl:attribute name="margin-left">0mm</xsl:attribute>
+			</xsl:if>
+			<xsl:if test="./ancestor::*[contains(@class, ' task/steps ')]">
+				<xsl:attribute name="margin-left">0mm</xsl:attribute>
 			</xsl:if>
 			<xsl:if test="./parent::*[contains(@class,' topic/body ')]">
                 <xsl:attribute name="margin-left">45mm</xsl:attribute>
@@ -126,13 +134,16 @@
 	<xsl:template match="*" mode="placeNoteContent">
         <fo:block xsl:use-attribute-sets="note" id="{@id}">
 			<xsl:if test="./ancestor::*[contains(@class,' task/task ')]">
-                <xsl:attribute name="margin-left">0mm</xsl:attribute>
+                <xsl:attribute name="margin-left">45mm</xsl:attribute>
 			</xsl:if>
 			<xsl:if test="./ancestor::*[contains(@class,' topic/section ')]">
                 <xsl:attribute name="margin-left">0mm</xsl:attribute>
 			</xsl:if>
 			<xsl:if test="./ancestor::*[contains(@class,' topic/table ')]">
                 <xsl:attribute name="margin-left">0mm</xsl:attribute>
+			</xsl:if>
+			<xsl:if test="./ancestor::*[contains(@class, ' task/steps ')]">
+				<xsl:attribute name="margin-left">0mm</xsl:attribute>
 			</xsl:if>
 			<xsl:if test="count((./ancestor::*[contains(@class, ' topic/topic ')]) | (./ancestor::*[contains(@class, ' topic/body ')])) &gt; 1">
                 <xsl:attribute name="margin-left">0mm</xsl:attribute>
@@ -276,6 +287,9 @@
 			</xsl:if>
 			<xsl:if test="./ancestor::*[contains(@class,' topic/section ')]">
                 <xsl:attribute name="margin-left">0mm</xsl:attribute>
+			</xsl:if>
+			<xsl:if test="./ancestor::*[contains(@class, ' task/steps ')]">
+				<xsl:attribute name="margin-left">0mm</xsl:attribute>
 			</xsl:if>
             <xsl:apply-templates select="*[contains(@class,' topic/title ')]"/>
             <xsl:apply-templates select="*[not(contains(@class,' topic/title '))]"/>

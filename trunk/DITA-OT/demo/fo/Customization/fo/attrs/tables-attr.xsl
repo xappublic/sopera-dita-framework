@@ -42,12 +42,32 @@
         <xsl:attribute name="start-indent">1pt</xsl:attribute>
 	</xsl:attribute-set>
 
+	<xsl:attribute-set name="dl">
+        <!--DL is a table-->
+        <!--<xsl:attribute name="width">100%</xsl:attribute>-->
+        <xsl:attribute name="space-before.optimum">5pt</xsl:attribute>
+        <xsl:attribute name="space-after.optimum">5pt</xsl:attribute>
+		<xsl:attribute name="text-align">left</xsl:attribute>
+		<xsl:attribute name="margin-left">0pt</xsl:attribute>
+		<xsl:attribute name="margin-right">0pt</xsl:attribute>
+    </xsl:attribute-set>
+	
+    <xsl:attribute-set name="dl__body">
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="dl.dlhead">
+    </xsl:attribute-set>
+	
 	<xsl:attribute-set name="dlentry.dt__content">
         <xsl:attribute name="font-weight">normal</xsl:attribute>
+		<xsl:attribute name="margin-left">0pt</xsl:attribute>
+		<xsl:attribute name="margin-right">0pt</xsl:attribute>
     </xsl:attribute-set>
 
 	<xsl:attribute-set name="dlentry.dd__content">
         <xsl:attribute name="font-weight">normal</xsl:attribute>
+		<xsl:attribute name="margin-left">0pt</xsl:attribute>
+		<xsl:attribute name="margin-right">0pt</xsl:attribute>
     </xsl:attribute-set>
 	
     <xsl:attribute-set name="dlhead.dthd__content">
@@ -58,12 +78,17 @@
         <xsl:attribute name="font-weight">normal</xsl:attribute>
     </xsl:attribute-set>
 	
-	    <xsl:attribute-set name="dlentry.dt">
+	<xsl:attribute-set name="dlentry.dt">
         <xsl:attribute name="relative-align">baseline</xsl:attribute>
 		<xsl:attribute name="width">40mm</xsl:attribute>
+		
+		<xsl:attribute name="margin-left">0pt</xsl:attribute>
+		<xsl:attribute name="margin-right">2pt</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="dlentry.dd">
+    <xsl:attribute-set name="dlentry.dd">	
+		<xsl:attribute name="margin-left">2pt</xsl:attribute>
+		<xsl:attribute name="margin-right">0pt</xsl:attribute>
     </xsl:attribute-set>
 
 </xsl:stylesheet>

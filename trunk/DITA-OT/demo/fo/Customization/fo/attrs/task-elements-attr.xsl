@@ -6,10 +6,14 @@
     version="1.0">
 
     <xsl:attribute-set name="taskbody" use-attribute-sets="body">
-		<xsl:attribute name="margin-left">45mm</xsl:attribute>
+		<!--<xsl:attribute name="margin-left">45mm</xsl:attribute>-->
     </xsl:attribute-set>
 
 	<xsl:attribute-set name="steps.step__content">
         <xsl:attribute name="margin-left">2mm</xsl:attribute>    
-    </xsl:attribute-set>	
+    </xsl:attribute-set>
+		
+	<xsl:attribute-set name="steps">
+		<xsl:attribute name="margin-left">45mm</xsl:attribute>
+    </xsl:attribute-set>
 </xsl:stylesheet>
