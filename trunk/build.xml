@@ -70,8 +70,10 @@
 		</copy>		
 	</target>
 	<target name="createAll">
+		<dirname file="${map.file}" property="in.dir"/>
 		<xmlvalidate failonerror="true">
-			<fileset dir="in">
+			<!--<fileset dir="in">-->
+			<fileset dir="${in.dir}">
 				<include name="**/*.xml" />
 				<include name="**/*.ditamap" />
 			</fileset>			
