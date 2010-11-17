@@ -118,6 +118,9 @@
 			<xsl:if test="./parent::*[contains(@class,' topic/section ')]">
                 <xsl:attribute name="margin-left">0mm</xsl:attribute>
 			</xsl:if>
+			<xsl:if test="./ancestor::*[contains(@class,' topic/dl ')]">
+                <xsl:attribute name="margin-left">0mm</xsl:attribute>
+			</xsl:if>
 			<xsl:if test="./ancestor::*[contains(@class, ' task/steps ')]">
 				<xsl:attribute name="margin-left">0mm</xsl:attribute>
 			</xsl:if>
