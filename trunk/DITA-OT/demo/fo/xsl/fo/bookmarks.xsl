@@ -99,7 +99,7 @@ See the accompanying license.txt file for applicable licenses.
                         <xsl:attribute name="starting-state">hide</xsl:attribute>
                     </xsl:if>
             		<fo:bookmark-title>
-                		<xsl:value-of select="$topicTitle"/>
+                		<xsl:value-of select="normalize-space($topicTitle)"/>
             		</fo:bookmark-title>
             		<xsl:apply-templates mode="bookmark"/>
         		</fo:bookmark>
