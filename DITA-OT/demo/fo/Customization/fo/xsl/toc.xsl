@@ -109,12 +109,8 @@
 								<xsl:if test="$levelz = '1'">
 									<xsl:attribute name="font-weight">bold</xsl:attribute>
 								</xsl:if>
-								<xsl:value-of select="$topicTitle"/>
+								<xsl:value-of select="normalize-space($topicTitle)"/> <!-- title text in TOC -->
 							</fo:inline>
-                            <!--<fo:inline xsl:use-attribute-sets="__toc__title" margin-right=".2in"
-                                       keep-together.within-line="always">
-                                <xsl:value-of select="$topicTitle"/>
-                            </fo:inline>-->
                             <fo:inline margin-left="-.2in" keep-together.within-line="always">
                                 <fo:leader xsl:use-attribute-sets="__toc__leader"/>
                                 <fo:page-number-citation ref-id="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}"/>

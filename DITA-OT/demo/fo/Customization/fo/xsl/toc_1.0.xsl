@@ -63,7 +63,7 @@
 										<xsl:text>: </xsl:text>
 									</fo:inline>
 									<fo:inline xsl:use-attribute-sets="__toc__title" margin-right=".2in">
-										<xsl:value-of select="."/>
+										<xsl:value-of select="normalize-space(.)"/>
 									</fo:inline>
 									<fo:inline margin-left="-.2in">
 										<fo:leader xsl:use-attribute-sets="__toc__leader"/>
@@ -99,7 +99,7 @@
 											<xsl:text>: </xsl:text>
 										</fo:inline>
 										<fo:inline xsl:use-attribute-sets="__toc__title" margin-right=".2in">
-											<xsl:value-of select="."/>
+											<xsl:value-of select="normalize-space(.)"/>
 										</fo:inline>
 										<fo:inline margin-left="-.2in">
 											<fo:leader xsl:use-attribute-sets="__toc__leader"/>
