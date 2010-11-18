@@ -31,11 +31,14 @@
 
 	<!--[not(ancestor::*[contains(@class, ' task/task ')])]-->
 	<xsl:template match="//*[contains(@class, ' topic/section ')][not(ancestor::*[contains(@class, ' topic/section ')])]">
+		<xsl:variable name="sectiontext">
+			<xsl:value-of select="normalize-space(./text())"/>
+		</xsl:variable>
 		<fo:table>
 			<fo:table-column column-width="40mm"/>
 			<fo:table-column column-width="5mm"/>
 			<fo:table-column column-width="125mm"/>
-
+			
 			<fo:table-body>
 			  <fo:table-row>
 				<fo:table-cell>
@@ -47,13 +50,10 @@
 				<fo:table-cell>
 					<fo:block xsl:use-attribute-sets="section" id="{@id}">
 						<xsl:apply-templates select="." mode="dita2xslfo:section-heading"/>
-						<xsl:variable name="presection">
-							<xsl:value-of select="normalize-space(text())"/>
-						</xsl:variable>
-						<xsl:if test="($presection != '')">
-							<xsl:if test="($presection != ' ')">
+						<xsl:if test="($sectiontext != '')">
+							<xsl:if test="($sectiontext != ' ')">
 								<fo:block xsl:use-attribute-sets="section">
-									<xsl:value-of select="$presection"/>
+									<xsl:value-of select="$sectiontext"/>
 								</fo:block>
 							</xsl:if>
 						</xsl:if>
