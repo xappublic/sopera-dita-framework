@@ -7,6 +7,7 @@
 	<xsl:import href="static-content.xsl"/>	
 	<xsl:import href="commons.xsl"/>
 	<xsl:import href="front-matter_1.0.xsl"/>
+	<xsl:import href="bookmarks.xsl"/>
 	<xsl:import href="bookmarks_1.0.xsl"/>
 	<xsl:import href="pr-domain.xsl"/>
 	<xsl:import href="tables_1.0.xsl"/>
