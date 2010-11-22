@@ -200,7 +200,7 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:choose>
                 </xsl:variable>
                 <fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="__force__page__count">
-					<xsl:attribute name="initial-page-number">1</xsl:attribute>
+					<!--<xsl:attribute name="initial-page-number">1</xsl:attribute>-->
                     <xsl:call-template name="insertBodyStaticContents"/>
                     <fo:flow flow-name="xsl-region-body">
                         <xsl:call-template name="processTopic"/>
@@ -217,8 +217,8 @@ See the accompanying license.txt file for applicable licenses.
               concept, task, reference later in this file to reduce duplicated
               code. Continue calling the named process* templates in order to
               ensure backwards compatibility; ideally though, a single template would
-              be called for all types, deferring the override decision to match rules. -->
-    <xsl:template match="*[contains(@class, ' topic/topic ')]">
+              be called for all types, deferring the override decision to match rules.  -->
+    <xsl:template match="*[contains(@class, ' topic/topic ')][position() &lt;= 1]">
         <xsl:variable name="topicType">
             <xsl:call-template name="determineTopicType"/>
         </xsl:variable>
@@ -253,9 +253,9 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:variable>
                 <xsl:choose>
                     <xsl:when test="not(ancestor::*[contains(@class,' topic/topic ')])">
-                        <fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="__force__page__count">
+						<fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="__force__page__count">
 							<xsl:attribute name="initial-page-number">1</xsl:attribute>
-                            <xsl:call-template name="insertBodyStaticContents"/>
+							<xsl:call-template name="insertBodyStaticContents"/>
                             <fo:flow flow-name="xsl-region-body">
                                 <xsl:choose>
                                     <xsl:when test="contains(@class,' concept/concept ')"><xsl:call-template name="processConcept"/></xsl:when>
@@ -265,7 +265,74 @@ See the accompanying license.txt file for applicable licenses.
                                 </xsl:choose>
                             </fo:flow>
                         </fo:page-sequence>
-                    </xsl:when>
+					</xsl:when>
+                    <xsl:otherwise>
+                        <xsl:choose>
+                            <xsl:when test="contains(@class,' concept/concept ')"><xsl:call-template name="processConcept"/></xsl:when>
+                            <xsl:when test="contains(@class,' task/task ')"><xsl:call-template name="processTask"/></xsl:when>
+                            <xsl:when test="contains(@class,' reference/reference ')"><xsl:call-template name="processReference"/></xsl:when>
+                            <xsl:otherwise><xsl:call-template name="processTopic"/></xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+			<!--BS: skipp abstract (copyright) from usual content. It will be processed from the front-matter-->
+			<xsl:when test="$topicType = 'topicAbstract'"/>
+			<xsl:otherwise>
+                <xsl:call-template name="processUnknowTopic">
+                    <xsl:with-param name="topicType" select="$topicType"/>
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+	
+	<xsl:template match="*[contains(@class, ' topic/topic ')][position() &gt;= 2]">
+        <xsl:variable name="topicType">
+            <xsl:call-template name="determineTopicType"/>
+        </xsl:variable>
+
+        <xsl:choose>
+            <xsl:when test="$topicType = 'topicChapter'">
+                <xsl:call-template name="processTopicChapter"/>
+            </xsl:when>
+            <xsl:when test="$topicType = 'topicAppendix'">
+                <xsl:call-template name="processTopicAppendix"/>
+            </xsl:when>
+            <xsl:when test="$topicType = 'topicPart'">
+                <xsl:call-template name="processTopicPart"/>
+            </xsl:when>
+            <xsl:when test="$topicType = 'topicPreface'">
+                <xsl:call-template name="processTopicPreface"/>
+            </xsl:when>
+            <xsl:when test="$topicType = 'topicNotices'">
+                <!-- Suppressed in normal processing, since it goes at the beginning of the book. -->
+                <!-- <xsl:call-template name="processTopicNotices"/> -->
+            </xsl:when>
+            <xsl:when test="$topicType = 'topicSimple'">
+                <xsl:variable name="page-sequence-reference">
+                    <xsl:choose>
+                        <xsl:when test="$mapType = 'bookmap'">
+                            <xsl:value-of select="'body-sequence'"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="'ditamap-body-sequence'"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <xsl:choose>
+                    <xsl:when test="not(ancestor::*[contains(@class,' topic/topic ')])">
+						<fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="__force__page__count">
+							<xsl:call-template name="insertBodyStaticContents"/>
+                            <fo:flow flow-name="xsl-region-body">
+                                <xsl:choose>
+                                    <xsl:when test="contains(@class,' concept/concept ')"><xsl:call-template name="processConcept"/></xsl:when>
+                                    <xsl:when test="contains(@class,' task/task ')"><xsl:call-template name="processTask"/></xsl:when>
+                                    <xsl:when test="contains(@class,' reference/reference ')"><xsl:call-template name="processReference"/></xsl:when>
+                                    <xsl:otherwise><xsl:call-template name="processTopic"/></xsl:otherwise>
+                                </xsl:choose>
+                            </fo:flow>
+                        </fo:page-sequence>
+					</xsl:when>
                     <xsl:otherwise>
                         <xsl:choose>
                             <xsl:when test="contains(@class,' concept/concept ')"><xsl:call-template name="processConcept"/></xsl:when>
