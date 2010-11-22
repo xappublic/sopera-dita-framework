@@ -493,7 +493,12 @@
             </xsl:if>
         </fo:external-graphic>
     </xsl:template>
+	<!--
+	<xsl:template match="*[contains(@class, ' topic/topic ') and not(contains(@oid, 'metadata'))]">
 	
+	
+	</xsl:template>
+	-->
 	<xsl:template match="//*[contains(@oid, 'metadata')]"></xsl:template>
 	<xsl:template match="//*[contains(@oid, 'metadata')]//p">
 		<fo:block>
