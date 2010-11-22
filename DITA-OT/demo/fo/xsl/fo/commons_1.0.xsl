@@ -142,7 +142,7 @@ See the accompanying license.txt file for applicable licenses.
                         </xsl:variable>
 
                         <fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="__force__page__count">
-							<xsl:attribute name="initial-page-number">1</xsl:attribute>
+							<!--<xsl:attribute name="initial-page-number">1</xsl:attribute>-->
                             <xsl:call-template name="insertBodyStaticContents"/>
                             <fo:flow flow-name="xsl-region-body">
                                 <xsl:call-template name="processTopic"/>
