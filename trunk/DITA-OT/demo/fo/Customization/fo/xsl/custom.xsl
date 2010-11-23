@@ -10,6 +10,7 @@
 	<xsl:import href="bookmarks.xsl"/>
 	<xsl:import href="bookmarks_1.0.xsl"/>
 	<xsl:import href="pr-domain.xsl"/>
+	<xsl:import href="tables.xsl"/>
 	<xsl:import href="tables_1.0.xsl"/>
 	<xsl:import href="toc.xsl"/>
 	<xsl:import href="toc_1.0.xsl"/>

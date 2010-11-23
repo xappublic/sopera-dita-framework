@@ -59,7 +59,8 @@
     </xsl:attribute-set>
 	
 	<xsl:attribute-set name="dlentry.dt__content">
-        <xsl:attribute name="font-weight">normal</xsl:attribute>
+        <xsl:attribute name="font-weight">bold</xsl:attribute> <!-- new -->
+		<!--<xsl:attribute name="font-weight">normal</xsl:attribute>-->
 		<xsl:attribute name="margin-left">0pt</xsl:attribute>
 		<xsl:attribute name="margin-right">0pt</xsl:attribute>
     </xsl:attribute-set>
@@ -80,14 +81,14 @@
 	
 	<xsl:attribute-set name="dlentry.dt">
         <xsl:attribute name="relative-align">baseline</xsl:attribute>
-		<xsl:attribute name="width">40mm</xsl:attribute>
-		
+		<!--<xsl:attribute name="width">40mm</xsl:attribute>-->
 		<xsl:attribute name="margin-left">0pt</xsl:attribute>
 		<xsl:attribute name="margin-right">2pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="dlentry.dd">	
-		<xsl:attribute name="margin-left">2pt</xsl:attribute>
+		<!--<xsl:attribute name="margin-left">2pt</xsl:attribute>-->
+		<xsl:attribute name="margin-left">10mm</xsl:attribute> <!-- new -->
 		<xsl:attribute name="margin-right">0pt</xsl:attribute>
     </xsl:attribute-set>
 
