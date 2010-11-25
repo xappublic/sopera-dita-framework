@@ -7,15 +7,38 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.StringReader;
 import java.io.Writer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
+import org.w3c.dom.Attr;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import com.sun.org.apache.xml.internal.serialize.XHTMLSerializer;
 
 public class FrameworkContentPane extends JPanel implements ActionListener,
 		MouseListener, Runnable {
@@ -29,7 +52,7 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 	private JPanel projectNamePanel;
 	private JLabel projectNameLabel;
 	// projectNamePanel end.
-
+	
 	// centralPanel begin
 	private JPanel centralPanel;
 	// infoPanel begin
@@ -55,14 +78,14 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 	private JProgressBar logProgressBar;
 	private JButton logSaveButton;
 	// logPanel end
-	// validationLogPanel begin
-	private JPanel validationLogPanel;
-	private JScrollPane validationLogScrollPane;
-	private JTextArea validationLogTextArea;
-	private JPanel validationLogButtonPanel;
-	private JProgressBar validationLogProgressBar;
-	private JButton validationLogSaveButton;
-	// validationLogPanel end
+	// updateSourceLogPanel begin
+	private JPanel updateSourceLogPanel;
+	private JScrollPane updateSourceLogScrollPane;
+	private static JTextArea updateSourceLogTextArea;
+	private JPanel updateSourceLogButtonPanel;
+	private JProgressBar updateSourceLogProgressBar;
+	private JButton updateSourceLogSaveButton;
+	// updateSourceLogPanel end
 	// shortLogPanel begin
 	private JPanel shortLogPanel;
 	private JScrollPane shortLogScrollPane;
@@ -89,6 +112,8 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 	// statusBarPanel end.
 
 	String cmdFile = "";
+	
+	String outFolder = "in\\";
 
 	class DitaFileFilter extends javax.swing.filechooser.FileFilter {
 		private final String[] okFileExtensions;
@@ -120,6 +145,7 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 	}
 
 	public FrameworkContentPane() {
+		
 		setBorder(componentBorder);
 		setOpaque(true);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -247,38 +273,39 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		logPanel.add(logScrollPane);
 		logPanel.add(logButtonPanel);
 
-		validationLogPanel = new JPanel();
+		updateSourceLogPanel = new JPanel();
 
-		validationLogTextArea = new JTextArea();
-		validationLogTextArea.setLineWrap(true);
-		validationLogTextArea.setWrapStyleWord(true);
-		validationLogTextArea.setEditable(false);
+		updateSourceLogTextArea = new JTextArea();
+		updateSourceLogTextArea.setLineWrap(true);
+		updateSourceLogTextArea.setWrapStyleWord(true);
+		updateSourceLogTextArea.setEditable(false);
 		
-		validationLogScrollPane = new JScrollPane(validationLogTextArea);
-		validationLogScrollPane.setMinimumSize(new Dimension(590, 380));
-		validationLogScrollPane.setPreferredSize(new Dimension(590, 380));
-		validationLogScrollPane.setMaximumSize(new Dimension(590, 380));
+		updateSourceLogScrollPane = new JScrollPane(updateSourceLogTextArea);
+		updateSourceLogScrollPane.setMinimumSize(new Dimension(590, 380));
+		updateSourceLogScrollPane.setPreferredSize(new Dimension(590, 380));
+		updateSourceLogScrollPane.setMaximumSize(new Dimension(590, 380));
 
-		validationLogButtonPanel = new JPanel();
-		validationLogButtonPanel.setBorder(componentBorder);
-		validationLogButtonPanel.setMinimumSize(new Dimension(590, 40));
-		validationLogButtonPanel.setPreferredSize(new Dimension(590, 40));
-		validationLogButtonPanel.setMaximumSize(new Dimension(590, 40));
+		updateSourceLogButtonPanel = new JPanel();
+		updateSourceLogButtonPanel.setBorder(componentBorder);
+		updateSourceLogButtonPanel.setMinimumSize(new Dimension(590, 40));
+		updateSourceLogButtonPanel.setPreferredSize(new Dimension(590, 40));
+		updateSourceLogButtonPanel.setMaximumSize(new Dimension(590, 40));
 
-		validationLogProgressBar = new JProgressBar();
-		validationLogProgressBar.setBorder(componentBorder);
-		validationLogProgressBar.setMinimumSize(new Dimension(500, 25));
-		validationLogProgressBar.setPreferredSize(new Dimension(500, 25));
-		validationLogProgressBar.setMaximumSize(new Dimension(500, 25));
-		validationLogProgressBar.setStringPainted(true);
+		updateSourceLogProgressBar = new JProgressBar();
+		updateSourceLogProgressBar.setBorder(componentBorder);
+		updateSourceLogProgressBar.setMinimumSize(new Dimension(400, 25));
+		updateSourceLogProgressBar.setPreferredSize(new Dimension(400, 25));
+		updateSourceLogProgressBar.setMaximumSize(new Dimension(400, 25));
+		updateSourceLogProgressBar.setStringPainted(true);
 
-		validationLogSaveButton = new JButton("Save");
+		updateSourceLogSaveButton = new JButton("Start convertation");
+		updateSourceLogSaveButton.addActionListener(this);
+		
+		updateSourceLogButtonPanel.add(updateSourceLogProgressBar);
+		updateSourceLogButtonPanel.add(updateSourceLogSaveButton);
 
-		validationLogButtonPanel.add(validationLogProgressBar);
-		validationLogButtonPanel.add(validationLogSaveButton);
-
-		validationLogPanel.add(validationLogScrollPane);
-		validationLogPanel.add(validationLogButtonPanel);
+		updateSourceLogPanel.add(updateSourceLogScrollPane);
+		updateSourceLogPanel.add(updateSourceLogButtonPanel);
 
 		shortLogPanel = new JPanel();
 
@@ -319,7 +346,9 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 				"Information about transformation process");
 		infoTabs.addTab("Short log", null, shortLogPanel,
 		"Log with main information about convertation process");
-		for (int i = 0; i < 3; i++) {
+		infoTabs.addTab("Update source", null, updateSourceLogPanel,
+		"Update old dita sources (DITA 132) to DITA 1.5.1");
+		for (int i = 0; i < 4; i++) {
 			infoTabs.setForegroundAt(i, new Color(132, 184, 24));
 			infoTabs.setBackgroundAt(i, new Color(255, 255, 255));
 		}
@@ -426,6 +455,15 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 	}
 
 	public void run() {
+		startButton.setEnabled(false);
+		pdfCheckBox.setEnabled(false);
+		htmlCheckBox.setEnabled(false);
+		eclipseHelpCheckBox.setEnabled(false);
+		addMapButton.setEnabled(false);
+		findMapButton.setEnabled(false);
+		deleteMapButton.setEnabled(false);
+		clearMapsButton.setEnabled(false);
+		
 		logTextArea.setText("");
 		shortLogTextArea.setText("");
 		infoTabs.getModel().setSelectedIndex(2);		
@@ -468,17 +506,42 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 			} catch (InterruptedException e) {
 			}
 		}
+		startButton.setEnabled(true);
+		pdfCheckBox.setEnabled(true);
+		htmlCheckBox.setEnabled(true);
+		eclipseHelpCheckBox.setEnabled(true);
+		addMapButton.setEnabled(true);
+		findMapButton.setEnabled(true);
+		deleteMapButton.setEnabled(true);
+		clearMapsButton.setEnabled(true);
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
+		
+		if (arg0.getSource().equals(updateSourceLogSaveButton)) {
+			JFileChooser chooser = new JFileChooser();
+			chooser.setCurrentDirectory(new File("."));
+			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			chooser.setMultiSelectionEnabled(true);
+			chooser.setFileFilter(new DitaFileFilter("ditamap", "Folder with old sources"));
+			int returnVal = chooser.showOpenDialog(this);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				UpdateSourceThrd us = new UpdateSourceThrd(updateSourceLogTextArea, chooser);
+				new Thread(us).start();
+			}
+		}
 		if (arg0.getSource().equals(addMapButton)) {
 			JFileChooser chooser = new JFileChooser();
 			chooser.setCurrentDirectory(new File("."));
+			chooser.setMultiSelectionEnabled(true);
 			chooser.setFileFilter(new DitaFileFilter("ditamap", "DITA Map file"));
 			int returnVal = chooser.showOpenDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				DefaultListModel dlm = (DefaultListModel) mapList.getModel();
-				dlm.addElement(chooser.getSelectedFile().getAbsolutePath());
+				for (int i = 0; i < chooser.getSelectedFiles().length; i++) {
+					// Start transformation for each ditamap file
+					dlm.addElement(chooser.getSelectedFiles()[i].getAbsolutePath());	
+				}				
 			}
 		}
 		if (arg0.getSource().equals(deleteMapButton)) {
@@ -533,7 +596,7 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		}
 		if (arg0.getSource().equals(findMapButton)) {
 			try {
-				FindDitaMaps(new File("in"));
+				FindDitaMaps(new File(outFolder));
 			}
 			catch (Exception e) {
 				System.out.println("Not found 'in' directory with .ditamap files");
