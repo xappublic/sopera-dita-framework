@@ -24,6 +24,7 @@
 			<property name="args.input" value="${map.file}" />
 			<property name="output.dir" value="out${file.separator}${outfolder}${file.separator}htmlhelp" />
 			<property name="transtype" value="htmlhelp" />
+			<property name="clean.temp" value="yes" />
 		</ant>		
 	</target>
 
@@ -48,7 +49,7 @@
 			<property name="args.input" value="${map.file}" />
 			<property name="output.dir" value="out${file.separator}${outfolder}${file.separator}pdf" />
 			<property name="transtype" value="pdf" />
-			<property name="clean.temp" value="no" />
+			<property name="clean.temp" value="yes" />
 		</ant>
 	</target>
 	<target name="data2xhtml" depends="integrate">
