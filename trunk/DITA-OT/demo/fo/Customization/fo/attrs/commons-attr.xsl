@@ -100,6 +100,7 @@
     </xsl:attribute-set>
 
     <xsl:attribute-set name="section">
+		<!--<xsl:attribute name="text-align">justify</xsl:attribute>-->
         <xsl:attribute name="line-height">12pt</xsl:attribute>
         <xsl:attribute name="space-before">2.0em</xsl:attribute>
         <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
