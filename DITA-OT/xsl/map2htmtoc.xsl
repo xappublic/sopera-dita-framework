@@ -259,7 +259,7 @@
   <xsl:param name="pathFromMaplist"/>
   <xsl:if test=".//*[contains(@class, ' map/topicref ')][not(@toc='no')][not(@processing-role='resource-only')]">
     <ul>
-	  <xsl:attribute name="style">list-style-type: none; padding-left: 20px;</xsl:attribute>
+	  <xsl:attribute name="style">list-style-type: none; padding-left: 0px;</xsl:attribute>
 	  <xsl:value-of select="$newline"/>
 	  <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
@@ -555,232 +555,254 @@
   <xsl:value-of select="$newline"/>
   <script type="text/javascript" src="jquery/js/jquery.cookie.js"></script>
   <xsl:value-of select="$newline"/>
+  <script type="text/javascript" src="jquery/js/jquery.jstree.js"></script>
+  <xsl:value-of select="$newline"/>
   <script type="text/javascript">
 		<xsl:text disable-output-escaping="yes"><![CDATA[
-		$(document).ready(function () {
-            $('.menu ul li a').bind('mouseenter', function (event) {
-                $(this).css('color', '#555555');
-            });
-            $('.menu ul li a').bind('mouseleave', function (event) {
-                $(this).css('color', '');
-            });
+			$(document).ready(function () {
 
-            $('#screen').attr('style', 'height: ' + ($(window).height() - 135) + 'px'); // Set height screen div
-            $('.menu').attr('style', 'height: ' + ($(window).height() - 160) + 'px'); // Set height menu div
-            $('.frm').attr('style', 'height: ' + ($(window).height() - 160) + 'px'); // Set height frame div
+			$('#screen').attr('style', 'height: ' + ($(window).height() - 135) + 'px'); // Set height screen div
+			$('.menu').attr('style', 'height: ' + ($(window).height() - 160) + 'px'); // Set height menu div
+			$('.frm').attr('style', 'height: ' + ($(window).height() - 160) + 'px'); // Set height frame div
 
-            $('.navi').corner("top");
-            $('.menu').corner("bl");
-            $('.frm').corner("br");
+			$('.navi').corner("top");
+			$('.menu').corner("bl");
+			$('.frm').corner("br");
 
-            var files = new Array();
+			var files = new Array();
 
-            $('.menu ul li a').each(function (index) {
-                var el = new Object();
-                el.href = $(this).attr('href');
-                el.text = $(this).text();
-                files.push(el);
-                if (index == 0) $('#docframe').attr('src', $(this).attr('href')); //in frame show first element
+			function xmlParser(xml) {
+				var findFiles = new Array();
+				$(xml).find("file").each(function () {
+					var name = $(this).find("name").text();
+					var text = $(this).find("text").text();
+					if (name.toLowerCase().indexOf($('#searchbox').val().toLowerCase()) != -1) {
+						findFiles.push(name);
+					}
+					else if (text.toLowerCase().indexOf($('#searchbox').val().toLowerCase()) != -1) {
+						findFiles.push(name);
+					}
+				});
+				menuFilter(findFiles)
+			}
 
-                $(this).click(function (event) {
-                    $('iframe').attr('src', $(this).attr('href')); return false;
-                });
-            });
+			function menuFilter(findFiles) {
+				$('.menu ul li').each(function (index) {
+					if ($.inArray($(this).text(), findFiles) != -1) {
+						$(this).show();
+					}
+					else {
+						$(this).hide();
+					}
+				});
+				//Hide animation search
+				$('#searching').hide();
+			}
 
-            function xmlParser(xml) {
-                var findFiles = new Array();
-                $(xml).find("file").each(function () {
-                    var name = $(this).find("name").text();
-                    var text = $(this).find("text").text();
-                    if (name.toLowerCase().indexOf($('#searchbox').val().toLowerCase()) != -1) {
-                        findFiles.push(name);
-                    }
-                    else if (text.toLowerCase().indexOf($('#searchbox').val().toLowerCase()) != -1) {
-                        findFiles.push(name);
-                    }
-                });
-                menuFilter(findFiles)
-            }
+			function runSearch() {
+				if ($('#searchbox').val() == '') {
+					$('.menu ul li').each(function (index) {
+						$(this).show();
+					});
+					$('#searchOpt').hide(200);
+				}
+				else if ($("input:radio[name=box]").filter(":checked").val() == 't2') {
+					//Profesional search
+					if ($('#searchbox').val().length >= 3) {
+						$('#searchOpt').show(200);
+						$('#searching').show();
+						$(document).ready(function () {
+							$.ajax({
+								type: "GET",
+								url: "searchdata.xml",
+								dataType: "xml",
+								success: xmlParser
+							});
+						});
+					}
+				}
+				else {
+					//Simple search
+					$('#searchOpt').show(200);
+					$('.menu ul li').each(function (index) {
+						if ($('#searchbox').val() != '') {
+							if ($(this).text().toLowerCase().indexOf($('#searchbox').val().toLowerCase()) < 0) {
+								$(this).hide();
+							}
+							else {
+								$(this).show();
+							}
+						}
+						else {
+							$(this).show();
+						}
+					});
+				}
+			}
 
-            function menuFilter(findFiles) {
-                $('.menu ul li').each(function (index) {
-                    if ($.inArray($(this).text(), findFiles) != -1) {
-                        $(this).show();
-                    }
-                    else {
-                        $(this).hide();
-                    }
-                });
-                //Hide animation search
-                $('#searching').hide();
-            }
+			$('#searchbox').autocomplete({
+				delay: 500,
+				minLength: 0,
+				search: function (event, ui) {
+					runSearch();
+				}
+			});
 
-            function runSearch() {
-                if ($('#searchbox').val() == '') {
-                    $('.menu ul li').each(function (index) {
-                        $(this).show();
-                    });
-                    $('#searchOpt').hide(200);
-                }
-                else if ($("input:radio[name=box]").filter(":checked").val() == 't2') {
-                    //Profesional search
-                    if ($('#searchbox').val().length >= 3) {
-                        $('#searchOpt').show(200);
-                        $('#searching').show();
-                        $(document).ready(function () {
-                            $.ajax({
-                                type: "GET",
-                                url: "searchdata.xml",
-                                dataType: "xml",
-                                success: xmlParser
-                            });
-                        });
-                    }
-                }
-                else {
-                    //Simple search
-                    $('#searchOpt').show(200);
-                    $('.menu ul li').each(function (index) {
-                        if ($('#searchbox').val() != '') {
-                            if ($(this).text().toLowerCase().indexOf($('#searchbox').val().toLowerCase()) < 0) {
-                                $(this).hide();
-                            }
-                            else {
-                                $(this).show();
-                            }
-                        }
-                        else {
-                            $(this).show();
-                        }
-                    });
-                }
-            }
+			$('#searchbox').css('color', '#808080');
+			$('#searchbox').val('menu filter');
 
-            $('#searchbox').autocomplete({
-                delay: 500,
-                minLength: 0,
-                search: function (event, ui) {
-                    runSearch();
-                }
-            });
+			$('#searchbox').focusin(function myfunction() {
+				if ($('#searchbox').val() == 'menu filter') {
+					$('#searchbox').css('color', '#000000');
+					$('#searchbox').val('');
+				}
+				$('#searchbox').animate({
+					width: '500px'
+				}, 200, function () {
 
-            $('#searchbox').css('color', '#808080');
-            $('#searchbox').val('menu filter');
+				})
+			});
 
-            $('#searchbox').focusin(function myfunction() {
-                if ($('#searchbox').val() == 'menu filter') {
-                    $('#searchbox').css('color', '#000000');
-                    $('#searchbox').val('');
-                }
-                $('#searchbox').animate({
-                    width: '500px'
-                }, 200, function () {
+			$('#searchbox').focusout(function myfunction() {
+				if ($('#searchbox').val() == '') {
+					$('#searchbox').css('color', '#808080');
+					$('#searchbox').val('menu filter');
+					$('#searchbox').animate({
+						width: '150px'
+					}, 200, function () {
 
-                })
-            });
+					});
+					$('.menu ul li').each(function (index) {
+						$(this).show();
+					});
+					$('#searchOpt').hide(200);
+				}
+			});
 
-            $('#searchbox').focusout(function myfunction() {
-                if ($('#searchbox').val() == '') {
-                    $('#searchbox').css('color', '#808080');
-                    $('#searchbox').val('menu filter');
-                    $('#searchbox').animate({
-                        width: '150px'
-                    }, 200, function () {
+			$('.navi').css('border', '1px solid #6F6C67'); // fix border for ie;
 
-                    });
-                    $('.menu ul li').each(function (index) {
-                        $(this).show();
-                    });
-                    $('#searchOpt').hide(200);
-                }
-            });
+			$('#favoritesDialog').dialog({
+				autoOpen: false,
+				//draggable: false,
+				//resizable: false,
+				modal: true,
+				open: function (event, ui) {
+					var framesrc = $('#docframe').attr('src');
+					$(files).each(function (index) {
+						if (this.href == framesrc) $('#favoriteNow').val(this.text);
+					});
+					var favoritesData = $.cookie("favorites");
+					if (favoritesData != null) {
+						var favs = favoritesData.split("\|\*\|");
+						$('#favelements').html('');
+						// for each pair "name|-|link"
+						$(favs).each(function (index) {
+							var fav = this.split("\|-\|");
+							//alert(fav[0] + " and " + fav[1]);
+							var favDiv = $('<div class="favorite"></div>');
+							var favAnchor = $('<a href="' + fav[1] + '">' + fav[0] + '</a>');
+							$(favAnchor).click(function (event) {
+								$('#docframe').attr('src', $(this).attr('href'));
+								$('#favoritesDialog').dialog('close');
+								return false;
+							});
+							$(favAnchor).appendTo(favDiv);
+							$(favDiv).append('&nbsp;');
+							var favAnchorDel = $('<a href="' + fav[1] + '">[x]</a>');
+							$(favAnchorDel).click(function (event) {
+								//Deleting bookmark
+								var bDelName = $(this).attr('href');
+								var divToDel = $(this).parent();
+								var favoritesData = $.cookie("favorites");
+								var favoritesDataNew = "";
+								if ((favoritesData != null) && (favoritesData != "")) {
+									var favsDel = favoritesData.split("\|\*\|");
+									// for each pair "name|-|link"
+									$(favsDel).each(function (index) {
+										var favDel = this.split("\|-\|");
+										if (favDel[1] != bDelName) {
+											if (favoritesDataNew == "") {
+												favoritesDataNew += favDel[0] + "|-|" + favDel[1];
+											}
+											else {
+												favoritesDataNew += "|*|" + favDel[0] + "|-|" + favDel[1];
+											}
+										}
+									});
+								}
+								if (favoritesDataNew == "") { $.cookie("favorites", null); }
+								else { $.cookie("favorites", favoritesDataNew, { expires: 365 }); }
+								$(divToDel).hide();
+								return false;
+							});
+							$(favAnchorDel).appendTo(favDiv);
+							$(favDiv).appendTo($('#favelements'));
+						});
+					}
+				}
+			});
 
-            $('.navi').css('border', '1px solid #6F6C67'); // fix border for ie;
+			$('#favorites').click(function (event) {
+				if ($('#favoritesDialog').dialog('isOpen') == false) { $('#favoritesDialog').dialog('open'); }
+				else { $('#favoritesDialog').dialog('close'); }
+			});
 
-            $('#favoritesDialog').dialog({
-                autoOpen: false,
-                //draggable: false,
-                //resizable: false,
-                modal: true,
-                open: function (event, ui) {
-                    var framesrc = $('#docframe').attr('src');
-                    $(files).each(function (index) {
-                        if (this.href == framesrc) $('#favoriteNow').val(this.text);
-                    });
-                    var favoritesData = $.cookie("favorites");
-                    if (favoritesData != null) {
-                        var favs = favoritesData.split("\|\*\|");
-                        $('#favelements').html('');
-                        // for each pair "name|-|link"
-                        $(favs).each(function (index) {
-                            var fav = this.split("\|-\|");
-                            //alert(fav[0] + " and " + fav[1]);
-                            var favDiv = $('<div class="favorite"></div>');
-                            var favAnchor = $('<a href="' + fav[1] + '">' + fav[0] + '</a>');
-                            $(favAnchor).click(function (event) {
-                                $('#docframe').attr('src', $(this).attr('href'));
-                                $('#favoritesDialog').dialog('close');
-                                return false;
-                            });
-                            $(favAnchor).appendTo(favDiv);
-                            $(favDiv).append('&nbsp;');
-                            var favAnchorDel = $('<a href="' + fav[1] + '">[x]</a>');
-                            $(favAnchorDel).click(function (event) {
-                                //Deleting bookmark
-                                var bDelName = $(this).attr('href');
-                                var divToDel = $(this).parent();
-                                var favoritesData = $.cookie("favorites");
-                                var favoritesDataNew = "";
-                                if ((favoritesData != null) && (favoritesData != "")) {
-                                    var favsDel = favoritesData.split("\|\*\|");
-                                    // for each pair "name|-|link"
-                                    $(favsDel).each(function (index) {
-                                        var favDel = this.split("\|-\|");
-                                        if (favDel[1] != bDelName) {
-                                            if (favoritesDataNew == "") {
-                                                favoritesDataNew += favDel[0] + "|-|" + favDel[1];
-                                            }
-                                            else {
-                                                favoritesDataNew += "|*|" + favDel[0] + "|-|" + favDel[1];
-                                            }
-                                        }
-                                    });
-                                }
-                                if (favoritesDataNew == "") { $.cookie("favorites", null); }
-                                else { $.cookie("favorites", favoritesDataNew, { expires: 365 }); }
-                                $(divToDel).hide();
-                                return false;
-                            });
-                            $(favAnchorDel).appendTo(favDiv);
-                            $(favDiv).appendTo($('#favelements'));
-                        });
-                    }
-                }
-            });
+			$('#favoritesAdd').click(function (event) {
+				var flink = $('#docframe').attr('src');
+				var fname = $('#favoriteNow').val();
+				var favoritesData = $.cookie("favorites");
+				if ((favoritesData != null) && favoritesData != "") {
+					favoritesData += "|*|" + fname + "|-|" + flink;
+				}
+				else {
+					favoritesData = fname + "|-|" + flink;
+				}
+				$.cookie("favorites", favoritesData, { expires: 365 });
+				$('#favoritesDialog').dialog('close');
+			});
 
-            $('#favorites').click(function (event) {
-                if ($('#favoritesDialog').dialog('isOpen') == false) { $('#favoritesDialog').dialog('open'); }
-                else { $('#favoritesDialog').dialog('close'); }
-            });
+			$('input:radio[name=box]').click(function (event) {
+				runSearch();
+			});
 
-            $('#favoritesAdd').click(function (event) {
-                var flink = $('#docframe').attr('src');
-                var fname = $('#favoriteNow').val();
-                var favoritesData = $.cookie("favorites");
-                if ((favoritesData != null) && favoritesData != "") {
-                    favoritesData += "|*|" + fname + "|-|" + flink;
-                }
-                else {
-                    favoritesData = fname + "|-|" + flink;
-                }
-                $.cookie("favorites", favoritesData, { expires: 365 });
-                $('#favoritesDialog').dialog('close');
-            });
+			$('.menu > ul').jstree({
+				"core": { "initially_open": ["root"] },
+				"html_data": {
+					"data": $('.menu > ul').html()
+				},
+				"themes": {
+					"theme": "default"
+				},
+				"callback": {
+					onselect: function (NODE, TREE_OBJ) {
+						alert('zxx');
+					}
+				},
+				"types": {
+					"types": {
+						"default": {
+							"icon": {
+								"image": "jquery/js/themes/default/file.png"
+							}
+						}
+					}
+				},
+				"plugins": ["themes", "types", "html_data"]
+			});
 
-            $('input:radio[name=box]').click(function (event) {
-                runSearch();
-            });
-        });
+
+			$('.menu ul li a').each(function (index) {
+				var el = new Object();
+				el.href = $(this).attr('href');
+				el.text = $(this).text();
+				files.push(el);
+				if (index == 0) $('#docframe').attr('src', $(this).attr('href')); //in frame show first element
+
+				$(this).click(function (event) {
+					$('iframe').attr('src', $(this).attr('href')); return false;
+				});
+			});
+		});
 		]]>
 		</xsl:text>
     </script>
@@ -806,6 +828,11 @@
             width: 272px;
             padding: 10px;
             height: 500px;
+        }
+        
+        .menu ul
+        {
+            margin-top: 5px;
         }
         
         .menu a
