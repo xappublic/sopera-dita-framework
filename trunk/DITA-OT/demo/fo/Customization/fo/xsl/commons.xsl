@@ -50,14 +50,14 @@
 				<fo:table-cell>
 					<fo:block xsl:use-attribute-sets="section" id="{@id}">
 						<xsl:apply-templates select="." mode="dita2xslfo:section-heading"/>
-						<xsl:if test="($sectiontext != '')">
+						<!--<xsl:if test="($sectiontext != '')">
 							<xsl:if test="($sectiontext != ' ')">
 								<fo:block xsl:use-attribute-sets="section">
 									<xsl:value-of select="$sectiontext"/>
 								</fo:block>
 							</xsl:if>
-						</xsl:if>
-						<xsl:apply-templates select="*[name()!='title']"/>
+						</xsl:if>-->
+						<xsl:apply-templates select="*[name()!='title'] | text()"/>
 					</fo:block>
 				</fo:table-cell>
 			  </fo:table-row>			  
