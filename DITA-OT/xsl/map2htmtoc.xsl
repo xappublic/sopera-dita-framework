@@ -586,19 +586,6 @@
 				menuFilter(findFiles)
 			}
 
-			function menuFilter(findFiles) {
-				$('.menu ul li').each(function (index) {
-					if ($.inArray($(this).text(), findFiles) != -1) {
-						$(this).show();
-					}
-					else {
-						$(this).hide();
-					}
-				});
-				//Hide animation search
-				$('#searching').hide();
-			}
-
 			function runSearch() {
 				if ($('#searchbox').val() == '') {
 					$('.menu ul li').each(function (index) {
@@ -775,7 +762,7 @@
 				},
 				"callback": {
 					onselect: function (NODE, TREE_OBJ) {
-						alert('zxx');
+						
 					}
 				},
 				"types": {
@@ -802,6 +789,28 @@
 					$('iframe').attr('src', $(this).attr('href')); return false;
 				});
 			});
+			
+			function menuFilter(findFiles) {
+				$('.menu ul li').each(function (index) {
+					if (findInArr($(this).text(), findFiles)) {
+						$(this).show();
+					}
+					else {
+						$(this).hide();
+					}
+				});
+				$('#searching').hide();
+			}
+			
+			function findInArr(text, findFiles) {
+				var res = false;
+				$(findFiles).each(function (index) {
+					var txt1 = new String(findFiles[index]).toLowerCase().trim().replace("\r","").replace("\n","").replace("\t","");
+					var txt2 = new String(text).toLowerCase().trim().replace("\r","").replace("\n","").replace("\t","");
+					if(txt1 == txt2) { res = true; }
+				});
+				return res;
+			}
 		});
 		]]>
 		</xsl:text>
