@@ -38,8 +38,11 @@ public class Main {
 			return;
 		} else
 			mapFilePath = args[0];
-//		 mapFilePath = "C:\\bin\\sopera-dita-framework\\in\\dt_developer_tools_userguide_main.ditamap";
-
+		 //mapFilePath = "C:\\bin\\sopera-dita-framework\\in\\SOP_DITAMAPS\\iop_installation_operations_guide.ditamap";
+		String separator = "/";
+		if (System.getProperties().getProperty("os.name").indexOf("indows") > 0) {
+			separator = "\\";
+		}
 		File mapFile = new File(mapFilePath);
 		List<FilesList> files = new ArrayList<FilesList>();
 
@@ -94,12 +97,7 @@ public class Main {
 							.replace('/', '\\');
 					File hrefFile = new File(files.get(0).rootCatalogpath
 							+ href);
-					files.add(new FilesList(hrefFile.getParent() + "\\",
-							hrefFile.getParent() + "\\" + href)); // Добавляем
-																	// первый
-																	// файл в
-																	// список
-																	// файлов
+					files.add(new FilesList(hrefFile.getParent() + separator, hrefFile.getAbsolutePath())); // Добавляем первый файл в список файлов
 				}
 			}
 
@@ -111,9 +109,9 @@ public class Main {
             {
             	if(nodes2.item(i).getAttributes().getNamedItem("conref") != null)
                 {
-                    String href = nodes2.item(i).getAttributes().getNamedItem("conref").getNodeValue().replace('/', '\\');
+                    String href = nodes2.item(i).getAttributes().getNamedItem("conref").getNodeValue().replace("/", separator);
                     File hrefFile = new File(files.get(0).rootCatalogpath + href);
-                    files.add(new FilesList(hrefFile.getParent() + "\\", hrefFile.getParent() + "\\" + href));
+                    files.add(new FilesList(hrefFile.getParent() + separator, hrefFile.getAbsolutePath())); // Добавляем первый файл в список файлов
                 }
             }
             
@@ -125,9 +123,9 @@ public class Main {
             {
             	if(nodes3.item(i).getAttributes().getNamedItem("conref") != null)
                 {
-                    String href = nodes3.item(i).getAttributes().getNamedItem("conref").getNodeValue().replace('/', '\\');
+                    String href = nodes3.item(i).getAttributes().getNamedItem("conref").getNodeValue().replace("/", separator);
                     File hrefFile = new File(files.get(0).rootCatalogpath + href);
-                    files.add(new FilesList(hrefFile.getParent() + "\\", hrefFile.getParent() + "\\" + href));
+                    files.add(new FilesList(hrefFile.getParent() + separator, hrefFile.getAbsolutePath())); // Добавляем первый файл в список файлов
                 }
             }
             
@@ -139,9 +137,9 @@ public class Main {
             {
             	if(nodes4.item(i).getAttributes().getNamedItem("conref") != null)
                 {
-                    String href = nodes4.item(i).getAttributes().getNamedItem("conref").getNodeValue().replace('/', '\\');
+                    String href = nodes4.item(i).getAttributes().getNamedItem("conref").getNodeValue().replace("/", separator);
                     File hrefFile = new File(files.get(0).rootCatalogpath + href);
-                    files.add(new FilesList(hrefFile.getParent() + "\\", hrefFile.getParent() + "\\" + href));
+                    files.add(new FilesList(hrefFile.getParent() + separator, hrefFile.getAbsolutePath())); // Добавляем первый файл в список файлов
                 }
             }
 
@@ -153,9 +151,9 @@ public class Main {
             {
             	if(nodes5.item(i).getAttributes().getNamedItem("conref") != null)
                 {
-                    String href = nodes5.item(i).getAttributes().getNamedItem("conref").getNodeValue().replace('/', '\\');
+                    String href = nodes5.item(i).getAttributes().getNamedItem("conref").getNodeValue().replace("/", separator);
                     File hrefFile = new File(files.get(0).rootCatalogpath + href);
-                    files.add(new FilesList(hrefFile.getParent() + "\\", hrefFile.getParent() + "\\" + href));
+                    files.add(new FilesList(hrefFile.getParent() + separator, hrefFile.getAbsolutePath())); // Добавляем первый файл в список файлов
                 }
             }
             
@@ -166,7 +164,7 @@ public class Main {
 				for (int i = 0; i < nodes.getLength(); i++) {
 					if(nodes.item(i).getAttributes().getNamedItem("href") != null)
 					{
-						String href = nodes.item(i).getAttributes().getNamedItem("href").getNodeValue().replace('/', '\\');
+						String href = nodes.item(i).getAttributes().getNamedItem("href").getNodeValue().replace("/", separator);
 						System.out.println("get info image: '" + href+ "'");
 						try {
 							String resTmp = "";
