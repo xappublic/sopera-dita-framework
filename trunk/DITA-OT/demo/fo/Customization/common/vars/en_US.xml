@@ -51,7 +51,7 @@ See the accompanying license.txt file for applicable licenses.
     -->
 
     <!-- Product name to be placed inside headers etc. -->
-    <variable id="Product Name">Using SOPERA Services with Intalio|BPM Adapter</variable>
+    <variable id="Product Name">SOPERA</variable>
 
     <!-- The footer that appears on odd-numbered pages. -->
     <variable id="Body odd footer">SOPERA GmbH<param ref-name="lead"/><param ref-name="pagenum"/></variable>
