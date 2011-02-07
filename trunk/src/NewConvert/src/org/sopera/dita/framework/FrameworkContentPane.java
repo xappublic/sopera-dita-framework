@@ -7,38 +7,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.StringReader;
 import java.io.Writer;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-
-import org.w3c.dom.Attr;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
-import com.sun.org.apache.xml.internal.serialize.XHTMLSerializer;
 
 public class FrameworkContentPane extends JPanel implements ActionListener,
 		MouseListener, Runnable {
@@ -298,7 +275,7 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		updateSourceLogProgressBar.setMaximumSize(new Dimension(400, 25));
 		updateSourceLogProgressBar.setStringPainted(true);
 
-		updateSourceLogSaveButton = new JButton("Start convertation");
+		updateSourceLogSaveButton = new JButton("Start conversion");
 		updateSourceLogSaveButton.addActionListener(this);
 		
 		updateSourceLogButtonPanel.add(updateSourceLogProgressBar);
@@ -534,6 +511,7 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 			JFileChooser chooser = new JFileChooser();
 			chooser.setCurrentDirectory(new File("."));
 			chooser.setMultiSelectionEnabled(true);
+			chooser.setApproveButtonText("Add");
 			chooser.setFileFilter(new DitaFileFilter("ditamap", "DITA Map file"));
 			int returnVal = chooser.showOpenDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -563,6 +541,7 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		if (arg0.getSource().equals(logSaveButton)) {
 			JFileChooser chooser = new JFileChooser();
 			chooser.setCurrentDirectory(new File("."));
+			chooser.setApproveButtonText("Save");
 			chooser.setFileFilter(new DitaFileFilter("txt", "Text file"));
 			int returnVal = chooser.showOpenDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -580,6 +559,7 @@ public class FrameworkContentPane extends JPanel implements ActionListener,
 		if (arg0.getSource().equals(shortLogSaveButton)) {
 			JFileChooser chooser = new JFileChooser();
 			chooser.setCurrentDirectory(new File("."));
+			chooser.setApproveButtonText("Save");
 			chooser.setFileFilter(new DitaFileFilter("txt", "Text file"));
 			int returnVal = chooser.showOpenDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
