@@ -34,6 +34,8 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 public class UpdateSourceThrd implements Runnable {
 
 	static JTextArea textArea;
@@ -63,19 +65,6 @@ public class UpdateSourceThrd implements Runnable {
 		}
 	}
 
-//	public static void CopyFile(String nameFrom, String nameTo) throws Exception {
-//		FileChannel source = new FileInputStream(new File(nameFrom))
-//				.getChannel();
-//		FileChannel dest = new FileOutputStream(new File(nameTo)).getChannel();
-//		try {
-//			source.transferTo(0, source.size(), dest);
-//		} finally {
-//			source.close();
-//			dest.close();
-//		}
-//		System.out.println("File '" + nameFrom + "' copied to '" + nameTo + "'");
-//	}
-
 	 public void CopyFiles(File sourceLocation , File targetLocation)
 	    throws IOException {
 	        
@@ -94,16 +83,6 @@ public class UpdateSourceThrd implements Runnable {
 	            InputStream in = new FileInputStream(sourceLocation);
 	            OutputStream out = new FileOutputStream(targetLocation);
 	            
-//	            System.out.println();
-//	            System.out.println("to");
-//	            System.out.println();
-//	            
-//	            try {
-//					CopyFile(sourceLocation.getAbsolutePath(), targetLocation.getAbsolutePath());
-//				} catch (Exception e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
 	            // Copy the bits from instream to outstream
 	            
 	            byte[] buf = new byte[1024];
@@ -220,9 +199,17 @@ public class UpdateSourceThrd implements Runnable {
 				if (!isMap) {
 					if (nodes.item(i).getNodeValue().trim() != "") {
 						String tmp = nodes.item(i).getNodeValue();
+//						if((nodes.item(i).getParentNode().getNodeName() == "section") && (tmp.replace("\t", "").replace("\r", "").replace("\n", "").trim().equals("") == false))
+//						{
+//							content += "<p>";
+//						}
 						content += tmp.replace("&", "&amp;")
 								.replace("<", "&lt;").replace(">", "&gt;")
 								.replace("&amp;#x200B;", "&#x200B;");
+//						if((nodes.item(i).getParentNode().getNodeName() == "section") && (tmp.replace("\t", "").replace("\r", "").replace("\n", "").trim().equals("") == false))
+//						{
+//							content += "</p>";
+//						}
 					}
 				}
 			}
@@ -282,7 +269,6 @@ public class UpdateSourceThrd implements Runnable {
 
 		f.flush();
 		f.close();
-		// System.exit(0);
 	}
 
 	public void run() {
@@ -301,13 +287,13 @@ public class UpdateSourceThrd implements Runnable {
 				mapFilePath = mapFilePath.replace("_main.xml", ".ditamap");
 				mapfile.renameTo(new File(mapFilePath));
 			}
+			// Rename ditamap file from .xml to .ditamap
 			if (mapFilePath.endsWith(".xml")) {
 				File mapfile = new File(mapFilePath);
 				mapFilePath = mapFilePath.replace(".xml", ".ditamap");
 				mapfile.renameTo(new File(mapFilePath));
 			}
 			File mapFile = new File(mapFilePath);
-			
 			
 			try {
 				textArea.append("[COPY IMAGES] " + mapFile.getParent() + "\r\n");
@@ -364,14 +350,7 @@ public class UpdateSourceThrd implements Runnable {
 						if (topicPattern.matcher(doc.getDoctype().getName())
 								.matches()) {
 							if (filetype != t) {
-								filetype = doc.getDoctype().getName(); // update
-																		// doctype
-								// System.err.println("[ERROR] type from doctype and from reference not equals ("
-								// + t + " and " + files.get(0).fileType + ")");
-								// System.err.println("for file " +
-								// files.get(0).filePath);
-								// System.err.println("parent " +
-								// files.get(0).parentLink);
+								filetype = doc.getDoctype().getName();
 							}
 						}
 					}
@@ -379,6 +358,7 @@ public class UpdateSourceThrd implements Runnable {
 					XPathFactory xPathFactory = XPathFactory.newInstance();
 					XPath xpath = xPathFactory.newXPath();
 
+					// Get topicref elements from opened xml file
 					XPathExpression expr = xpath.compile("//topicref");
 					Object result = expr.evaluate(doc, XPathConstants.NODESET);
 					NodeList nodes = (NodeList) result;
@@ -400,6 +380,7 @@ public class UpdateSourceThrd implements Runnable {
 						}
 					}
 
+					// Get topic elements from opened xml file
 					XPathExpression expr2 = xpath.compile("//topic");
 					Object result2 = expr2
 							.evaluate(doc, XPathConstants.NODESET);
@@ -423,6 +404,7 @@ public class UpdateSourceThrd implements Runnable {
 						}
 					}
 
+					// Get concept elements from opened xml file
 					XPathExpression expr3 = xpath.compile("//concept");
 					Object result3 = expr3
 							.evaluate(doc, XPathConstants.NODESET);
@@ -446,6 +428,7 @@ public class UpdateSourceThrd implements Runnable {
 						}
 					}
 
+					// Get task elements from opened xml file
 					XPathExpression expr4 = xpath.compile("//task");
 					Object result4 = expr4
 							.evaluate(doc, XPathConstants.NODESET);
@@ -469,6 +452,7 @@ public class UpdateSourceThrd implements Runnable {
 						}
 					}
 
+					// Get reference elements from opened xml file
 					XPathExpression expr5 = xpath.compile("//reference");
 					Object result5 = expr5
 							.evaluate(doc, XPathConstants.NODESET);
@@ -492,11 +476,9 @@ public class UpdateSourceThrd implements Runnable {
 						}
 					}
 
-					// glossary
-
 					// Modifying DOM file
-
 					if (filetype == "map") {
+						//if opened file is ditamap
 						NodeList n = doc.getChildNodes();
 						for (int i = 0; i < n.getLength(); i++) {
 							if (n.item(i).getLocalName() == "dita") {
@@ -662,10 +644,9 @@ public class UpdateSourceThrd implements Runnable {
 														"$1$2$3$4$5$6"));
 							}
 						}
-						// Поиск субтопиков, разделение субтопиков на topicref и
-						// другие
+						// Searching subtopics, split subtopics on topicref and others
 						{
-							// Находим топик в файле
+							// Find topic in file
 							XPathExpression tref = xpath
 									.compile("//topic//topic|//topic//task|//topic//concept|//topic//reference|//topic//glossary|//task//topic|//task//task|//task//concept|//task//reference|//task//glossary|//concept//topic|//concept//task|//concept//concept|//concept//reference|//concept//glossary|//reference//topic|//reference//task|//reference//concept|//reference//reference|//reference//glossary|//glossary//topic|//glossary//task|//glossary//concept|//glossary//reference|//glossary//glossary");
 							Object tresult = tref.evaluate(doc,
@@ -674,17 +655,15 @@ public class UpdateSourceThrd implements Runnable {
 
 							for (int i = 0; i < tnodes.getLength(); i++) {
 								String href = "";
-								// Проверяем есть ли у него conref или href
+								// Check if topic contains conref
 								if (tnodes.item(i).getAttributes()
 										.getNamedItem("conref") != null) {
-									// Если есть запоминаем ссылку
+									// If topic contain conref
 									href = tnodes.item(i).getAttributes()
 											.getNamedItem("conref")
 											.getNodeValue().replace('/', '\\');
 								} else {
-									// Если нет то выносим содержимое в
-									// отдельный файл с именем = ID топика и
-									// запоминаем ссылку
+									// If topic not contain conref extract content to separate file and add to href variable path to file
 									href = tnodes.item(i).getAttributes()
 											.getNamedItem("id").getNodeValue()
 											+ ".xml";
@@ -715,13 +694,11 @@ public class UpdateSourceThrd implements Runnable {
 															outFolder)));
 								}
 								if (href != "") {
-									// Открываем дитамап
+									// Opening ditamap
 									DocumentBuilderFactory factory1 = DocumentBuilderFactory
 											.newInstance();
 									factory1.setValidating(false);
-									factory1.setNamespaceAware(true); // never
-																		// forget
-																		// this!
+									factory1.setNamespaceAware(true);
 									DocumentBuilder builder1 = factory1
 											.newDocumentBuilder();
 									builder1.setEntityResolver(new EntityResolver() {
@@ -729,8 +706,6 @@ public class UpdateSourceThrd implements Runnable {
 												String publicId, String systemId)
 												throws SAXException,
 												IOException {
-											// System.out.println("Ignoring " +
-											// publicId + ", " + systemId);
 											return new InputSource(
 													new StringReader(""));
 										}
@@ -745,7 +720,7 @@ public class UpdateSourceThrd implements Runnable {
 											.newInstance();
 									XPath xpath1 = xPathFactory1.newXPath();
 
-									// Находим в нем текущий файл
+									//find file in ditamap
 									XPathExpression expr1 = xpath1
 											.compile("//*[contains(@href, '"
 													+ files.get(0).filePath.replace(
@@ -760,7 +735,7 @@ public class UpdateSourceThrd implements Runnable {
 													mapFile.getParent() + "\\",
 													"") + "')]" + "\r\n");
 									for (int k = 0; k < nodes1.getLength(); k++) {
-										// Добавляем в него ссылку
+										//Add topicref to map
 										org.w3c.dom.Element el = doc1
 												.createElement("topicref");
 										el.setAttribute("href", href);
@@ -770,127 +745,11 @@ public class UpdateSourceThrd implements Runnable {
 								}
 							}
 							for (int i = 0; i < tnodes.getLength(); i++) {
-								// Удаляем содержимое топика и сам топик в
-								// текущем файле (который нашли и на который
-								// скопировали ссылку)
+								// Deleting topic in this file (Which we found and for which we copied link)
 								Node n = tnodes.item(i);
 								n.getParentNode().removeChild(n);
 							}
 						}
-						// /////FOR TOPICREF////
-						// {
-						// //Находим топик в файле
-						// XPathExpression tref =
-						// xpath.compile("//topic//topicref|//task//topicref|//concept//topicref|//reference//topicref|//glossary//topicref");
-						// Object tresult = tref.evaluate(doc,
-						// XPathConstants.NODESET);
-						// NodeList tnodes = (NodeList) tresult;
-						//
-						// for (int i = 0; i < tnodes.getLength(); i++)
-						// {
-						// String href = "";
-						// //Проверяем есть ли у него conref или href
-						// if(tnodes.item(i).getAttributes().getNamedItem("href")
-						// != null)
-						// {
-						// //Если есть запоминаем ссылку
-						// href =
-						// tnodes.item(i).getAttributes().getNamedItem("id").getNodeValue().replace('/',
-						// '\\');
-						//
-						// }
-						// else
-						// {
-						// //Если нет то выносим содержимое в отдельный файл с
-						// именем = ID топика и запоминаем ссылку
-						// href =
-						// tnodes.item(i).getAttributes().getNamedItem("id").getNodeValue()
-						// + ".xml";
-						// String topicText = XmlNodesToString(tnodes.item(i),
-						// 1, false);
-						// DocumentBuilderFactory factory1 =
-						// DocumentBuilderFactory.newInstance();
-						// factory1.setValidating(false);
-						// factory1.setNamespaceAware(true);
-						// DocumentBuilder builder1 =
-						// factory.newDocumentBuilder();
-						// textArea.append("[EXTRACT TO FILE] " +
-						// files.get(0).rootCatalogpath + href);
-						// org.w3c.dom.Document doc1 = builder1.parse(new
-						// ByteArrayInputStream(topicText.getBytes("UTF-8")));
-						// writeXMLToFile("topic", doc1,
-						// files.get(0).rootCatalogpath + href);
-						//
-						// files.add(new FilesList(files.get(0).rootCatalogpath,
-						// files.get(0).rootCatalogpath + href, "topic",
-						// files.get(0).filePath.replace(mapFolder,
-						// outFolder)));
-						// }
-						// if(href!="")
-						// {
-						// //Открываем дитамап
-						// DocumentBuilderFactory factory1 =
-						// DocumentBuilderFactory.newInstance();
-						// factory1.setValidating(false);
-						// factory1.setNamespaceAware(true); // never forget
-						// this!
-						// DocumentBuilder builder1 =
-						// factory1.newDocumentBuilder();
-						// builder1.setEntityResolver(new EntityResolver() {
-						// public InputSource resolveEntity(String publicId,
-						// String systemId)
-						// throws SAXException, IOException {
-						// //System.out.println("Ignoring " + publicId + ", " +
-						// systemId);
-						// return new InputSource(new StringReader(""));
-						// }
-						// });
-						//
-						// String newMap =
-						// mapFile.getAbsolutePath().replace(mapFolder,
-						// outFolder);
-						// org.w3c.dom.Document doc1 = builder1.parse(newMap);
-						//
-						// XPathFactory xPathFactory1 =
-						// XPathFactory.newInstance();
-						// XPath xpath1 = xPathFactory1.newXPath();
-						//
-						// // Находим в нем текущий файл
-						// XPathExpression expr1 =
-						// xpath1.compile("//*[contains(@href, '" +
-						// files.get(0).filePath.replace(mapFile.getParent() +
-						// "\\", "") + "')]");
-						// Object result1 = expr1.evaluate(doc1,
-						// XPathConstants.NODESET);
-						// NodeList nodes1 = (NodeList) result1;
-						// System.out.println("Search in ditamap *[contains(@href, '"
-						// + files.get(0).filePath.replace(mapFile.getParent() +
-						// "\\", "") + "')]");
-						// for (int k = 0; k < nodes1.getLength(); k++) {
-						// // Добавляем в него ссылку
-						// org.w3c.dom.Element el =
-						// doc1.createElement("topicref");
-						// el.setAttribute("href", href);
-						// nodes1.item(0).appendChild(el);
-						// }
-						// writeXMLToFile("map", doc1, newMap);
-						// //Добавляем файл href в список файлов
-						// //files.add(new
-						// FilesList(files.get(0).rootCatalogpath,
-						// files.get(0).rootCatalogpath + href, "topic",
-						// files.get(0).filePath.replace(mapFolder,
-						// outFolder)));
-						// }
-						// //System.err.println(href);
-						// }
-						// for (int i = 0; i < tnodes.getLength(); i++)
-						// {
-						// //Удаляем содержимое топика и сам топик в текущем
-						// файле (который нашли и на который скопировали ссылку)
-						// Node n = tnodes.item(i);
-						// n.getParentNode().removeChild(n);
-						// }
-						// }
 					}
 					// Add 0 width spaces to dita sources
 					// XmlNodesAddSpaces(doc.getLastChild().getChildNodes());
@@ -912,7 +771,6 @@ public class UpdateSourceThrd implements Runnable {
 				textArea.setCaretPosition(textArea.getDocument().getLength());
 			}
 			textArea.append("[TOTAL FILES] " + count);
-			// XXX
 		}
 	}
 }
