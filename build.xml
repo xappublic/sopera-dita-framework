@@ -79,13 +79,13 @@
 				<include name="**/*.ditamap" />
 			</fileset>			
 			<xmlcatalog>
-				<dtd publicId="-//OASIS//DTD DITA 1.2 topic//EN" location="${basedir}${file.separator}DITA-OT/dtd/technicalContent/dtd/topic.dtd" />
-				<dtd publicId="-//OASIS//DTD DITA 1.2 task//EN" location="${basedir}${file.separator}DITA-OT/dtd/technicalContent/dtd/task.dtd" />
+				<dtd publicId="-//OASIS//DTD DITA topic//EN" location="${basedir}${file.separator}DITA-OT/dtd/technicalContent/dtd/topic.dtd" />
+				<dtd publicId="-//OASIS//DTD DITA task//EN" location="${basedir}${file.separator}DITA-OT/dtd/technicalContent/dtd/task.dtd" />
 				<dtd publicId="-//OASIS//DTD DITA map//EN" location="${basedir}${file.separator}DITA-OT/dtd/technicalContent/dtd/map.dtd" />
 				
-				<dtd publicId="-//OASIS//DTD DITA 1.2 Concept//EN" location="${basedir}${file.separator}DITA-OT/dtd/technicalContent/dtd/concept.dtd" />
-				<dtd publicId="-//OASIS//DTD DITA 1.2 Reference//EN" location="${basedir}${file.separator}DITA-OT/dtd/technicalContent/dtd/reference.dtd" />
-				<dtd publicId="-//OASIS//DTD DITA 1.2 Glossary//EN" location="${basedir}${file.separator}DITA-OT/dtd/technicalContent/dtd/glossary.dtd" />
+				<dtd publicId="-//OASIS//DTD DITA Concept//EN" location="${basedir}${file.separator}DITA-OT/dtd/technicalContent/dtd/concept.dtd" />
+				<dtd publicId="-//OASIS//DTD DITA Reference//EN" location="${basedir}${file.separator}DITA-OT/dtd/technicalContent/dtd/reference.dtd" />
+				<dtd publicId="-//OASIS//DTD DITA Glossary//EN" location="${basedir}${file.separator}DITA-OT/dtd/technicalContent/dtd/glossary.dtd" />
 			</xmlcatalog>
 		</xmlvalidate>
 		<if>
