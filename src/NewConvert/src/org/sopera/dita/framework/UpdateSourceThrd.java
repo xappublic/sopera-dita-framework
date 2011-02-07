@@ -232,17 +232,17 @@ public class UpdateSourceThrd implements Runnable {
 		{
 			String dt = "";
 			if (doctype == "topic")
-				dt = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE topic PUBLIC \"-//OASIS//DTD DITA 1.2 topic//EN\" \"DITA-OT/dtd/technicalContent/dtd/topic.dtd\">";
+				dt = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE topic PUBLIC \"-//OASIS//DTD DITA topic//EN\" \"DITA-OT/dtd/technicalContent/dtd/topic.dtd\">";
 			if (doctype == "task")
-				dt = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE task PUBLIC \"-//OASIS//DTD DITA 1.2 task//EN\" \"DITA-OT/dtd/technicalContent/dtd/task.dtd\">";
+				dt = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE task PUBLIC \"-//OASIS//DTD DITA task//EN\" \"DITA-OT/dtd/technicalContent/dtd/task.dtd\">";
 			if (doctype == "map")
 				dt = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE map PUBLIC \"-//OASIS//DTD DITA map//EN\" \"DITA-OT/dtd/technicalContent/dtd/map.dtd\">";
 			if (doctype == "concept")
-				dt = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE concept PUBLIC \"-//OASIS//DTD DITA 1.2 Concept//EN\" \"DITA-OT/dtd/technicalContent/dtd/concept.dtd\">";
+				dt = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE concept PUBLIC \"-//OASIS//DTD DITA Concept//EN\" \"DITA-OT/dtd/technicalContent/dtd/concept.dtd\">";
 			if (doctype == "reference")
-				dt = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE reference PUBLIC \"-//OASIS//DTD DITA 1.2 Reference//EN\" \"DITA-OT/dtd/technicalContent/dtd/reference.dtd\">";
+				dt = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE reference PUBLIC \"-//OASIS//DTD DITA Reference//EN\" \"DITA-OT/dtd/technicalContent/dtd/reference.dtd\">";
 			if (doctype == "glossary")
-				dt = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE glossary PUBLIC \"-//OASIS//DTD DITA 1.2 Glossary//EN\" \"DITA-OT/dtd/technicalContent/dtd/glossary.dtd\">";
+				dt = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE glossary PUBLIC \"-//OASIS//DTD DITA Glossary//EN\" \"DITA-OT/dtd/technicalContent/dtd/glossary.dtd\">";
 			char[] buf = new char[dt.length()];
 			dt.getChars(0, buf.length, buf, 0);
 			f.write(buf, 0, buf.length);
