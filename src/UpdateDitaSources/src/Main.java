@@ -414,7 +414,7 @@ public class Main {
 
 							files.add(new FilesList(
 									files.get(0).rootCatalogpath,
-									files.get(0).rootCatalogpath + href,
+									files.get(0).rootCatalogpath + "updated" + File.separatorChar + href,
 									"topic", files.get(0).filePath.replaceAll(
 											"inOld", "in")));
 						}
@@ -613,8 +613,12 @@ public class Main {
 
 	static void writeXMLToFile(String doctype, org.w3c.dom.Document doc,
 			String path) throws IOException, XPathExpressionException {
-		// path = path.replaceAll("inOld", "in");
-
+		File original = new File(path);
+		File parent = original.getParentFile();
+		File updated = new File(parent.getAbsolutePath() + File.separatorChar + "updated");
+		updated.mkdirs();
+		path = updated.getAbsolutePath() + File.separatorChar + original.getName();
+		
 		new File(path).getParentFile().mkdirs();
 
 		System.out.println("[SAVE FILE] '" + path + "'");
@@ -626,17 +630,17 @@ public class Main {
 		{
 			String dt = "";
 			if (doctype == "topic")
-				dt = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE topic PUBLIC \"-//OASIS//DTD DITA 1.2 topic//EN\" \"DITA-OT/dtd/technicalContent/dtd/topic.dtd\">";
+				dt = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE topic PUBLIC \"-//OASIS//DTD DITA Composite//EN\" \"DITA-OT/dtd/technicalContent/dtd/ditabase.dtd\">";
 			if (doctype == "task")
-				dt = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE task PUBLIC \"-//OASIS//DTD DITA 1.2 task//EN\" \"DITA-OT/dtd/technicalContent/dtd/task.dtd\">";
+				dt = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE task PUBLIC \"-//OASIS//DTD DITA Composite//EN\" \"DITA-OT/dtd/technicalContent/dtd/ditabase.dtd\">";
 			if (doctype == "map")
 				dt = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE map PUBLIC \"-//OASIS//DTD DITA map//EN\" \"DITA-OT/dtd/technicalContent/dtd/map.dtd\">";
 			if (doctype == "concept")
-				dt = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE concept PUBLIC \"-//OASIS//DTD DITA 1.2 Concept//EN\" \"DITA-OT/dtd/technicalContent/dtd/concept.dtd\">";
+				dt = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE concept PUBLIC \"-//OASIS//DTD DITA Composite//EN\" \"DITA-OT/dtd/technicalContent/dtd/ditabase.dtd\">";
 			if (doctype == "reference")
-				dt = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE reference PUBLIC \"-//OASIS//DTD DITA 1.2 Reference//EN\" \"DITA-OT/dtd/technicalContent/dtd/reference.dtd\">";
+				dt = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE reference PUBLIC \"-//OASIS//DTD DITA Composite//EN\" \"DITA-OT/dtd/technicalContent/dtd/ditabase.dtd\">";
 			if (doctype == "glossary")
-				dt = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE glossary PUBLIC \"-//OASIS//DTD DITA 1.2 Glossary//EN\" \"DITA-OT/dtd/technicalContent/dtd/glossary.dtd\">";
+				dt = "<?xml version=\"1.0\"?>\r\n<!DOCTYPE glossary PUBLIC \"-//OASIS//DTD DITA Composite//EN\" \"DITA-OT/dtd/technicalContent/dtd/ditabase.dtd\">";
 			char[] buf = new char[dt.length()];
 			dt.getChars(0, buf.length, buf, 0);
 			f.write(buf, 0, buf.length);
@@ -655,7 +659,7 @@ public class Main {
 		content += XmlNodesToString(nodes, 1, doctype == "map");
 
 		content += "\r\n</" + doc.getLastChild().getNodeName() + ">";
-		// System.err.println(content);
+		System.err.println(content);
 
 		char[] bufcontent = new char[content.length()];
 		content.getChars(0, bufcontent.length, bufcontent, 0);
