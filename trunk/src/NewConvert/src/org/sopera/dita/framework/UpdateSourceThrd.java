@@ -414,7 +414,8 @@ public class UpdateSourceThrd implements Runnable {
 					//Remove reference to updated file from files variable
 					files.remove(0);
 				} catch (Exception e) {
-					System.err.println("Error");
+					System.err.println("Error in file:" + files.get(0).filePath);
+					files.remove(0);
 				}
 				textArea.setCaretPosition(textArea.getDocument().getLength());
 			}
