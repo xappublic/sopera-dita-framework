@@ -37,11 +37,14 @@ public class UpdateSourceThrd implements Runnable {
 	static JTextArea textArea;
 	JFileChooser chooser;
 	String mapFolder = "";
-	String outFolder = "in\\";
+	String separator = "\\";
+	
+	String outFolder = "in" + separator;
 
 	public UpdateSourceThrd(JTextArea shortLogTextArea, JFileChooser chooser) {
 		textArea = shortLogTextArea;
 		this.chooser = chooser;
+		separator = String.valueOf(File.separatorChar);
 	}
 
 	private void FindDitaMapsOld(File files, List<String> mapfiles) {
@@ -254,7 +257,7 @@ public class UpdateSourceThrd implements Runnable {
 
 	public void run() {
 		List<String> ditamaps = new ArrayList<String>();
-		mapFolder = chooser.getSelectedFile().getAbsolutePath() + "\\";
+		mapFolder = chooser.getSelectedFile().getAbsolutePath() + separator;
 		FindDitaMapsOld(chooser.getSelectedFile(), ditamaps);
 		textArea.append("Found maps:\r\n");
 		for (int mapindex = 0; mapindex < ditamaps.size(); mapindex++) {
@@ -269,17 +272,17 @@ public class UpdateSourceThrd implements Runnable {
 			try {
 				textArea.append("[COPY IMAGES] " + mapFile.getParent() + "\r\n");
 				String dest = mapFile.getParent().replace(chooser.getSelectedFile().getAbsolutePath(), "in");
-				if(dest.endsWith("\\")) dest += "images";
-				else  dest += "\\images";
+				if(dest.endsWith(separator)) dest += "images";
+				else  dest += separator + "images";
 				new File(dest).mkdirs();
-				CopyFiles(new File(mapFile.getParent() + "\\images"), new File(dest));
+				CopyFiles(new File(mapFile.getParent() + separator + "images"), new File(dest));
 				textArea.append("[END COPY IMAGES] " + mapFile.getParent() + "\r\n");
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
 			
 			List<FilesListUpdateMaps> files = new ArrayList<FilesListUpdateMaps>();
-			files.add(new FilesListUpdateMaps(mapFile.getParent() + "\\",
+			files.add(new FilesListUpdateMaps(mapFile.getParent() + separator,
 					mapFilePath, "map", "")); // Add ditamap to files list
 			int count = 0;
 
@@ -339,7 +342,7 @@ public class UpdateSourceThrd implements Runnable {
 								String href = "";
 								// Check if topic contains conref
 								if (tnodes.item(i).getAttributes().getNamedItem("conref") != null) {
-									href = tnodes.item(i).getAttributes().getNamedItem("conref").getNodeValue().replace('/', '\\');
+									href = tnodes.item(i).getAttributes().getNamedItem("conref").getNodeValue().replace("/", separator);
 								} else {
 									// If topic not contain conref extract content to separate file and add to href variable path to file
 									href = tnodes.item(i).getAttributes().getNamedItem("id").getNodeValue()	+ ".xml";
@@ -379,10 +382,10 @@ public class UpdateSourceThrd implements Runnable {
 									XPathFactory xPathFactory1 = XPathFactory.newInstance();
 									XPath xpath1 = xPathFactory1.newXPath();
 									//find file in ditamap
-									XPathExpression expr1 = xpath1.compile("//*[contains(@href, '" + files.get(0).filePath.replace(mapFile.getParent()+ "\\", "") + "')]");
+									XPathExpression expr1 = xpath1.compile("//*[contains(@href, '" + files.get(0).filePath.replace(mapFile.getParent()+ separator, "") + "')]");
 									Object result1 = expr1.evaluate(doc1, XPathConstants.NODESET);
 									NodeList nodes1 = (NodeList) result1;
-									textArea.append("Search in ditamap *[contains(@href, '" + files.get(0).filePath.replace(mapFile.getParent() + "\\", "") + "')]" + "\r\n");
+									textArea.append("Search in ditamap *[contains(@href, '" + files.get(0).filePath.replace(mapFile.getParent() + separator, "") + "')]" + "\r\n");
 									for (int k = 0; k < nodes1.getLength(); k++) {
 										//Add topicref to map
 										org.w3c.dom.Element el = doc1.createElement("topicref");
@@ -516,9 +519,9 @@ public class UpdateSourceThrd implements Runnable {
 		textArea.append("[INFO] Found " + nodes.getLength() + " " + xpathQuery + "/@" + attr + " in '" + files.get(0).filePath + "' file" + "\r\n");
 		for (int i = 0; i < nodes.getLength(); i++) {
 			if (nodes.item(i).getAttributes().getNamedItem(attr) != null) {
-				String href = nodes.item(i).getAttributes().getNamedItem(attr).getNodeValue().replace('/', '\\');
+				String href = nodes.item(i).getAttributes().getNamedItem(attr).getNodeValue().replace("/", separator);
 				File hrefFile = new File(files.get(0).rootCatalogpath + href);
-				files.add(new FilesListUpdateMaps(hrefFile.getParent() + "\\", hrefFile.getParent()	+ "\\" + href, doctype,	files.get(0).filePath));
+				files.add(new FilesListUpdateMaps(hrefFile.getParent() + separator, hrefFile.getParent()	+ separator + href, doctype,	files.get(0).filePath));
 			}
 		}
 	}
