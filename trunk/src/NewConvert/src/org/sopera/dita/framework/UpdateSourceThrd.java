@@ -330,11 +330,11 @@ public class UpdateSourceThrd implements Runnable {
 						fixLinks(doc, xpath);
 						// Searching subtopics, split subtopics on topicref and others
 						// Find topic in file
-						XPathExpression tref = xpath.compile("//topic//topic|//topic//task|//topic//concept|//topic//reference|//topic//glossary|" +
-															 "//task//topic|//task//task|//task//concept|//task//reference|//task//glossary|" +
-															 "//concept//topic|//concept//task|//concept//concept|//concept//reference|//concept//glossary|" +
-															 "//reference//topic|//reference//task|//reference//concept|//reference//reference|//reference//glossary|" +
-															 "//glossary//topic|//glossary//task|//glossary//concept|//glossary//reference|//glossary//glossary");
+						XPathExpression tref = xpath.compile("/topic/topic|/topic/task|/topic/concept|/topic/reference|/topic/glossary|" +
+															 "/task/topic|/task/task|/task/concept|/task/reference|/task/glossary|" +
+															 "/concept/topic|/concept/task|/concept/concept|/concept/reference|/concept/glossary|" +
+															 "/reference/topic|/reference/task|/reference/concept|/reference/reference|/reference/glossary|" +
+															 "/glossary/topic|/glossary/task|/glossary/concept|/glossary/reference|/glossary/glossary");
 							Object tresult = tref.evaluate(doc, XPathConstants.NODESET);
 							NodeList tnodes = (NodeList) tresult;
 
